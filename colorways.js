@@ -164,6 +164,7 @@ Citizen|Series 8 870 = Noir #15181C ; Bleu #1E3F7A ; Vert #1F5A3A
 Citizen|Zenshin = Bleu #1E3F7A ; Blanc #F2F3F4 ; Vert #1F5A3A
 Citizen|Eco-Drive Chandler = Noir #15181C ; Bleu #1E3F7A ; Blanc #F2F3F4
 Orient|Kamasu (Mako III) = Bordeaux #6B1E2A b:#15181D ; Bleu #1E3F7A b:#1E3F7A ; Vert #1F5A3A b:#1F5A3A ; Noir #15181C
+Orient|3 Stars (Tristar) = Bleu #1E3F7A ; Noir #15181C ; Blanc #F2F3F4 ; Vert #1F5A3A ; Rouge #9E2A2B ; Doré #C9A04E c:doré
 Orient|Bambino = Crème #EDE6D6 ; Noir #15181C ; Bleu #1E3F7A ; Vert #1F5A3A ; Marron #5A3A2A
 Orient|Mako II = Bleu #1E3F7A b:#1E3F7A ; Noir #15181C ; Orange #D86A2B
 Orient|Ray II = Noir #111418 ; Bleu #1E3F7A b:#1E3F7A

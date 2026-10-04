@@ -420,6 +420,16 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .st-stage canvas{width:100%;height:100%;display:block}
 .st-guide{position:absolute;left:50%;top:50%;width:66%;height:66%;transform:translate(-50%,-50%);border:2px dashed rgba(168,130,58,.6);border-radius:50%;pointer-events:none}
 .st-row{display:flex;gap:8px}
+.size-row{flex-direction:row;align-items:center;gap:10px}
+.size-row input{flex:1;accent-color:var(--brass)}
+.size-row span{min-width:42px;text-align:right;color:var(--ink);font-weight:800}
+.web-links{display:flex;gap:8px;flex-wrap:wrap}
+.web-links a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);text-decoration:none;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.8rem}
+.web-links a svg{width:14px;height:14px}
+.web-card{grid-column:1/-1;border:1px dashed rgba(168,130,58,.5);border-radius:18px;padding:14px;background:rgba(255,255,255,.7);display:flex;flex-direction:column;gap:10px}
+.web-card b{font-family:var(--serif);font-size:1.1rem}
+.web-card p{margin:0;color:var(--muted);font-size:.85rem}
+.web-card .btns{display:flex;gap:8px;flex-wrap:wrap}
 .st-check{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:700}
 .st-check input{width:auto;accent-color:var(--brass)}
 .st-hint{margin-top:-4px;font-size:.8rem}
@@ -573,6 +583,10 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
       <button type="button" class="btn" id="m-export">Exporter une sauvegarde</button>
       <button type="button" class="btn" id="m-import">Restaurer une sauvegarde</button>
     </div>
+    <h3>Taille des montres sur tes photos</h3>
+    <p class="help">Largeur du boîtier dans l'image, identique pour toutes les photos.</p>
+    <label class="size-row"><input type="range" id="m-size" min="45" max="80" step="1"><span id="m-size-v"></span></label>
+    <p class="help" id="m-size-msg"></p>
     <h3>Comment la rareté est calculée</h3>
     <p class="help">D'après le prix public neuf de chaque montre (à défaut, le prix payé ou constaté).</p>
     <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>de 200 à 399 €</span><span class="pill epic">Épique</span><span>de 400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
@@ -787,6 +801,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
       <h2 class="d-model" id="d-model"></h2>
     </div>
     <div class="d-price" id="d-price"></div>
+    <div class="web-links" id="d-web"></div>
     <div class="d-cw" id="d-cw">
       <p class="d-version" id="d-version"></p>
       <div class="d-opt" id="d-opt-dial"><h3>Cadran</h3><div class="cw-list" data-axis="dial"></div></div>
@@ -1067,6 +1082,7 @@ Citizen|Zenshin|A|41|100|s|#1E3F7A|r|t|t|l|date|s|a|b|900
 Citizen|Eco-Drive Chandler|S|42|100|m|#15181C|r|s|l|l|date|l|n|g|200
 Orient|Kamasu (Mako III)|A|41.8|200|s|#6B1E2A|r|s|s|d|date|s|p|g|369
 Orient|Bambino|A|40.5|30|m|#EDE6D6|r|s|l|l||l|b|d|200
+Orient|3 Stars (Tristar)|A|37|30|m|#1E3F7A|r|s|s|l|daydate|s|b|b|110
 Orient|Mako II|A|41.5|200|m|#1E3F7A|r|s|s|d|daydate|l|p|g|200
 Orient|Ray II|A|41.5|200|m|#111418|r|s|s|d|daydate|l|p|g|180
 Orient|Kano|A|40|200|m|#15181C|r|s|s|d|date|l|p|g|250
@@ -1383,7 +1399,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   ];
 
   let state = load(), tab = "collection", editing = null;
-  let pendingPhoto = null, photoCleared = false, previewUrl = null;
+  let pendingPhoto = null, pendingOrig = null, pendingAdj = null, photoCleared = false, previewUrl = null;
   let artifactNs = null, sampleFn = null, assetsNs = null, canSendImages = false;
   let aiCtl = null, delArmed = false;
 
@@ -1406,6 +1422,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       ai: { month: ai.month || "", count: Number(ai.count) || 0, limit: Number(ai.limit) > 0 ? Number(ai.limit) : 30 },
       patches: Array.isArray(d && d.patches) ? d.patches : [],
       refPick: (d && d.refPick && typeof d.refPick === "object") ? d.refPick : {},
+      photoSize: Number(d && d.photoSize) || 62,
       view: { layout: ["list","grid","big"].includes(v.layout) ? v.layout : "grid", catalog: { ...dv.catalog, ...(v.catalog || {}) }, collection: { ...dv.collection, ...(v.collection || {}) }, wishlist: { ...dv.wishlist, ...(v.wishlist || {}) } } };
   }
   function applyPatches(st){ let c = false; PATCHES.forEach(p => { if (!st.patches.includes(p.id)){ p.apply(st); st.patches.push(p.id); c = true; } }); return c; }
@@ -2133,7 +2150,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   }
   function openSheet(list, id){
     editing = { list, id, mode: id ? "edit" : "new" }; presetFor = ""; aiFor = "";
-    pendingPhoto = null; photoCleared = false; delArmed = false;
+    pendingPhoto = null; pendingOrig = null; pendingAdj = null; photoCleared = false; delArmed = false;
     if (previewUrl){ URL.revokeObjectURL(previewUrl); previewUrl = null; }
     const w = current();
     form.reset(); setMode(list);
@@ -2184,7 +2201,10 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     if (!d.brand && !d.model){ form.elements.brand.focus(); $("#ai-msg").textContent = "Indique au moins la marque ou le modèle."; return; }
     const save = $("#save"); save.disabled = true;
     const w = current();
+    const hadNew = !!pendingPhoto;
     d.photo = await uploadPhotoIfAny(w ? w.photo : "");
+    if (hadNew && pendingOrig){ try { d.photoOrig = (await localAssets.upload(pendingOrig)).id; } catch(e){} d.photoAdj = pendingAdj; d.photoStd = stdKey(); }
+    else if (photoCleared){ d.photoOrig = ""; d.photoAdj = null; d.photoStd = ""; }
     let saved;
     if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); tab = "collection"; }
     else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); }
@@ -2343,7 +2363,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
     try {
       const res = await openStudio(f); if (!res) return;
-      pendingPhoto = res; photoCleared = false;
+      pendingPhoto = res.blob; pendingOrig = f; pendingAdj = res.adj; photoCleared = false;
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       previewUrl = URL.createObjectURL(pendingPhoto); refreshPreview();
     } catch(err){ $("#ai-msg").textContent = "Ce format d'image n'est pas lisible. Essaie une photo JPEG ou PNG."; }
@@ -2595,7 +2615,7 @@ Règles :
     const layout = state.view.layout || "grid";
     listEl.className = "grid layout-" + layout;
     document.querySelectorAll(".layouts button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
-    listEl.innerHTML = catItems.length ? "" : `<p class="empty">Aucune montre ne correspond à ta recherche.</p>`;
+    listEl.innerHTML = v.q.trim().length >= 3 ? webCard(v.q.trim(), catItems.length) : (catItems.length ? "" : `<p class="empty">Aucune montre ne correspond à ta recherche.</p>`);
     catShown = 0; moreCatalog();
     renderGauge();
   }
@@ -2623,6 +2643,30 @@ Règles :
     if (!lazyIO) lazyIO = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting){ lazyIO.unobserve(x.target); const e = CAT_LIST[+x.target.dataset.lazy]; if (e && x.target.isConnected) x.target.outerHTML = watchSVG(e); } }), { rootMargin: "300px" });
     lazyIO.observe(el);
   }
+  // découpe « orient 3 stars » en marque + modèle, d'après les marques connues
+  function splitQuery(q){
+    const brands = [...new Set([...CAT_LIST.map(e => e.brand), ...state.collection.map(w => w.brand), ...state.wishlist.map(w => w.brand)])].filter(Boolean).sort((a, b) => b.length - a.length);
+    const fq = fold(q), hit = brands.find(b => fq === fold(b) || fq.startsWith(fold(b) + " "));
+    const cap = t => t.replace(/(^|\s)(\p{L})/gu, (m, sp, ch) => sp + ch.toUpperCase());
+    if (hit) return { brand: hit, model: cap(q.slice(hit.length).trim()) };
+    const [b, ...rest] = q.split(/\s+/); return { brand: cap(b), model: cap(rest.join(" ")) };
+  }
+  function webCard(q, n){
+    const { brand, model } = splitQuery(q);
+    return `<div class="web-card"><b>${n ? "Pas la bonne ?" : "Pas encore dans le catalogue"}</b>
+      <p>Cherche « ${esc(q)} » sur internet, puis crée sa fiche : marque <strong>${esc(brand)}</strong>${model ? `, modèle <strong>${esc(model)}</strong>` : ""}. Tu pourras y coller une photo.</p>
+      <div class="web-links"><a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Images</a></div>
+      <div class="btns"><button type="button" class="btn small primary" data-newwatch="collection">Je l'ai : créer la fiche</button><button type="button" class="btn small" data-newwatch="wishlist">Ajouter à mes envies</button></div></div>`;
+  }
+  listEl.addEventListener("click", e => {
+    const b = e.target.closest("[data-newwatch]"); if (!b) return;
+    e.stopPropagation();
+    const { brand, model } = splitQuery(state.view.catalog.q.trim());
+    openSheet(b.dataset.newwatch, null);
+    form.elements.brand.value = brand; form.elements.model.value = model;
+    if (typeof autoDesign === "function") autoDesign();
+    $("#ai-msg").textContent = "Complète ce que tu sais (mouvement, diamètre, couleurs…), puis enregistre. Ajoute ensuite sa photo depuis sa fiche.";
+  }, true);
   function entryToWatch(e){
     return { id: uid(), colorway: e.colorway || "", bezelColor: e.bezelColor || "", gmtColors: e.gmtColors || "", brand: e.brand, model: e.model, movementType: e.movementType, movement: "", size: e.size, water: e.water, glass: e.glass, display: e.display, dial: e.dial, shape: e.shape, case: e.case, strap: e.strap, strapColor: e.strapColor || STRAP_DEFAULT[e.strap] || "", bezel: e.bezel, comps: [...e.comps], dialTexture: e.dialTexture, indices: e.indices, hands: e.hands, current: e.retail, retail: e.retail, target: "", priority: "2", photo: "" };
   }
@@ -2766,7 +2810,14 @@ Règles :
     for (let x = 0; x < W; x++) if (cols[x] >= 2){ x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
     g.putImageData(id, 0, 0);
     const bgFrac = 1 - fg / (W * H);
-    return { alpha: c, bgFrac, bbox: x1 < 0 ? null : { x: x0 / k, y: y0 / k, w: (x1 - x0 + 1) / k, h: (y1 - y0 + 1) / k } };
+    // boîtier = rangées les plus larges (le bracelet est plus étroit) : sert à donner la même taille à toutes les montres
+    let maxW = 0; const rw = new Float32Array(H), rc = new Float32Array(H);
+    for (let y = 0; y < H; y++){ let l = -1, r = -1; for (let x = 0; x < W; x++) if (a[y * W + x] > .5){ if (l < 0) l = x; r = x; } if (l >= 0){ rw[y] = r - l + 1; rc[y] = (l + r) / 2; maxW = Math.max(maxW, rw[y]); } }
+    let sy = 0, n = 0; const centers = [];
+    for (let y = 0; y < H; y++) if (rw[y] >= maxW * .88){ sy += y; n++; centers.push(rc[y]); }
+    centers.sort((p, q) => p - q);
+    const caseInfo = n ? { w: maxW / k, cx: centers[centers.length >> 1] / k, cy: sy / n / k } : null;
+    return { alpha: c, bgFrac, caseInfo, bbox: x1 < 0 ? null : { x: x0 / k, y: y0 / k, w: (x1 - x0 + 1) / k, h: (y1 - y0 + 1) / k } };
   }
   // balance des blancs (en partie) et niveaux, calculés sur la montre seulement
   function harmonize(canvas, alphaCanvas){
@@ -2787,58 +2838,77 @@ Règles :
     }
     g.putImageData(im, 0, 0);
   }
-  function stPrepare(){
-    const { src, rot } = ST, q = rot % 2 === 1;
+  const DEF_ADJ = { rot: 0, zoom: 1, dx: 0, dy: 0, cut: true, tol: 34, tone: true };
+  const photoSize = () => (Number(state.photoSize) || 62) / 100;
+  const STD_V = 2, stdKey = () => STD_V + "-" + Math.round(photoSize() * 100);
+  function processPhoto(src, adj){
+    const q = adj.rot % 2 === 1;
     const R = document.createElement("canvas"); R.width = q ? src.height : src.width; R.height = q ? src.width : src.height;
-    const rg = R.getContext("2d", { willReadFrequently: true }); rg.translate(R.width / 2, R.height / 2); rg.rotate(rot * Math.PI / 2); rg.drawImage(src, -src.width / 2, -src.height / 2); rg.setTransform(1, 0, 0, 1, 0, 0);
+    const rg = R.getContext("2d", { willReadFrequently: true }); rg.translate(R.width / 2, R.height / 2); rg.rotate(adj.rot * Math.PI / 2); rg.drawImage(src, -src.width / 2, -src.height / 2); rg.setTransform(1, 0, 0, 1, 0, 0);
     let m = null, cutOk = false;
-    if (ST.cut){ m = computeMask(R, ST.tol); cutOk = m.bbox && m.bgFrac > .08 && m.bgFrac < .97; }
-    if (ST.tone) harmonize(R, cutOk ? m.alpha : null);
-    if (cutOk){ const fg = R.getContext("2d"); fg.globalCompositeOperation = "destination-in"; fg.imageSmoothingQuality = "high"; fg.drawImage(m.alpha, 0, 0, R.width, R.height); fg.globalCompositeOperation = "source-over"; }
-    const bb = cutOk ? m.bbox : { x: 0, y: 0, w: R.width, h: R.height };
-    // même taille pour toutes les montres : le boîtier et le bracelet visibles occupent ~86 % de la hauteur
-    const base = cutOk ? Math.min(OUT * .86 / bb.h, OUT * .8 / bb.w) : Math.max(OUT / R.width, OUT / R.height);
-    Object.assign(ST, { R, cutOk, base, cx: bb.x + bb.w / 2, cy: bb.y + bb.h / 2 });
-    $("#st-status").textContent = !ST.cut ? "Fond d'origine conservé : recadre la montre dans le cercle." : cutOk ? "Fond remplacé, montre recentrée et mise à la taille standard." : "Fond trop chargé pour être détouré : la photo est gardée et recadrée. Une photo sur fond uni donne le meilleur résultat.";
-    $("#st-guide").classList.toggle("hidden", cutOk);
-    $("#st-tol-l").classList.toggle("hidden", !ST.cut);
+    if (adj.cut){ m = computeMask(R, adj.tol); cutOk = !!(m.bbox && m.caseInfo && m.bgFrac > .08 && m.bgFrac < .97); }
+    if (adj.tone) harmonize(R, cutOk ? m.alpha : null);
+    if (cutOk){ rg.globalCompositeOperation = "destination-in"; rg.imageSmoothingQuality = "high"; rg.drawImage(m.alpha, 0, 0, R.width, R.height); rg.globalCompositeOperation = "source-over"; }
+    // même largeur de boîtier pour toutes les montres (réglable dans « … »), boîtier centré
+    if (cutOk) return { R, cutOk, base: photoSize() * OUT / m.caseInfo.w, cx: m.caseInfo.cx, cy: m.caseInfo.cy };
+    return { R, cutOk, base: Math.max(OUT / R.width, OUT / R.height), cx: R.width / 2, cy: R.height / 2 };
   }
-  function stDraw(){
-    const g = stX, { R, cutOk, base, cx, cy } = ST, sc = base * ST.zoom;
+  function drawPhoto(g, P, adj){
+    const sc = P.base * adj.zoom;
     const gr = g.createRadialGradient(OUT * .5, OUT * .4, 0, OUT * .5, OUT * .5, OUT * .72); gr.addColorStop(0, "#FFFFFF"); gr.addColorStop(.75, "#F1EBE0"); gr.addColorStop(1, "#E8E0D2");
     g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = gr; g.fillRect(0, 0, OUT, OUT);
     g.imageSmoothingQuality = "high";
-    if (cutOk){ g.shadowColor = "rgba(70,50,20,.30)"; g.shadowBlur = 46; g.shadowOffsetY = 24; }
-    g.drawImage(R, OUT / 2 - cx * sc + ST.dx, OUT / 2 - cy * sc + ST.dy, R.width * sc, R.height * sc);
+    if (P.cutOk){ g.shadowColor = "rgba(70,50,20,.30)"; g.shadowBlur = 46; g.shadowOffsetY = 24; }
+    g.drawImage(P.R, OUT / 2 - P.cx * sc + adj.dx, OUT / 2 - P.cy * sc + adj.dy, P.R.width * sc, P.R.height * sc);
     g.restore();
   }
-  function openStudio(blob){
+  async function srcCanvas(blob){
+    const img = await loadBitmap(blob);
+    const k = Math.min(1, 1600 / Math.max(img.width, img.height)), c = document.createElement("canvas");
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    return c;
+  }
+  // même traitement que le studio, sans fenêtre
+  async function autoStudio(blob, adj){
+    const a = { ...DEF_ADJ, ...(adj || {}) }, P = processPhoto(await srcCanvas(blob), a);
+    const c = document.createElement("canvas"); c.width = c.height = OUT; drawPhoto(c.getContext("2d"), P, a);
+    return new Promise(r => c.toBlob(r, "image/jpeg", .9));
+  }
+  function stPrepare(){
+    Object.assign(ST, { P: processPhoto(ST.src, ST.adj) });
+    const cutOk = ST.P.cutOk;
+    $("#st-status").textContent = !ST.adj.cut ? "Fond d'origine conservé : recadre la montre dans le cercle." : cutOk ? "Fond remplacé, boîtier recentré à la taille standard." : "Fond trop chargé pour être détouré : la photo est gardée et recadrée. Une photo sur fond uni donne le meilleur résultat.";
+    $("#st-guide").classList.toggle("hidden", cutOk);
+    $("#st-tol-l").classList.toggle("hidden", !ST.adj.cut);
+  }
+  function stDraw(){ drawPhoto(stX, ST.P, ST.adj); }
+  // renvoie { blob, adj } (réglages gardés pour les retouches et la réharmonisation)
+  function openStudio(blob, adj){
     return new Promise(async resolve => {
-      let img; try { img = await loadBitmap(blob); } catch(e){ resolve(null); return; }
-      const k = Math.min(1, 1600 / Math.max(img.width, img.height)), src = document.createElement("canvas");
-      src.width = Math.round(img.width * k); src.height = Math.round(img.height * k); src.getContext("2d").drawImage(img, 0, 0, src.width, src.height);
-      ST = { src, rot: 0, zoom: 1, dx: 0, dy: 0, cut: true, tol: 34, tone: true, resolve };
-      $("#st-zoom").value = 100; $("#st-cut").checked = true; $("#st-tol").value = 34; $("#st-tone").checked = true;
+      let src; try { src = await srcCanvas(blob); } catch(e){ resolve(null); return; }
+      const a = { ...DEF_ADJ, ...(adj || {}) };
+      ST = { src, adj: a, resolve };
+      $("#st-zoom").value = Math.round(a.zoom * 100); $("#st-cut").checked = a.cut; $("#st-tol").value = a.tol; $("#st-tone").checked = a.tone;
       $("#studio").showModal(); $("#st-status").textContent = "Détourage et cadrage…";
       setTimeout(() => { stPrepare(); stDraw(); }, 30);
     });
   }
-  function stEnd(blob){ const r = ST && ST.resolve; ST = null; $("#studio").close(); if (r) r(blob); }
+  function stEnd(blob){ const r = ST && ST.resolve, adj = ST && ST.adj; ST = null; $("#studio").close(); if (r) r(blob ? { blob, adj } : null); }
   let stTimer = null;
   const stRedo = () => { clearTimeout(stTimer); stTimer = setTimeout(() => { if (ST){ stPrepare(); stDraw(); } }, 120); };
-  $("#st-zoom").addEventListener("input", e => { if (!ST) return; ST.zoom = e.target.value / 100; stDraw(); });
-  $("#st-rot").addEventListener("click", () => { if (!ST) return; ST.rot = (ST.rot + 1) % 4; ST.dx = ST.dy = 0; stRedo(); });
-  $("#st-center").addEventListener("click", () => { if (!ST) return; ST.dx = ST.dy = 0; ST.zoom = 1; $("#st-zoom").value = 100; stDraw(); });
-  $("#st-cut").addEventListener("change", e => { if (!ST) return; ST.cut = e.target.checked; ST.dx = ST.dy = 0; stRedo(); });
-  $("#st-tol").addEventListener("input", e => { if (!ST) return; ST.tol = +e.target.value; stRedo(); });
-  $("#st-tone").addEventListener("change", e => { if (!ST) return; ST.tone = e.target.checked; stRedo(); });
+  $("#st-zoom").addEventListener("input", e => { if (!ST) return; ST.adj.zoom = e.target.value / 100; stDraw(); });
+  $("#st-rot").addEventListener("click", () => { if (!ST) return; ST.adj.rot = (ST.adj.rot + 1) % 4; ST.adj.dx = ST.adj.dy = 0; stRedo(); });
+  $("#st-center").addEventListener("click", () => { if (!ST) return; ST.adj.dx = ST.adj.dy = 0; ST.adj.zoom = 1; $("#st-zoom").value = 100; stDraw(); });
+  $("#st-cut").addEventListener("change", e => { if (!ST) return; ST.adj.cut = e.target.checked; ST.adj.dx = ST.adj.dy = 0; stRedo(); });
+  $("#st-tol").addEventListener("input", e => { if (!ST) return; ST.adj.tol = +e.target.value; stRedo(); });
+  $("#st-tone").addEventListener("change", e => { if (!ST) return; ST.adj.tone = e.target.checked; stRedo(); });
   $("#st-save").addEventListener("click", () => { if (!ST) return; stC.toBlob(b => stEnd(b), "image/jpeg", .9); });
   $("#st-cancel").addEventListener("click", () => stEnd(null));
   $("#studio").addEventListener("close", () => { if (ST) stEnd(null); });
   { // déplacer la montre au doigt
     let drag = null; const stage = $("#st-stage");
-    stage.addEventListener("pointerdown", e => { if (!ST) return; drag = { x: e.clientX, y: e.clientY, dx: ST.dx, dy: ST.dy }; stage.setPointerCapture(e.pointerId); });
-    stage.addEventListener("pointermove", e => { if (!drag || !ST) return; const k = OUT / stage.clientWidth; ST.dx = drag.dx + (e.clientX - drag.x) * k; ST.dy = drag.dy + (e.clientY - drag.y) * k; stDraw(); });
+    stage.addEventListener("pointerdown", e => { if (!ST) return; drag = { x: e.clientX, y: e.clientY, dx: ST.adj.dx, dy: ST.adj.dy }; stage.setPointerCapture(e.pointerId); });
+    stage.addEventListener("pointermove", e => { if (!drag || !ST) return; const k = OUT / stage.clientWidth; ST.adj.dx = drag.dx + (e.clientX - drag.x) * k; ST.adj.dy = drag.dy + (e.clientY - drag.y) * k; stDraw(); });
     const end = () => { drag = null; }; stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
   }
 
@@ -2848,6 +2918,11 @@ Règles :
   const optLabel = (name, v) => { const o = v && form.elements[name] ? [...form.elements[name].options].find(x => x.value === v) : null; return o ? o.textContent.trim() : ""; };
   const colorName = hex => { const all = [...DIAL_PALETTE, ...Object.values(VARIANTS).flat()]; const f = all.find(([, h]) => h.toLowerCase() === String(hex).toLowerCase()); if (f) return f[0]; const l = lum(hex); return l > .7 ? "Clair" : l < .12 ? "Noir" : "Coloré"; };
   function openDetail(e){ openWatchSheet("catalog", null, e); }
+  const G_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`;
+  function webLinks(w){
+    const q = `${w.brand} ${w.model}`.trim(), v = w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : "";
+    return `<a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q + v)}" target="_blank" rel="noopener">${G_ICON}Images</a><a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(q + v)}" target="_blank" rel="noopener">${G_ICON}Prix</a>`;
+  }
   function openWatchSheet(kind, id, entry){
     const base = kind === "catalog" ? entry : state[kind].find(x => x.id === id); if (!base) return;
     let shown = base;
@@ -2887,6 +2962,7 @@ Règles :
     const opts = detail.opts = optionsFor(w);
     renderHero(w);
     $("#d-brand").textContent = w.brand; $("#d-model").textContent = w.model;
+    $("#d-web").innerHTML = webLinks(w);
     const priceShown = kind === "collection" ? (w.price || w.retail) : kind === "wishlist" ? (w.current || w.retail) : w.retail;
     $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
     // versions : cadran, lunette, bracelet
@@ -2977,10 +3053,10 @@ Règles :
     const b = e.target.closest("[data-photo]"); if (!b || !detail) return;
     const a = b.dataset.photo, w = detail.shown, target = { kind: detail.kind, id: detail.id, w };
     const msg = t => { const m = $("#own-msg"); if (m) m.textContent = t; };
-    const edit = async (blob, fromOrig) => {
-      const res = await openStudio(blob); if (!res) return;
+    const edit = async (blob, fromOrig, adj) => {
+      const res = await openStudio(blob, adj); if (!res) return;
       msg("Enregistrement…");
-      try { await savePhoto(target, res, fromOrig ? null : blob); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); }
+      try { await savePhoto(target, res.blob, fromOrig ? null : blob, res.adj); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); }
       catch(err){ msg("La photo n'a pas pu être enregistrée."); }
     };
     if (a === "paste"){
@@ -2995,8 +3071,9 @@ Règles :
       const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; if (a === "camera") inp.capture = "environment";
       inp.onchange = () => { if (inp.files[0]) edit(inp.files[0]); }; inp.click();
     } else if (a === "retouch"){
-      const origId = detail.kind === "catalog" ? (state.refPick[modelKey(w)] || {}).orig : (state[detail.kind].find(x => x.id === detail.id) || {}).photoOrig;
-      (async () => { const src = origId ? await tx("readonly", st => st.get(origId)) : null; edit(src || await (await fetch(photoOf(detail.kind, w).src)).blob(), !!src); })();
+      const it = detail.kind === "catalog" ? (state.refPick[modelKey(w)] || {}) : (state[detail.kind].find(x => x.id === detail.id) || {});
+      const origId = detail.kind === "catalog" ? it.orig : it.photoOrig, adj = detail.kind === "catalog" ? it.adj : it.photoAdj;
+      (async () => { const src = origId ? await tx("readonly", st => st.get(origId)) : null; edit(src || await (await fetch(photoOf(detail.kind, w).src)).blob(), !!src, adj); })();
     } else if (a === "remove"){
       if (detail.kind === "catalog"){ const pk = state.refPick[modelKey(w)]; if (pk){ [pk.own, pk.orig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); delete state.refPick[modelKey(w)]; } }
       else { const it = state[detail.kind].find(x => x.id === detail.id); if (it){ [it.photo, it.photoOrig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); it.photo = ""; it.photoOrig = ""; detail.shown = detail.base = it; } }
@@ -3013,7 +3090,9 @@ Règles :
   $("#add").addEventListener("click", () => openSheet(tab, null));
   document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.addEventListener("click", () => { if (tab !== b.dataset.tab){ tab = b.dataset.tab; render(); window.scrollTo({ top: 0, behavior: "instant" in document.documentElement.style ? "instant" : "auto" }); } }));
   $("#tab-add").addEventListener("click", () => openSheet(tab === "catalog" ? "wishlist" : tab, null));
-  $("#menu-btn").addEventListener("click", () => $("#msheet").showModal());
+  $("#menu-btn").addEventListener("click", () => { $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
+  $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
+  $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
   document.addEventListener("click", e => { const x = e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); const d = x.closest("dialog"); if (!d) return; if (d.id === "sheet") closeSheet(); else d.close(); });
   $("#m-export").addEventListener("click", () => { $("#msheet").close(); $("#bk-export").click(); });
   $("#m-import").addEventListener("click", () => { $("#msheet").close(); $("#bk-import").click(); });
@@ -3207,21 +3286,44 @@ Règles :
     return pick && pick.own && PHOTO_URLS[pick.own] ? { ...pick, thumb: PHOTO_URLS[pick.own], url: PHOTO_URLS[pick.own] } : null;
   }
   // enregistre la photo retouchée (et l'originale, pour pouvoir la retoucher) : sur la montre de la collection, sinon sur le modèle
-  async function savePhoto(target, blob, orig){
+  async function savePhoto(target, blob, orig, adj){
     const { id } = await localAssets.upload(blob);
     const oid = orig ? (await localAssets.upload(orig)).id : null;
     if (target.kind === "catalog"){
       const key = modelKey(target.w), old = state.refPick[key];
       if (old && old.own) localAssets.delete(old.own).catch(() => {});
       if (old && old.orig && oid) localAssets.delete(old.orig).catch(() => {});
-      state.refPick[key] = { own: id, orig: oid || (old && old.orig) || null };
+      state.refPick[key] = { own: id, orig: oid || (old && old.orig) || null, adj: adj || null, std: stdKey() };
     } else {
       const w = state[target.kind].find(x => x.id === target.id); if (!w) return;
       if (w.photo) localAssets.delete(w.photo).catch(() => {});
       if (w.photoOrig && oid) localAssets.delete(w.photoOrig).catch(() => {});
-      w.photo = id; if (oid) w.photoOrig = oid;
+      w.photo = id; if (oid) w.photoOrig = oid; w.photoAdj = adj || null; w.photoStd = stdKey();
     }
     persist();
+  }
+  // toutes les photos au même format (à l'ouverture et quand la taille par défaut change), à partir des originales
+  let restdRunning = false;
+  async function restandardize(){
+    if (restdRunning) return; restdRunning = true;
+    try {
+      const jobs = [];
+      [...state.collection, ...state.wishlist].forEach(w => { if (w.photo && w.photoStd !== stdKey()) jobs.push({ get: () => w, kind: "w" }); });
+      Object.keys(state.refPick || {}).forEach(k => { const p = state.refPick[k]; if (p && p.own && p.std !== stdKey()) jobs.push({ get: () => state.refPick[k], kind: "m" }); });
+      for (const j of jobs){
+        const o = j.get(); if (!o) continue;
+        const cur = j.kind === "w" ? o.photo : o.own, origId = (j.kind === "w" ? o.photoOrig : o.orig) || cur;
+        try {
+          const src = await tx("readonly", st => st.get(origId)); if (!src) continue;
+          const out = await autoStudio(src, j.kind === "w" ? o.photoAdj : o.adj);
+          const { id } = await localAssets.upload(out);
+          if (cur !== origId) localAssets.delete(cur).catch(() => {});
+          if (j.kind === "w"){ o.photo = id; o.photoOrig = origId; o.photoStd = stdKey(); }
+          else { o.own = id; o.orig = origId; o.std = stdKey(); }
+          persist(); render();
+        } catch(e){ console.warn("photo", e); }
+      }
+    } finally { restdRunning = false; }
   }
   function refReady(w){ return refChoice(w); }
   const realImg = (x, cls) => `<img class="th real ${cls || ""}" src="${esc(x.thumb)}" alt="">`;
@@ -3284,6 +3386,7 @@ Règles :
     await loadPhotos();
     render();
     hideSplash();
+    setTimeout(() => restandardize(), 2600);
     if (needSave) persist();
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
     if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});
