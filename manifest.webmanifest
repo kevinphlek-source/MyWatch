@@ -1,0 +1,17 @@
+{
+  "name": "Mes montres",
+  "short_name": "Mes montres",
+  "description": "Ma collection de montres, mes recherchées et un catalogue de référence.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E6E9EC",
+  "theme_color": "#1B2430",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
