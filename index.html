@@ -410,6 +410,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .d-credit{display:flex;flex-direction:column;gap:8px;padding:10px 18px 0;font-size:.72rem;color:var(--muted)}
 .d-credit:empty{display:none}
 .d-credit a{color:var(--brass);font-weight:700}
+.d-near{font-weight:800;color:#8A6418;background:var(--brass-soft);border-radius:999px;padding:3px 10px;align-self:flex-start}
 .d-pbtns{display:flex;gap:8px;flex-wrap:wrap}
 .d-pbtn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.78rem;cursor:pointer}
 .d-hero>img{object-fit:cover}
@@ -791,7 +792,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
     <h2>Photos réelles</h2>
     <p class="help" id="p-title"></p>
-    <p class="help">Photos libres de droits de Wikimedia Commons, auteur crédité. Choisis celle qui correspond le mieux à ta montre.</p>
+    <p class="help">Photos libres de droits de Wikimedia Commons, auteur crédité. Le téléphone vérifie chaque image et écarte celles qui ne montrent pas une montre. Choisis celle qui correspond le mieux.</p>
     <p class="help hidden" id="p-empty">Aucune photo trouvée pour ce modèle (ou pas de connexion). Tu peux ajouter ta propre photo depuis « Modifier ».</p>
     <div class="pgrid" id="p-grid"></div>
   </form>
@@ -2674,13 +2675,13 @@ Règles :
         detail.refList = list;
         if (!x) return false;
         hero.innerHTML = `<img src="${esc(x.url && x.thumb ? x.thumb : x.url)}" alt="" referrerpolicy="no-referrer">` + badge;
-        credit.innerHTML = `<span>Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>`;
+        credit.innerHTML = `${x.level === "proche" ? `<span class="d-near">Photo d'un modèle proche de la même famille</span>` : ""}<span>Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>`;
         return true;
       };
       const c = refCache[modelKey(w)];
       if (c && showReal(c.list)) return;
       hero.innerHTML = `<span class="ph-skel"></span>` + badge;
-      refPhotos(w).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
+      refPhotos(w, true).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
       return;
     }
     credit.innerHTML = `<span>Aperçu calculé de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Choisir une photo réelle</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>`;
@@ -2805,13 +2806,13 @@ Règles :
     $("#p-title").textContent = `${w.brand} ${w.model}`;
     const draw = list => {
       const cur = refChoice(w, list), pick = state.refPick[key];
-      grid.innerHTML = list.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${!!cur && cur.url === x.url}"><img src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy"><small>${esc(x.author)}</small></button>`).join("")
+      grid.innerHTML = list.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${!!cur && cur.url === x.url}"><img src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy"><small>${x.level === "proche" ? "Modèle proche · " : ""}${esc(x.author)}</small></button>`).join("")
         + `<button type="button" data-i="none" aria-pressed="${pick === "none" || !cur}"><span class="none">Pas de photo :<br>utiliser le rendu</span></button>`;
       $("#p-empty").classList.toggle("hidden", !!list.length);
     };
     grid.innerHTML = `<span class="ph-skel" style="grid-column:1/-1;height:120px;border-radius:14px"></span>`;
     ps.showModal();
-    refPhotos(w).then(draw);
+    refPhotos(w, true).then(draw);
     grid.onclick = e => {
       const b = e.target.closest("[data-i]"); if (!b) return;
       const list = (refCache[key] && refCache[key].list) || [];
@@ -3017,14 +3018,43 @@ Règles :
     return state[kind === "w" ? "wishlist" : "collection"].find(x => x.id === id);
   }
   // ---------- Photos réelles (Wikimedia Commons, licences libres, auteur crédité) ----------
-  const REF_KEY = "mes-montres-photos-ref-v1", COMMONS = "https://commons.wikimedia.org/w/api.php";
+  const REF_KEY = "mes-montres-photos-ref-v2", COMMONS = "https://commons.wikimedia.org/w/api.php";
   let refCache = {}; try { refCache = JSON.parse(localStorage.getItem(REF_KEY) || "{}") || {}; } catch(e){}
-  const refMem = new Map(); let refChain = Promise.resolve();
+  const refMem = new Map(); let refChain = Promise.resolve(), refChainHi = Promise.resolve();
   const modelKey = w => fold(w.brand) + "|" + fold(w.model);
   const stripTags = h => String(h || "").replace(/<[^>]*>/g, " ").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
   const GENERIC = new Set(["automatique","automatic","chronographe","chronograph","date","quartz","remontage","manuel","mecanique","classic","edition","the","de","du","la","le","les","et","auto","watch","montre","mm","powermatic","small","seconds","jour","day","gmt"]);
   function modelTokens(model){
     return fold(model).replace(/[()/,.'’-]/g, " ").split(/\s+/).filter(t => t && !GENERIC.has(t) && !/^\d{1,2}$/.test(t) && !/^\d+[.,]\d+$/.test(t));
+  }
+  // MobileNet (classes ImageNet + 1) : horloge analogique, chronomètre, montre/horloge numérique, pendule, boussole
+  const WATCH_CLASSES = [410, 827, 532, 531, 893, 636], WATCH_MIN = .2;
+  let mnP = null;
+  function loadMobilenet(){
+    if (!mnP) mnP = new Promise((res, rej) => {
+      if (window.tf) return res();
+      const sc = document.createElement("script"); sc.src = "vendor/tf.min.js"; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
+    }).then(() => tf.loadGraphModel("vendor/mobilenet/model.json")).catch(e => { console.warn("reconnaissance indisponible", e); return null; });
+    return mnP;
+  }
+  const smallThumb = u => String(u).replace(/\/(\d+)px-/, "/330px-");
+  async function watchScore(url){
+    const model = await loadMobilenet(); if (!model) return null;
+    const img = new Image(); img.crossOrigin = "anonymous"; img.referrerPolicy = "no-referrer"; img.src = smallThumb(url);
+    try { await img.decode(); } catch(e){ return 0; }
+    const c = document.createElement("canvas"); c.width = c.height = 224; const g = c.getContext("2d");
+    const W = img.naturalWidth, H = img.naturalHeight, sz = Math.min(W, H);
+    let best = 0;
+    for (const v of [0, 1]){
+      g.fillStyle = "#fff"; g.fillRect(0, 0, 224, 224);
+      if (v === 0) g.drawImage(img, (W - sz) / 2, (H - sz) / 2, sz, sz, 0, 0, 224, 224); // centre recadré
+      else { const k = 224 / Math.max(W, H); g.drawImage(img, (224 - W * k) / 2, (224 - H * k) / 2, W * k, H * k); } // image entière
+      let probs;
+      try { const out = tf.tidy(() => tf.softmax(model.predict(tf.browser.fromPixels(c).toFloat().div(127.5).sub(1).expandDims(0)))); probs = await out.data(); out.dispose(); }
+      catch(e){ return null; }
+      best = Math.max(best, WATCH_CLASSES.reduce((t, i) => t + (probs[i] || 0), 0));
+    }
+    return best;
   }
   function saveRef(){ try { localStorage.setItem(REF_KEY, JSON.stringify(refCache)); } catch(e){} }
   async function searchCommons(q){
@@ -3048,26 +3078,46 @@ Règles :
     return { sc, thumb: ii.thumburl || ii.url, url: ii.url, page: ii.descriptionurl, title: String(p.title || "").replace(/^File:/, ""),
       author: stripTags(em.Artist && em.Artist.value).slice(0, 80) || "Auteur inconnu", license: stripTags(em.LicenseShortName && em.LicenseShortName.value) || "Licence libre" };
   }
-  function refPhotos(w){
+  function refPhotos(w, urgent){
     const key = modelKey(w);
     const c = refCache[key];
     if (c && (c.list.length || Date.now() - c.t < 7 * 864e5)) return Promise.resolve(c.list);
     if (refMem.has(key)) return refMem.get(key);
-    const job = refChain.then(async () => {
+    const job = (urgent ? refChainHi : refChain).then(async () => {
       const toks = modelTokens(w.model), core = w.model.replace(/\([^)]*\)/g, " ").trim();
-      const queries = [`${w.brand} ${core}`, toks.length ? `${w.brand} ${toks.slice(0, 2).join(" ")}` : null].filter((q, i, a) => q && a.indexOf(q) === i);
+      const refs = (w.model.match(/\b[A-Z]{0,4}\d{3,}[A-Z0-9/-]*\b/g) || []);
+      // du plus précis au plus large : modèle complet, référence, mots clés, puis famille (premier mot du modèle)
+      const tiers = [
+        [`${w.brand} ${core}`, "exact"], ...refs.map(r => [`${w.brand} ${r}`, "exact"]),
+        toks.length > 1 ? [`${w.brand} ${toks.slice(0, 2).join(" ")}`, "exact"] : null,
+        toks.length ? [`${w.brand} ${toks[0]} watch`, "proche"] : null
+      ].filter(Boolean).filter((q, i, a) => a.findIndex(x => x[0] === q[0]) === i);
       let found = [];
-      for (const q of queries){
-        const pages = await searchCommons(q);
-        pages.forEach(p => { const x = scoreCommons(p, w.brand, toks); if (x && !found.some(f => f.url === x.url)) found.push(x); });
-        if (found.length >= 4) break;
+      for (const [q, level] of tiers){
+        let pages = [];
+        try { pages = await searchCommons(q); } catch(e){ if (!found.length) throw e; break; }
+        const need = level === "proche" ? toks.slice(0, 1) : toks;
+        pages.forEach(p => { const x = scoreCommons(p, w.brand, need); if (x && !found.some(f => f.url === x.url)){ x.level = level; x.sc += level === "exact" ? 4 : 0; found.push(x); } });
+        if (found.filter(f => f.level === "exact").length >= 5) break;
         await new Promise(r => setTimeout(r, 150));
       }
-      found.sort((a, b) => b.sc - a.sc); found = found.slice(0, 10);
-      refCache[key] = { t: Date.now(), list: found }; saveRef();
-      return found;
+      found.sort((a, b) => b.sc - a.sc); found = found.slice(0, 14);
+      // le téléphone regarde chaque photo et écarte celles qui ne montrent pas une montre
+      const kept = [];
+      let checks = 0;
+      for (const x of found){
+        if (checks++ >= 9) break;
+        const ws = await watchScore(x.thumb);
+        if (ws === null){ kept.push(x); continue; }       // reconnaissance indisponible : on garde le tri par texte
+        x.watch = Math.round(ws * 100) / 100;
+        if (ws >= WATCH_MIN) kept.push(x);
+        if (kept.length >= (urgent ? 6 : 3)) break;
+      }
+      kept.sort((a, b) => (b.level === "exact") - (a.level === "exact") || (b.sc + (b.watch || 0) * 6) - (a.sc + (a.watch || 0) * 6));
+      refCache[key] = { t: Date.now(), list: kept }; saveRef();
+      return kept;
     });
-    refChain = job.catch(() => {});
+    if (urgent) refChainHi = job.catch(() => {}); else refChain = job.catch(() => {});
     const p = job.catch(() => []); // hors ligne : on réessaiera plus tard
     refMem.set(key, p); p.then(() => refMem.delete(key));
     return p;
