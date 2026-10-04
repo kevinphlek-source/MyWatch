@@ -403,8 +403,9 @@ input,select,textarea{background:#fff;border-color:var(--line)}
 .menu-list{display:flex;flex-direction:column;gap:8px}
 .menu-list .btn{text-align:left}
 /* croix de fermeture, toujours visible en haut à droite */
-dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
-.x-close{position:sticky;top:10px;z-index:8;display:grid;place-items:center;width:38px;height:38px;margin:10px 10px -48px auto;border-radius:50%;border:1px solid var(--line);background:rgba(255,253,248,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(30,20,5,.15)}
+dialog form>.x-close{flex:none}
+dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;max-height:calc(100% - 28px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+.x-close{position:fixed;top:calc(env(safe-area-inset-top,0px) + 24px);right:calc(max(12px, (100vw - 560px) / 2) + 10px);z-index:20;display:grid;place-items:center;width:40px;height:40px;margin:0!important;border-radius:50%;border:1px solid var(--line);background:rgba(255,253,248,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(30,20,5,.15)}
 .x-close svg{width:16px;height:16px}
 .d-close{display:none}
 .d-credit{display:flex;flex-direction:column;gap:8px;padding:10px 18px 0;font-size:.72rem;color:var(--muted)}
@@ -695,14 +696,21 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
           <option value="guilloche">Guilloché / clous de Paris</option><option value="grain">Grainé / texturé</option><option value="fume">Fumé (dégradé)</option>
         </select>
       </label>
-      <label>Index
+      <label>Catégorie
+        <select name="category">
+          <option value="">Automatique</option><option value="habillee">Habillée (dress)</option><option value="plongee">Plongée</option><option value="chrono">Chronographe</option>
+          <option value="aviation">Aviation</option><option value="field">Militaire / field</option><option value="gmt">Voyage / GMT</option><option value="sport">Sport chic</option>
+          <option value="digitale">Digitale</option><option value="quotidien">Quotidien</option>
+        </select>
+      </label>
+      <label class="hidden">Index
         <select name="indices">
           <option value="batons">Bâtons fins</option><option value="appliques">Appliques larges</option><option value="points">Plongée (points lumineux)</option>
           <option value="romains">Chiffres romains</option><option value="arabes">Chiffres arabes</option><option value="explorer">Chiffres 3-6-9</option>
         </select>
       </label>
     </div>
-    <div class="row">
+    <div class="row hidden">
       <label>Aiguilles
         <select name="hands">
           <option value="baton">Bâton</option><option value="dauphine">Dauphine</option><option value="glaive">Glaive</option>
@@ -798,6 +806,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
     </label>
     <div class="cgroup"><h4>Rareté</h4><div class="chips" id="f-rarity"></div></div>
     <div class="cgroup"><h4>Type de mouvement</h4><div class="chips" id="f-move"></div></div>
+    <div class="cgroup"><h4>Catégorie</h4><div class="chips" id="f-cat"></div></div>
     <div class="cgroup"><h4>Bracelet</h4><div class="chips" id="f-strap"></div></div>
     <div class="row">
       <label>Marque<select name="brand" id="f-brand"></select></label>
@@ -883,7 +892,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 16; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 17; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1439,7 +1448,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   const eur = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
   function thisMonth(){ return new Date().toISOString().slice(0, 7); }
-  function defaultView(){ return { layout: "grid", catalog: { q: "", sort: "brand", rarity: [], move: [], strap: [], brand: "", comp: "" }, collection: { sort: "value-desc", rarity: [], move: [], strap: [], brand: "", comp: "" }, wishlist: { sort: "priority", rarity: [], move: [], strap: [], brand: "", comp: "" } }; }
+  function defaultView(){ return { layout: "grid", catalog: { q: "", sort: "brand", rarity: [], move: [], strap: [], cat: [], brand: "", comp: "" }, collection: { sort: "value-desc", rarity: [], move: [], strap: [], cat: [], brand: "", comp: "" }, wishlist: { sort: "priority", rarity: [], move: [], strap: [], cat: [], brand: "", comp: "" } }; }
   function load(){
     try { const raw = localStorage.getItem(LS_KEY); if (raw) return normalize(JSON.parse(raw)); } catch(e){}
     return normalize(JSON.parse(JSON.stringify(INITIAL)));
@@ -1961,7 +1970,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   function artBg(c){ return /^#[0-9a-f]{6}$/i.test(c || "") ? `radial-gradient(circle at 50% 45%, ${c}30, ${c}0a 70%)` : "var(--bg)"; }
 
   // ---------- Cartes ----------
-  function specLine(w){ return [MOVE[w.movementType], w.size ? String(w.size).replace(".", ",") + " mm" : "", w.water ? w.water + " m" : ""].filter(Boolean).join(", "); }
+  function specLine(w){ return [CAT_LABEL[categoryOf(w)], MOVE[w.movementType], w.size ? String(w.size).replace(".", ",") + " mm" : "", w.water ? w.water + " m" : ""].filter(Boolean).join(", "); }
   function card(w, wish){
     const r = rarity(valueOf(w, wish));
     const shown = wish ? (w.current || w.retail || w.target) : (w.price || w.retail);
@@ -1996,7 +2005,23 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     wishlist: [["priority","Priorité"],["deal","Plus proche du prix cible"],["value-desc","Valeur (plus chère d'abord)"],["value-asc","Valeur (moins chère d'abord)"],["rarity","Rareté"],["brand","Marque (A à Z)"],["size","Diamètre"]]
   };
   function view(){ return state.view[tab]; }
-  function activeFilters(v){ return v.rarity.length + v.move.length + v.strap.length + (v.brand ? 1 : 0) + (v.comp ? 1 : 0); }
+  const CAT_LABEL = { habillee: "Habillée (dress)", plongee: "Plongée", chrono: "Chronographe", aviation: "Aviation", field: "Militaire / field", gmt: "Voyage / GMT", sport: "Sport chic", digitale: "Digitale", quotidien: "Quotidien" };
+  // catégorie choisie, sinon déduite des caractéristiques de la montre
+  function categoryOf(w){
+    if (w.category && CAT_LABEL[w.category]) return w.category;
+    const m = fold((w.brand || "") + " " + (w.model || "")), c = w.comps || [];
+    if (w.display === "numerique") return "digitale";
+    if (w.bezel === "plongee" || /diver|plongee|submariner|seamaster|aquis|pelagos|turtle|samurai|sub 300|fifty fathoms|superocean|hydroconquest|ocean star|aquaracer/.test(m)) return "plongee";
+    if (/pilot|aviat|flieger|navitimer|big pilot|br 03|br 05|top time|zulu|aviator|lunar/.test(m)) return "aviation";
+    if (c.includes("chrono") || c.includes("flyback")) return "chrono";
+    if (w.bezel === "gmt" || c.includes("gmt") || c.includes("worldtime")) return "gmt";
+    if (/field|khaki|ranger|scout|hack|murph|expedition|explorer|marine|mechanical/.test(m) && !/marine torpilleur/.test(m)) return "field";
+    if (signatureOf(w).integrated || /royal oak|nautilus|overseas|prx|laureato|tsuyosa|aikon|highlife|alpine eagle/.test(m)) return "sport";
+    if (w.strap === "cuir" && w.bezel === "lisse" && (num(w.size) || 40) <= 40.5) return "habillee";
+    if (/calatrava|patrimony|saxonia|classique|tank|reverso|master ultra|de ville|bambino|presage|jazzmaster|le locle|max bill|tangente|dolcevita|cellini|1908/.test(m)) return "habillee";
+    return "quotidien";
+  }
+  function activeFilters(v){ return v.rarity.length + v.move.length + v.strap.length + (v.cat || []).length + (v.brand ? 1 : 0) + (v.comp ? 1 : 0); }
   function applyView(arr, wish){
     const v = view();
     let items = arr.filter(w => {
@@ -2006,6 +2031,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       if (v.strap.length && !v.strap.includes(w.strap || "")) return false;
       if (v.brand && fold(w.brand) !== fold(v.brand)) return false;
       if (v.comp && !(w.comps || []).includes(v.comp)) return false;
+      if ((v.cat || []).length && !v.cat.includes(categoryOf(w))) return false;
       return true;
     });
     const val = w => valueOf(w, wish) ?? -1;
@@ -2037,6 +2063,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     $("#f-brand").innerHTML = `<option value="">Toutes</option>` + brands.map(b => `<option${fold(v.brand) === fold(b) ? " selected" : ""}>${esc(b)}</option>`).join("");
     const comps = [...new Set(arr.flatMap(w => w.comps || []))];
     $("#f-comp").innerHTML = `<option value="">Toutes</option>` + comps.map(c => `<option value="${c}"${v.comp === c ? " selected" : ""}>${esc(COMP_LABEL[c] || c)}</option>`).join("");
+    const cats = [...new Set(arr.map(categoryOf))];
+    chipSet($("#f-cat"), "cat", Object.keys(CAT_LABEL).filter(k => cats.includes(k)).map(k => [k, CAT_LABEL[k]]), v.cat || []);
     $("#fsheet").showModal();
   }
   function readFilters(){
@@ -2046,6 +2074,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     v.move = [...f.querySelectorAll('input[name="move"]:checked')].map(i => i.value);
     v.strap = [...f.querySelectorAll('input[name="strap"]:checked')].map(i => i.value);
     v.brand = f.elements.brand.value; v.comp = f.elements.comp.value;
+    v.cat = [...f.querySelectorAll('input[name="cat"]:checked')].map(i => i.value);
   }
   $("#fform").addEventListener("change", () => { readFilters(); render(); });
   $("#fform").addEventListener("submit", e => { e.preventDefault(); readFilters(); $("#fsheet").close(); persist(); render(); });
@@ -2122,7 +2151,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
 
   // ---------- Fiche ----------
   $("#comps-body").innerHTML = COMP_GROUPS.map(([title, items]) => `<div class="cgroup"><h4>${title}</h4><div class="chips">${items.map(([k, l]) => `<label><input type="checkbox" name="comp" value="${k}">${l}</label>`).join("")}</div></div>`).join("");
-  const TEXT = ["dialTexture","indices","hands","brand","model","movementType","movement","size","water","glass","display","dial","shape","case","strap","bezel","price","date","current","target","priority"];
+  const TEXT = ["category","dialTexture","indices","hands","brand","model","movementType","movement","size","water","glass","display","dial","shape","case","strap","bezel","price","date","current","target","priority"];
   const STYLE_FIELDS = ["dial","shape","case","strap","bezel","display","dialTexture","indices","hands","movementType"];
   function isWishForm(){ return editing && editing.list === "wishlist" && editing.mode !== "buy"; }
   function retailEl(){ return form.elements[isWishForm() ? "retail2" : "retail"]; }
@@ -2207,7 +2236,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   function closeSheet(){ if (aiCtl) aiCtl.abort(); closeSuggest(); sheet.close(); if (previewUrl){ URL.revokeObjectURL(previewUrl); previewUrl = null; } }
   function readForm(){
     const d = {};
-    ["brand","model","movementType","movement","size","water","glass","display","dial","shape","case","strap","bezel","dialTexture","indices","hands"].forEach(f => d[f] = form.elements[f].value.trim());
+    ["brand","model","movementType","movement","size","water","glass","display","dial","shape","case","strap","bezel","dialTexture","indices","hands","category"].forEach(f => d[f] = form.elements[f].value.trim());
     d.comps = getComps();
     d.strapColor = METAL_STRAPS.includes(d.strap) ? "" : strapColor;
     if (dialOpts && dialOptsFromAI) d.dialOptions = dialOpts;
@@ -2602,7 +2631,7 @@ Règles :
   }
   function catCard(e, i){
     const r = rarity(num(e.retail)), own = ownedState(e);
-    const spec = [MOVE[e.movementType], e.size ? String(e.size).replace(".", ",") + " mm" : "", e.water ? e.water + " m" : ""].filter(Boolean).join(", ");
+    const spec = [CAT_LABEL[categoryOf(e)], MOVE[e.movementType], e.size ? String(e.size).replace(".", ",") + " mm" : "", e.water ? e.water + " m" : ""].filter(Boolean).join(", ");
     return `<div class="card cat ${r ? r.key : ""}" data-cat="${i}">
       <div class="card-in">
         <span class="art" data-art="1">${picFor(e, "k:" + i)}${own ? `<span class="stamp ok">${own === "collection" ? "Dans ta collection" : "Déjà recherchée"}</span>` : ""}</span>
@@ -2631,6 +2660,7 @@ Règles :
       if (v.strap.length && !v.strap.includes(e.strap || "")) return false;
       if (v.brand && fold(e.brand) !== fold(v.brand)) return false;
       if (v.comp && !(e.comps || []).includes(v.comp)) return false;
+      if ((v.cat || []).length && !v.cat.includes(categoryOf(e))) return false;
       return true;
     });
     const rIdx = e => { const r = rarity(num(e.retail)); return r ? RAR.indexOf(r) : 9; };
@@ -3030,6 +3060,7 @@ Règles :
     $("#d-cw").classList.toggle("hidden", !any && !vname);
     // caractéristiques
     const specs = [
+      ["Catégorie", esc(CAT_LABEL[categoryOf(w)])],
       ["Mouvement", esc(MOVE[w.movementType] || "")],
       [w.shape === "rect" || w.shape === "tonneau" ? "Hauteur" : w.shape === "carre" ? "Largeur" : "Diamètre", w.size ? String(w.size).replace(".", ",") + " mm" : ""],
       ["Étanchéité", w.water ? (w.water === "1000" ? "1 000 m et plus" : w.water + " m") : ""],
@@ -3037,8 +3068,6 @@ Règles :
       ["Boîtier", esc([optLabel("shape", w.shape), optLabel("case", w.case).toLowerCase()].filter(Boolean).join(", "))],
       ["Lunette", esc(optLabel("bezel", w.bezel))],
       ["Cadran", `<span class="sw-dot" style="background:${esc(w.dial)}"></span>${esc((opts.dials.find(o => isOn.dial(o)) || {}).name || nearestName(w.dial))}, ${esc(optLabel("dialTexture", w.dialTexture).toLowerCase())}`],
-      ["Index", esc(optLabel("indices", w.indices))],
-      ["Aiguilles", esc(optLabel("hands", w.hands))],
       ["Bracelet", esc(curStrap ? curStrap.name : optLabel("strap", w.strap))],
       ...(kind === "collection" ? [["Prix payé", money(w.price)], ["Prix public", money(w.retail)], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
       ...(kind === "wishlist" ? [["Prix constaté", money(w.current)], ["Prix cible", money(w.target)], ["Priorité", ({ 1: "Haute", 2: "Moyenne", 3: "Basse" })[w.priority] || ""]] : [])
@@ -3175,7 +3204,9 @@ Règles :
     $("#m-version").textContent = `Version ${APP_VERSION}. L'app se met à jour toute seule quand une nouvelle version est publiée.`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
   $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
   $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
-  document.addEventListener("click", e => { const x = e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); const d = x.closest("dialog"); if (!d) return; if (d.id === "sheet") closeSheet(); else d.close(); });
+  const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
+  document.addEventListener("click", closeFrom, true);
+  document.addEventListener("touchend", closeFrom, { capture: true, passive: false });
   $("#m-export").addEventListener("click", () => { $("#msheet").close(); $("#bk-export").click(); });
   $("#m-import").addEventListener("click", () => { $("#msheet").close(); $("#bk-import").click(); });
   listEl.addEventListener("click", e => {
