@@ -415,6 +415,14 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .d-pbtn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.78rem;cursor:pointer}
 .d-hero>img{object-fit:cover}
 .own-photo{margin-top:4px;padding:12px;border:1px dashed rgba(168,130,58,.5);border-radius:14px;background:rgba(255,255,255,.6);color:var(--ink);font-size:.8rem;display:flex;flex-direction:column;gap:6px}
+.own-photo .tip{color:var(--muted);font-weight:600;line-height:1.35}
+.st-stage{position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;overflow:hidden;touch-action:none;cursor:grab;box-shadow:inset 0 0 0 1px var(--line)}
+.st-stage canvas{width:100%;height:100%;display:block}
+.st-guide{position:absolute;left:50%;top:50%;width:66%;height:66%;transform:translate(-50%,-50%);border:2px dashed rgba(168,130,58,.6);border-radius:50%;pointer-events:none}
+.st-row{display:flex;gap:8px}
+.st-check{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:700}
+.st-check input{width:auto;accent-color:var(--brass)}
+.st-hint{margin-top:-4px;font-size:.8rem}
 .own-photo ol{margin:0;padding-left:18px;color:var(--muted);font-weight:600}
 .own-photo a{color:var(--brass);font-weight:800}
 .d-pbtn.gold{background:var(--ink);color:var(--surface);border-color:var(--ink)}
@@ -793,14 +801,22 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
   </div>
 </dialog>
 
-<dialog id="psheet" aria-label="Choisir une photo">
-  <form method="dialog" style="gap:12px">
+<dialog id="studio" aria-label="Studio photo">
+  <form method="dialog" style="gap:12px" id="st-form">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
-    <h2>Photos réelles</h2>
-    <p class="help" id="p-title"></p>
-    <p class="help">Photos libres de droits de Wikimedia Commons, auteur crédité. Le téléphone vérifie chaque image et écarte celles qui ne montrent pas une montre. Choisis celle qui correspond le mieux.</p>
-    <p class="help hidden" id="p-empty">Aucune photo trouvée pour ce modèle (ou pas de connexion). Tu peux ajouter ta propre photo depuis « Modifier ».</p>
-    <div class="pgrid" id="p-grid"></div>
+    <h2>Studio photo</h2>
+    <p class="help" id="st-status">Préparation…</p>
+    <div class="st-stage" id="st-stage"><canvas id="st-canvas" width="1080" height="1080"></canvas><span class="st-guide" id="st-guide"></span></div>
+    <p class="help st-hint">Fais glisser pour déplacer la montre. Le cercle indique la place idéale du boîtier.</p>
+    <label>Taille<input type="range" id="st-zoom" min="50" max="220" value="100"></label>
+    <div class="st-row">
+      <button type="button" class="btn small" id="st-rot">Pivoter</button>
+      <button type="button" class="btn small" id="st-center">Recentrer</button>
+    </div>
+    <label class="st-check"><input type="checkbox" id="st-cut" checked> Remplacer le fond par le fond crème</label>
+    <label id="st-tol-l">Sensibilité du détourage<input type="range" id="st-tol" min="10" max="90" value="34"></label>
+    <label class="st-check"><input type="checkbox" id="st-tone" checked> Harmoniser lumière et couleurs</label>
+    <div class="actions"><span class="spacer"></span><button type="button" class="btn" id="st-cancel">Annuler</button><button type="button" class="btn primary" id="st-save">Enregistrer</button></div>
   </form>
 </dialog>
 <dialog id="gsheet">
@@ -2326,7 +2342,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   $("#photo-input").addEventListener("change", async e => {
     const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
     try {
-      pendingPhoto = await shrink(f, 1400, 0.85); photoCleared = false;
+      const res = await openStudio(f); if (!res) return;
+      pendingPhoto = res; photoCleared = false;
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       previewUrl = URL.createObjectURL(pendingPhoto); refreshPreview();
     } catch(err){ $("#ai-msg").textContent = "Ce format d'image n'est pas lisible. Essaie une photo JPEG ou PNG."; }
@@ -2713,6 +2730,118 @@ Règles :
       bezelColor: cw.bezelColor || "", gmtColors: cw.gmtColors || "" };
   }
 
+  // ---------- Studio photo : détourage, cadrage et couleurs identiques pour toutes les photos ----------
+  const OUT = 1080, stC = $("#st-canvas"), stX = stC.getContext("2d");
+  let ST = null;
+  async function loadBitmap(blob){
+    if (window.createImageBitmap){ try { return await createImageBitmap(blob); } catch(e){} }
+    return new Promise((res, rej) => { const u = URL.createObjectURL(blob), im = new Image(); im.onload = () => { res(im); }; im.onerror = rej; im.src = u; });
+  }
+  // fond détecté depuis les bords de l'image, puis propagé tant que la couleur reste proche
+  function computeMask(R, tol){
+    const k = Math.min(1, 420 / Math.max(R.width, R.height)), W = Math.max(8, Math.round(R.width * k)), H = Math.max(8, Math.round(R.height * k));
+    const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d", { willReadFrequently: true });
+    g.drawImage(R, 0, 0, W, H); const px = g.getImageData(0, 0, W, H).data;
+    const border = []; for (let x = 0; x < W; x++){ border.push(x, (H - 1) * W + x); } for (let y = 0; y < H; y++){ border.push(y * W, y * W + W - 1); }
+    const med = ch => { const v = border.map(i => px[i*4+ch]).sort((a, b) => a - b); return v[v.length >> 1]; };
+    const bg = [med(0), med(1), med(2)];
+    const dBg = i => Math.hypot(px[i*4] - bg[0], px[i*4+1] - bg[1], px[i*4+2] - bg[2]);
+    const dNb = (i, j) => Math.hypot(px[i*4] - px[j*4], px[i*4+1] - px[j*4+1], px[i*4+2] - px[j*4+2]);
+    const isBg = new Uint8Array(W * H), q = new Int32Array(W * H); let qh = 0, qt = 0;
+    border.forEach(i => { if (!isBg[i] && dBg(i) < tol * 1.6){ isBg[i] = 1; q[qt++] = i; } });
+    while (qh < qt){
+      const i = q[qh++], x = i % W, y = (i / W) | 0;
+      for (const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, y > 0 ? i - W : -1, y < H - 1 ? i + W : -1]){
+        if (j < 0 || isBg[j]) continue;
+        if (dBg(j) < tol * 2.2 && dNb(i, j) < tol * .55){ isBg[j] = 1; q[qt++] = j; }
+      }
+    }
+    // adoucissement des bords (deux flous 3x3)
+    let a = new Float32Array(W * H); for (let i = 0; i < W * H; i++) a[i] = isBg[i] ? 0 : 1;
+    for (let pass = 0; pass < 2; pass++){ const b2 = new Float32Array(W * H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){ let s2 = 0, n = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++){ const xx = x + dx, yy = y + dy; if (xx >= 0 && yy >= 0 && xx < W && yy < H){ s2 += a[yy * W + xx]; n++; } } b2[y * W + x] = s2 / n; } a = b2; }
+    const id = g.createImageData(W, H); let fg = 0, x0 = W, y0 = H, x1 = -1, y1 = -1;
+    const rows = new Int32Array(H), cols = new Int32Array(W);
+    for (let i = 0; i < W * H; i++){ id.data[i*4] = id.data[i*4+1] = id.data[i*4+2] = 255; id.data[i*4+3] = Math.round(a[i] * 255); if (a[i] > .5){ fg++; rows[(i / W) | 0]++; cols[i % W]++; } }
+    for (let y = 0; y < H; y++) if (rows[y] >= 2){ y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    for (let x = 0; x < W; x++) if (cols[x] >= 2){ x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
+    g.putImageData(id, 0, 0);
+    const bgFrac = 1 - fg / (W * H);
+    return { alpha: c, bgFrac, bbox: x1 < 0 ? null : { x: x0 / k, y: y0 / k, w: (x1 - x0 + 1) / k, h: (y1 - y0 + 1) / k } };
+  }
+  // balance des blancs (en partie) et niveaux, calculés sur la montre seulement
+  function harmonize(canvas, alphaCanvas){
+    const g = canvas.getContext("2d", { willReadFrequently: true }), W = canvas.width, H = canvas.height;
+    const im = g.getImageData(0, 0, W, H), d = im.data;
+    let al = null; if (alphaCanvas){ const t = document.createElement("canvas"); t.width = W; t.height = H; const tg = t.getContext("2d", { willReadFrequently: true }); tg.drawImage(alphaCanvas, 0, 0, W, H); al = tg.getImageData(0, 0, W, H).data; }
+    let sr = 0, sg = 0, sb = 0, n = 0; const hist = new Uint32Array(256);
+    for (let i = 0; i < d.length; i += 16){ if (al && al[i+3] < 128) continue; sr += d[i]; sg += d[i+1]; sb += d[i+2]; n++; hist[Math.round(.299*d[i] + .587*d[i+1] + .114*d[i+2])]++; }
+    if (!n) return;
+    const mr = sr / n, mg = sg / n, mb = sb / n, gray = (mr + mg + mb) / 3;
+    const gR = 1 + (gray / mr - 1) * .6, gG = 1 + (gray / mg - 1) * .6, gB = 1 + (gray / mb - 1) * .6;
+    let acc = 0, lo = 0, hi = 255; for (let v = 0; v < 256; v++){ acc += hist[v]; if (acc < n * .01) lo = v; if (acc < n * .99) hi = v; }
+    const span = Math.max(40, hi - lo), mul = 243 / span;
+    for (let i = 0; i < d.length; i += 4){
+      d[i] = Math.max(0, Math.min(255, (d[i] * gR - lo) * mul + 6));
+      d[i+1] = Math.max(0, Math.min(255, (d[i+1] * gG - lo) * mul + 6));
+      d[i+2] = Math.max(0, Math.min(255, (d[i+2] * gB - lo) * mul + 6));
+    }
+    g.putImageData(im, 0, 0);
+  }
+  function stPrepare(){
+    const { src, rot } = ST, q = rot % 2 === 1;
+    const R = document.createElement("canvas"); R.width = q ? src.height : src.width; R.height = q ? src.width : src.height;
+    const rg = R.getContext("2d", { willReadFrequently: true }); rg.translate(R.width / 2, R.height / 2); rg.rotate(rot * Math.PI / 2); rg.drawImage(src, -src.width / 2, -src.height / 2); rg.setTransform(1, 0, 0, 1, 0, 0);
+    let m = null, cutOk = false;
+    if (ST.cut){ m = computeMask(R, ST.tol); cutOk = m.bbox && m.bgFrac > .08 && m.bgFrac < .97; }
+    if (ST.tone) harmonize(R, cutOk ? m.alpha : null);
+    if (cutOk){ const fg = R.getContext("2d"); fg.globalCompositeOperation = "destination-in"; fg.imageSmoothingQuality = "high"; fg.drawImage(m.alpha, 0, 0, R.width, R.height); fg.globalCompositeOperation = "source-over"; }
+    const bb = cutOk ? m.bbox : { x: 0, y: 0, w: R.width, h: R.height };
+    // même taille pour toutes les montres : le boîtier et le bracelet visibles occupent ~86 % de la hauteur
+    const base = cutOk ? Math.min(OUT * .86 / bb.h, OUT * .8 / bb.w) : Math.max(OUT / R.width, OUT / R.height);
+    Object.assign(ST, { R, cutOk, base, cx: bb.x + bb.w / 2, cy: bb.y + bb.h / 2 });
+    $("#st-status").textContent = !ST.cut ? "Fond d'origine conservé : recadre la montre dans le cercle." : cutOk ? "Fond remplacé, montre recentrée et mise à la taille standard." : "Fond trop chargé pour être détouré : la photo est gardée et recadrée. Une photo sur fond uni donne le meilleur résultat.";
+    $("#st-guide").classList.toggle("hidden", cutOk);
+    $("#st-tol-l").classList.toggle("hidden", !ST.cut);
+  }
+  function stDraw(){
+    const g = stX, { R, cutOk, base, cx, cy } = ST, sc = base * ST.zoom;
+    const gr = g.createRadialGradient(OUT * .5, OUT * .4, 0, OUT * .5, OUT * .5, OUT * .72); gr.addColorStop(0, "#FFFFFF"); gr.addColorStop(.75, "#F1EBE0"); gr.addColorStop(1, "#E8E0D2");
+    g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = gr; g.fillRect(0, 0, OUT, OUT);
+    g.imageSmoothingQuality = "high";
+    if (cutOk){ g.shadowColor = "rgba(70,50,20,.30)"; g.shadowBlur = 46; g.shadowOffsetY = 24; }
+    g.drawImage(R, OUT / 2 - cx * sc + ST.dx, OUT / 2 - cy * sc + ST.dy, R.width * sc, R.height * sc);
+    g.restore();
+  }
+  function openStudio(blob){
+    return new Promise(async resolve => {
+      let img; try { img = await loadBitmap(blob); } catch(e){ resolve(null); return; }
+      const k = Math.min(1, 1600 / Math.max(img.width, img.height)), src = document.createElement("canvas");
+      src.width = Math.round(img.width * k); src.height = Math.round(img.height * k); src.getContext("2d").drawImage(img, 0, 0, src.width, src.height);
+      ST = { src, rot: 0, zoom: 1, dx: 0, dy: 0, cut: true, tol: 34, tone: true, resolve };
+      $("#st-zoom").value = 100; $("#st-cut").checked = true; $("#st-tol").value = 34; $("#st-tone").checked = true;
+      $("#studio").showModal(); $("#st-status").textContent = "Détourage et cadrage…";
+      setTimeout(() => { stPrepare(); stDraw(); }, 30);
+    });
+  }
+  function stEnd(blob){ const r = ST && ST.resolve; ST = null; $("#studio").close(); if (r) r(blob); }
+  let stTimer = null;
+  const stRedo = () => { clearTimeout(stTimer); stTimer = setTimeout(() => { if (ST){ stPrepare(); stDraw(); } }, 120); };
+  $("#st-zoom").addEventListener("input", e => { if (!ST) return; ST.zoom = e.target.value / 100; stDraw(); });
+  $("#st-rot").addEventListener("click", () => { if (!ST) return; ST.rot = (ST.rot + 1) % 4; ST.dx = ST.dy = 0; stRedo(); });
+  $("#st-center").addEventListener("click", () => { if (!ST) return; ST.dx = ST.dy = 0; ST.zoom = 1; $("#st-zoom").value = 100; stDraw(); });
+  $("#st-cut").addEventListener("change", e => { if (!ST) return; ST.cut = e.target.checked; ST.dx = ST.dy = 0; stRedo(); });
+  $("#st-tol").addEventListener("input", e => { if (!ST) return; ST.tol = +e.target.value; stRedo(); });
+  $("#st-tone").addEventListener("change", e => { if (!ST) return; ST.tone = e.target.checked; stRedo(); });
+  $("#st-save").addEventListener("click", () => { if (!ST) return; stC.toBlob(b => stEnd(b), "image/jpeg", .9); });
+  $("#st-cancel").addEventListener("click", () => stEnd(null));
+  $("#studio").addEventListener("close", () => { if (ST) stEnd(null); });
+  { // déplacer la montre au doigt
+    let drag = null; const stage = $("#st-stage");
+    stage.addEventListener("pointerdown", e => { if (!ST) return; drag = { x: e.clientX, y: e.clientY, dx: ST.dx, dy: ST.dy }; stage.setPointerCapture(e.pointerId); });
+    stage.addEventListener("pointermove", e => { if (!drag || !ST) return; const k = OUT / stage.clientWidth; ST.dx = drag.dx + (e.clientX - drag.x) * k; ST.dy = drag.dy + (e.clientY - drag.y) * k; stDraw(); });
+    const end = () => { drag = null; }; stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
+  }
+
   // ---------- Fiche d'une montre (catalogue, collection, recherchées) ----------
   const dsheet = $("#dsheet");
   let detail = null; // { kind, id, base, shown, opts, delArmed }
@@ -2723,36 +2852,22 @@ Règles :
     const base = kind === "catalog" ? entry : state[kind].find(x => x.id === id); if (!base) return;
     let shown = base;
     if (kind === "catalog"){ const first = colorwaysFor(base)[0]; if (first && first.dial.toLowerCase() === String(base.dial).toLowerCase()) shown = applyColorway(base, first); }
-    detail = { kind, id, base, shown, delArmed: false, view: "real", refList: [] };
+    detail = { kind, id, base, shown, delArmed: false };
     $("#d-saved").textContent = "";
     renderDetail(); dsheet.showModal(); dsheet.scrollTop = 0;
   }
-  function renderHero(w){
-    const hero = $("#d-hero"), badge = "", credit = $("#d-credit");
-    credit.innerHTML = "";
-    if (w.photo && photoSrc(w.photo)){ hero.innerHTML = `<img src="${esc(photoSrc(w.photo))}" alt="">` + badge; return; }
-    if (detail.view !== "render"){
-      const showReal = list => {
-        if (!detail || detail.shown !== w) return false;
-        const x = refChoice(w, list);
-        detail.refList = list;
-        if (!x) return false;
-        hero.innerHTML = `<img src="${esc(x.url && x.thumb ? x.thumb : x.url)}" alt="" referrerpolicy="no-referrer">` + badge;
-        credit.innerHTML = `${x.level === "proche" ? `<span class="d-near">Photo d'un modèle proche de la même famille</span>` : ""}<span>${x.own ? "Ta photo, enregistrée pour ce modèle (usage personnel)" : `Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a>`}</span><span class="d-pbtns">${x.own ? "" : `<button type="button" class="d-pbtn" data-photo="wrong">Pas la bonne photo</button>`}<button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>` + ownPhotoBtns(w);
-        return true;
-      };
-      const c = refCache[modelKey(w)], pk = state.refPick[modelKey(w)];
-      if ((pk && pk.own) ? showReal([]) : (c && showReal(c.list))) return;
-      hero.innerHTML = watchSVG(w) + badge;
-      refPhotos(w, true).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
-      return;
-    }
-    credit.innerHTML = `<span>Dessin de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Photos trouvées</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>` + ownPhotoBtns(w);
-    hero.innerHTML = watchSVG(w) + badge;
+  function photoOf(kind, w){
+    if (kind !== "catalog" && w.photo && photoSrc(w.photo)) return { src: photoSrc(w.photo) };
+    const r = refChoice(w); return r ? { src: r.thumb, model: true } : null;
   }
-  function ownPhotoBtns(w){
+  function renderHero(w){
+    const hero = $("#d-hero"), credit = $("#d-credit"), ph = photoOf(detail.kind, w);
+    hero.innerHTML = ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w);
     const q = encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""}`);
-    return `<div class="own-photo"><b>Mettre la vraie photo de ce modèle</b><ol><li><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">Ouvrir Google Images</a></li><li>Appuie longuement sur la photo choisie, puis « Copier »</li><li>Reviens ici et touche « Coller la photo »</li></ol><span class="d-pbtns"><button type="button" class="d-pbtn gold" data-photo="paste">Coller la photo</button><button type="button" class="d-pbtn" data-photo="file">Choisir dans mes photos</button></span><span class="own-msg" id="own-msg" aria-live="polite"></span></div>`;
+    credit.innerHTML = `<div class="own-photo"><b>${ph ? "Ta photo" : "Ajouter ta photo de cette montre"}</b>
+      ${ph ? "" : `<span class="tip">Sur <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">Google Images</a>, appuie longuement sur une photo puis « Copier », reviens et touche « Coller ». L'app détoure, recentre et harmonise la photo.</span>`}
+      <span class="d-pbtns"><button type="button" class="d-pbtn gold" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="file">Mes photos</button><button type="button" class="d-pbtn" data-photo="camera">Appareil photo</button>${ph ? `<button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button>` : ""}</span>
+      <span class="own-msg" id="own-msg" aria-live="polite"></span></div>`;
   }
   function versionName(w, opts){
     const c = opts.cws.find(c => { const v = applyColorway(w, c); return c.dial.toLowerCase() === String(w.dial).toLowerCase() && bezelOf(v) === bezelOf(w) && (!c.case || c.case === w.case); });
@@ -2823,7 +2938,6 @@ Règles :
     const b = ev.target.closest(".cw[data-axis]"); if (!b || !detail) return;
     const axis = b.dataset.axis, list = { dial: detail.opts.dials, bezel: detail.opts.bezels, strap: detail.opts.straps }[axis], choice = list[+b.dataset.i];
     const next = pickVariant(detail.shown, detail.opts, axis, choice);
-    detail.view = "render"; // montrer tout de suite la version choisie
     if (detail.kind === "catalog") detail.shown = next;
     else {
       const w = state[detail.kind].find(x => x.id === detail.id); if (!w) return;
@@ -2861,53 +2975,34 @@ Règles :
   $("#d-close").addEventListener("click", () => dsheet.close());
   $("#d-credit").addEventListener("click", e => {
     const b = e.target.closest("[data-photo]"); if (!b || !detail) return;
-    const a = b.dataset.photo;
+    const a = b.dataset.photo, w = detail.shown, target = { kind: detail.kind, id: detail.id, w };
     const msg = t => { const m = $("#own-msg"); if (m) m.textContent = t; };
-    const done = async blob => { msg("Enregistrement…"); try { await setOwnRefPhoto(detail.shown, blob); detail.view = "real"; renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); } catch(err){ msg("Cette image n'a pas pu être lue. Essaie une autre photo."); } };
+    const edit = async (blob, fromOrig) => {
+      const res = await openStudio(blob); if (!res) return;
+      msg("Enregistrement…");
+      try { await savePhoto(target, res, fromOrig ? null : blob); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); }
+      catch(err){ msg("La photo n'a pas pu être enregistrée."); }
+    };
     if (a === "paste"){
       (async () => {
         try {
           if (!navigator.clipboard || !navigator.clipboard.read) throw new Error("x");
-          const items = await navigator.clipboard.read();
-          for (const it of items){ const t = it.types.find(x => x.startsWith("image/")); if (t){ await done(await it.getType(t)); return; } }
-          msg("Aucune image copiée. Dans Google Images, appuie longuement sur la photo puis « Copier ».");
-        } catch(err){ msg("Le collage n'est pas disponible ici : utilise « Choisir dans mes photos » après avoir enregistré l'image."); }
+          for (const it of await navigator.clipboard.read()){ const t = it.types.find(x => x.startsWith("image/")); if (t) return edit(await it.getType(t)); }
+          msg("Aucune image copiée : appuie longuement sur une photo puis « Copier ».");
+        } catch(err){ msg("Collage impossible ici : enregistre l'image puis utilise « Mes photos »."); }
       })();
-      return;
+    } else if (a === "file" || a === "camera"){
+      const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; if (a === "camera") inp.capture = "environment";
+      inp.onchange = () => { if (inp.files[0]) edit(inp.files[0]); }; inp.click();
+    } else if (a === "retouch"){
+      const origId = detail.kind === "catalog" ? (state.refPick[modelKey(w)] || {}).orig : (state[detail.kind].find(x => x.id === detail.id) || {}).photoOrig;
+      (async () => { const src = origId ? await tx("readonly", st => st.get(origId)) : null; edit(src || await (await fetch(photoOf(detail.kind, w).src)).blob(), !!src); })();
+    } else if (a === "remove"){
+      if (detail.kind === "catalog"){ const pk = state.refPick[modelKey(w)]; if (pk){ [pk.own, pk.orig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); delete state.refPick[modelKey(w)]; } }
+      else { const it = state[detail.kind].find(x => x.id === detail.id); if (it){ [it.photo, it.photoOrig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); it.photo = ""; it.photoOrig = ""; detail.shown = detail.base = it; } }
+      persist(); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render();
     }
-    if (a === "file"){ const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; inp.onchange = () => { if (inp.files[0]) done(inp.files[0]); }; inp.click(); return; }
-    if (a === "wrong"){
-      const key = modelKey(detail.shown), c = refCache[key], cur = c && refChoice(detail.shown, c.list);
-      if (c && cur){ c.list = c.list.filter(x => x.url !== cur.url); saveRef(); }
-      if (state.refPick[key] && !state.refPick[key].own){ delete state.refPick[key]; persist(); }
-      renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render();
-      return;
-    }
-    if (a === "render"){ detail.view = "render"; renderHero(detail.shown); }
-    else if (a === "real"){ detail.view = "real"; renderHero(detail.shown); }
-    else openPhotoPicker(detail.shown);
   });
-  function openPhotoPicker(w){
-    const ps = $("#psheet"), grid = $("#p-grid"), key = modelKey(w);
-    $("#p-title").textContent = `${w.brand} ${w.model}`;
-    const draw = list => {
-      const cur = refChoice(w, list), pick = state.refPick[key];
-      grid.innerHTML = list.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${!!cur && cur.url === x.url}"><img src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy"><small>${x.level === "proche" ? "Modèle proche · " : ""}${esc(x.author)}</small></button>`).join("")
-        + `<button type="button" data-i="none" aria-pressed="${pick === "none" || !cur}"><span class="none">Pas de photo :<br>utiliser le rendu</span></button>`;
-      $("#p-empty").classList.toggle("hidden", !!list.length);
-    };
-    grid.innerHTML = `<span class="ph-skel" style="grid-column:1/-1;height:120px;border-radius:14px"></span>`;
-    ps.showModal();
-    refPhotos(w, true).then(draw);
-    grid.onclick = e => {
-      const b = e.target.closest("[data-i]"); if (!b) return;
-      const list = (refCache[key] && refCache[key].list) || [];
-      state.refPick[key] = b.dataset.i === "none" ? "none" : list[+b.dataset.i];
-      persist(); ps.close();
-      if (detail){ detail.view = state.refPick[key] === "none" ? "render" : "real"; renderHero(detail.shown); }
-      tab === "catalog" ? renderCatalog() : render();
-    };
-  }
 
   dsheet.addEventListener("click", ev => { if (ev.target === dsheet) dsheet.close(); });
 
@@ -3103,161 +3198,36 @@ Règles :
     if (kind === "k") return CAT_LIST[+id];
     return state[kind === "w" ? "wishlist" : "collection"].find(x => x.id === id);
   }
-  // ---------- Photos réelles (Wikimedia Commons, licences libres, auteur crédité) ----------
-  const REF_KEY = "mes-montres-photos-ref-v3", COMMONS = "https://commons.wikimedia.org/w/api.php";
-  let refCache = {}; try { refCache = JSON.parse(localStorage.getItem(REF_KEY) || "{}") || {}; } catch(e){}
-  const refMem = new Map(); let refChain = Promise.resolve(), refChainHi = Promise.resolve();
+  // ---------- Photos personnelles (une par modèle, ou par montre de la collection) ----------
   const modelKey = w => fold(w.brand) + "|" + fold(w.model);
-  const stripTags = h => String(h || "").replace(/<[^>]*>/g, " ").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
-  const GENERIC = new Set(["automatique","automatic","chronographe","chronograph","date","quartz","remontage","manuel","mecanique","classic","edition","the","de","du","la","le","les","et","auto","watch","montre","mm","powermatic","small","seconds","jour","day","gmt"]);
-  function modelTokens(model){
-    return fold(model).replace(/[()/,’]/g, " ").split(/\s+/).map(t => t.replace(/^[.'-]+|[.'-]+$/g, ""))
-      .filter(t => t && !GENERIC.has(t) && !/^\d{1,2}$/.test(t) && !/^\d+[.,]\d+$/.test(t) && !/^(19|20)\d\d$/.test(t));
-  }
-  const compact = x => String(x).replace(/[\s._'-]/g, "");
-  const isRef = t => /\d/.test(t) && (/[a-z]/.test(t) || t.length >= 4);
-  // MobileNet (classes ImageNet + 1) : horloge analogique, chronomètre, montre/horloge numérique, pendule, boussole
-  const WATCH_CLASSES = [410, 827, 532, 531, 893, 636], WATCH_MIN = .3;
-  let mnP = null;
-  function loadMobilenet(){
-    if (!mnP) mnP = new Promise((res, rej) => {
-      if (window.tf) return res();
-      const sc = document.createElement("script"); sc.src = "vendor/tf.min.js"; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
-    }).then(() => tf.loadGraphModel("vendor/mobilenet/model.json")).catch(e => { console.warn("reconnaissance indisponible", e); return null; });
-    return mnP;
-  }
-  const smallThumb = u => String(u).replace(/\/(\d+)px-/, "/330px-");
-  async function watchScore(url){
-    const model = await loadMobilenet(); if (!model) return null;
-    const img = new Image(); img.crossOrigin = "anonymous"; img.referrerPolicy = "no-referrer"; img.src = smallThumb(url);
-    try { await img.decode(); } catch(e){ return 0; }
-    const c = document.createElement("canvas"); c.width = c.height = 224; const g = c.getContext("2d");
-    const W = img.naturalWidth, H = img.naturalHeight, sz = Math.min(W, H);
-    let best = 0;
-    for (const v of [0, 1]){
-      g.fillStyle = "#fff"; g.fillRect(0, 0, 224, 224);
-      if (v === 0) g.drawImage(img, (W - sz) / 2, (H - sz) / 2, sz, sz, 0, 0, 224, 224); // centre recadré
-      else { const k = 224 / Math.max(W, H); g.drawImage(img, (224 - W * k) / 2, (224 - H * k) / 2, W * k, H * k); } // image entière
-      let probs;
-      try { const out = tf.tidy(() => tf.softmax(model.predict(tf.browser.fromPixels(c).toFloat().div(127.5).sub(1).expandDims(0)))); probs = await out.data(); out.dispose(); }
-      catch(e){ return null; }
-      best = Math.max(best, WATCH_CLASSES.reduce((t, i) => t + (probs[i] || 0), 0));
-    }
-    return best;
-  }
-  function saveRef(){ try { localStorage.setItem(REF_KEY, JSON.stringify(refCache)); } catch(e){} }
-  async function searchCommons(q){
-    const url = `${COMMONS}?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=24&gsrsearch=${encodeURIComponent(q + " filetype:bitmap")}&prop=imageinfo&iiprop=url|extmetadata|mime|size&iiurlwidth=720`;
-    const r = await fetch(url, { mode: "cors" }); if (!r.ok) throw new Error("commons " + r.status);
-    const j = await r.json();
-    return Object.values((j.query && j.query.pages) || {}).sort((a, b) => (a.index || 0) - (b.index || 0));
-  }
-  function scoreCommons(p, brand, toks, mainRefs){
-    const ii = (p.imageinfo || [])[0]; if (!ii || !/jpe?g|png|webp/i.test(ii.mime || "") || (ii.width || 0) < 400) return null;
-    const em = ii.extmetadata || {};
-    const title = fold(String(p.title || "").replace(/^file:/i, "").replace(/\.[a-z]+$/i, "").replace(/[_-]/g, " "));
-    const hay = title + " " + fold(stripTags(em.ImageDescription && em.ImageDescription.value)) + " " + fold(stripTags(em.ObjectName && em.ObjectName.value));
-    const bTok = fold(brand).split(/\s+/)[0];
-    if (!hay.includes(bTok)) return null;
-    let sc = title.includes(bTok) ? 4 : 2;
-    const cT = compact(title), cH = compact(hay);
-    const inT = t => isRef(t) ? cT.includes(compact(t)) : new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(title);
-    const inH = t => isRef(t) ? cH.includes(compact(t)) : new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(hay);
-    const refs = toks.filter(isRef), words = toks.filter(t => !isRef(t));
-    const refHit = refs.filter(inH).length, wordHit = words.filter(inH).length;
-    // la référence du nom (EFK-110, 5811…) est obligatoire ; sinon tous les mots du modèle
-    const must = (mainRefs || []).filter(r => toks.includes(r));
-    if (must.length){ if (!must.some(inH)) return null; }
-    else if (toks.length && !(refHit || (words.length && wordHit === words.length))) return null;
-    toks.forEach(t => { sc += inT(t) ? 3 : inH(t) ? 1 : 0; });
-    if (/\b(logo|boutique|store|shop|magasin|advert|publicite|box|caliber|calibre|movement|mouvement|factory|usine|catalog|signage|building)\b/.test(title)) sc -= 6;
-    if (sc < 4) return null;
-    return { sc, thumb: ii.thumburl || ii.url, url: ii.url, page: ii.descriptionurl, title: String(p.title || "").replace(/^File:/, ""),
-      author: stripTags(em.Artist && em.Artist.value).slice(0, 80) || "Auteur inconnu", license: stripTags(em.LicenseShortName && em.LicenseShortName.value) || "Licence libre" };
-  }
-  function refPhotos(w, urgent){
-    const key = modelKey(w);
-    const c = refCache[key];
-    if (c && (c.list.length || Date.now() - c.t < 7 * 864e5)) return Promise.resolve(c.list);
-    if (refMem.has(key)) return refMem.get(key);
-    const job = (urgent ? refChainHi : refChain).then(async () => {
-      const toks = modelTokens(w.model), core = w.model.replace(/\([^)]*\)/g, " ").trim();
-      const refs = (w.model.match(/\b[A-Z]{0,4}\d{3,}[A-Z0-9/-]*\b/g) || []);
-      // du plus précis au plus large : modèle complet, référence, mots clés, puis famille (premier mot du modèle)
-      const tiers = [
-        [`${w.brand} ${core}`, "exact"], ...refs.map(r => [`${w.brand} ${r}`, "exact"]),
-        toks.length > 1 ? [`${w.brand} ${toks.slice(0, 2).join(" ")}`, "exact"] : null,
-        toks.length ? [`${w.brand} ${toks[0]} watch`, "proche"] : null
-      ].filter(Boolean).filter((q, i, a) => a.findIndex(x => x[0] === q[0]) === i);
-      let found = [];
-      for (const [q, level] of tiers){
-        let pages = [];
-        try { pages = await searchCommons(q); } catch(e){ if (!found.length) throw e; break; }
-        const need = level === "proche" ? toks.slice(0, 1) : toks;
-        const mainRefs = level === "proche" ? [] : modelTokens(w.model.replace(/\([^)]*\)/g, " ")).filter(isRef);
-        pages.forEach(p => { const x = scoreCommons(p, w.brand, need, mainRefs); if (x && !found.some(f => f.url === x.url)){ x.level = level; x.sc += level === "exact" ? 4 : 0; found.push(x); } });
-        if (found.filter(f => f.level === "exact").length >= 5) break;
-        await new Promise(r => setTimeout(r, 150));
-      }
-      found.sort((a, b) => b.sc - a.sc); found = found.slice(0, 14);
-      // le téléphone regarde chaque photo et écarte celles qui ne montrent pas une montre
-      const kept = [];
-      let checks = 0;
-      for (const x of found){
-        if (checks++ >= 9) break;
-        const ws = await watchScore(x.thumb);
-        if (ws === null) break;                            // reconnaissance indisponible : aucune photo non vérifiée n'est montrée
-        x.watch = Math.round(ws * 100) / 100;
-        if (ws >= WATCH_MIN) kept.push(x);
-        if (kept.length >= (urgent ? 6 : 3)) break;
-      }
-      if (kept.some(x => x.level === "exact")) for (let i = kept.length - 1; i >= 0; i--) if (kept[i].level !== "exact") kept.splice(i, 1);
-      kept.sort((a, b) => (b.level === "exact") - (a.level === "exact") || (b.sc + (b.watch || 0) * 6) - (a.sc + (a.watch || 0) * 6));
-      refCache[key] = { t: Date.now(), list: kept }; saveRef();
-      return kept;
-    });
-    if (urgent) refChainHi = job.catch(() => {}); else refChain = job.catch(() => {});
-    const p = job.catch(() => []); // hors ligne : on réessaiera plus tard
-    refMem.set(key, p); p.then(() => refMem.delete(key));
-    return p;
-  }
+  try { ["v1","v2","v3"].forEach(v => localStorage.removeItem("mes-montres-photos-ref-" + v)); } catch(e){}
   // photo retenue pour un modèle : choix de l'utilisateur, sinon la meilleure trouvée ; null = rendu 3D
-  function refChoice(w, list){
+  function refChoice(w){
     const pick = state.refPick[modelKey(w)];
-    if (pick === "none") return null;
-    if (pick && pick.own) return PHOTO_URLS[pick.own] ? { ...pick, thumb: PHOTO_URLS[pick.own], url: PHOTO_URLS[pick.own], page: "" } : null;
-    if (pick && typeof pick === "object") return pick;
-    return (list || []).length ? list[0] : null;
+    return pick && pick.own && PHOTO_URLS[pick.own] ? { ...pick, thumb: PHOTO_URLS[pick.own], url: PHOTO_URLS[pick.own] } : null;
   }
-  async function setOwnRefPhoto(w, blob){
-    const small = await shrink(blob, 1400, .86);
-    const key = modelKey(w), old = state.refPick[key];
-    const { id } = await localAssets.upload(small);
-    if (old && old.own) localAssets.delete(old.own).catch(() => {});
-    state.refPick[key] = { own: id, author: "Ma photo", license: "usage personnel", level: "exact" };
+  // enregistre la photo retouchée (et l'originale, pour pouvoir la retoucher) : sur la montre de la collection, sinon sur le modèle
+  async function savePhoto(target, blob, orig){
+    const { id } = await localAssets.upload(blob);
+    const oid = orig ? (await localAssets.upload(orig)).id : null;
+    if (target.kind === "catalog"){
+      const key = modelKey(target.w), old = state.refPick[key];
+      if (old && old.own) localAssets.delete(old.own).catch(() => {});
+      if (old && old.orig && oid) localAssets.delete(old.orig).catch(() => {});
+      state.refPick[key] = { own: id, orig: oid || (old && old.orig) || null };
+    } else {
+      const w = state[target.kind].find(x => x.id === target.id); if (!w) return;
+      if (w.photo) localAssets.delete(w.photo).catch(() => {});
+      if (w.photoOrig && oid) localAssets.delete(w.photoOrig).catch(() => {});
+      w.photo = id; if (oid) w.photoOrig = oid;
+    }
     persist();
   }
-  function refReady(w){ const pk = state.refPick[modelKey(w)]; if (pk && pk.own) return refChoice(w, []); const c = refCache[modelKey(w)]; return c ? refChoice(w, c.list) : undefined; }
-  const realImg = (x, cls) => `<img class="th real ${cls || ""}" src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy">`;
-  function fillThumb(el){
-    if (el.dataset.filled) return; el.dataset.filled = "1";
-    const w = thumbWatch(el.dataset.thumb); if (!w) return;
-    const own = el.dataset.thumb.startsWith("c:") || el.dataset.thumb.startsWith("w:");
-    const render = () => { if (el.isConnected) el.innerHTML = watchSVG(w); };
-    refPhotos(w).then(list => {
-      if (!el.isConnected) return;
-      const x = refChoice(w, list);
-      if (x){ el.innerHTML = realImg(x); const img = el.querySelector("img"); img.onerror = () => { el.dataset.filled = ""; render(); }; }
-      else render();
-    });
-  }
-  // image prête tout de suite si elle est déjà calculée, sinon un emplacement en attente (jamais l'ancien dessin)
-  function picFor(w, ref){
-    const real = refReady(w);
-    if (real) return realImg(real, "now");
-    if (real === null) return watchSVG(w);
-    return `<span class="pic" data-thumb="${esc(ref)}">${watchSVG(w)}</span>`;
-  }
+  function refReady(w){ return refChoice(w); }
+  const realImg = (x, cls) => `<img class="th real ${cls || ""}" src="${esc(x.thumb)}" alt="">`;
+  function fillThumb(){}
+  // ta photo du modèle si tu en as mis une, sinon le dessin
+  function picFor(w){ const real = refReady(w); return real ? realImg(real, "now") : watchSVG(w); }
   function observeThumbs(){
     const els = listEl.querySelectorAll("[data-thumb]:not([data-tobs])");
     if (!("IntersectionObserver" in window)) return els.forEach(fillThumb);
