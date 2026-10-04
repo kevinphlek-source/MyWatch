@@ -414,6 +414,12 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .d-pbtns{display:flex;gap:8px;flex-wrap:wrap}
 .d-pbtn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.78rem;cursor:pointer}
 .d-hero>img{object-fit:cover}
+.own-photo{margin-top:4px;padding:12px;border:1px dashed rgba(168,130,58,.5);border-radius:14px;background:rgba(255,255,255,.6);color:var(--ink);font-size:.8rem;display:flex;flex-direction:column;gap:6px}
+.own-photo ol{margin:0;padding-left:18px;color:var(--muted);font-weight:600}
+.own-photo a{color:var(--brass);font-weight:800}
+.d-pbtn.gold{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.own-msg{font-weight:700;color:var(--brass)}
+.own-msg:empty{display:none}
 .pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .pgrid button{border:2px solid transparent;border-radius:14px;overflow:hidden;padding:0;background:var(--studio);aspect-ratio:1/1;cursor:pointer;position:relative}
 .pgrid button[aria-pressed="true"]{border-color:var(--brass)}
@@ -2675,19 +2681,23 @@ Règles :
         detail.refList = list;
         if (!x) return false;
         hero.innerHTML = `<img src="${esc(x.url && x.thumb ? x.thumb : x.url)}" alt="" referrerpolicy="no-referrer">` + badge;
-        credit.innerHTML = `${x.level === "proche" ? `<span class="d-near">Photo d'un modèle proche de la même famille</span>` : ""}<span>Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>`;
+        credit.innerHTML = `${x.level === "proche" ? `<span class="d-near">Photo d'un modèle proche de la même famille</span>` : ""}<span>${x.own ? "Ta photo, enregistrée pour ce modèle (usage personnel)" : `Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a>`}</span><span class="d-pbtns">${x.own ? "" : `<button type="button" class="d-pbtn" data-photo="wrong">Pas la bonne photo</button>`}<button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>` + ownPhotoBtns(w);
         return true;
       };
-      const c = refCache[modelKey(w)];
-      if (c && showReal(c.list)) return;
+      const c = refCache[modelKey(w)], pk = state.refPick[modelKey(w)];
+      if ((pk && pk.own) ? showReal([]) : (c && showReal(c.list))) return;
       hero.innerHTML = `<span class="ph-skel"></span>` + badge;
       refPhotos(w, true).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
       return;
     }
-    credit.innerHTML = `<span>Aperçu calculé de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Choisir une photo réelle</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>`;
+    credit.innerHTML = `<span>Aperçu calculé de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Photos trouvées</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>` + ownPhotoBtns(w);
     const small = thumbReady.get(thumbKey(w, 360)), big = thumbReady.get(thumbKey(w, 720));
     hero.innerHTML = (big || small ? `<img src="${big || small}" alt="">` : (thumbsOff ? watchSVG(w) : `<span class="ph-skel"></span>`)) + badge;
     if (!big) thumbFor(w, 720).then(url => { if (detail && detail.shown === w) hero.innerHTML = (url ? `<img src="${url}" alt="">` : watchSVG(w)) + badge; });
+  }
+  function ownPhotoBtns(w){
+    const q = encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""}`);
+    return `<div class="own-photo"><b>Mettre la vraie photo de ce modèle</b><ol><li><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">Ouvrir Google Images</a></li><li>Appuie longuement sur la photo choisie, puis « Copier »</li><li>Reviens ici et touche « Coller la photo »</li></ol><span class="d-pbtns"><button type="button" class="d-pbtn gold" data-photo="paste">Coller la photo</button><button type="button" class="d-pbtn" data-photo="file">Choisir dans mes photos</button></span><span class="own-msg" id="own-msg" aria-live="polite"></span></div>`;
   }
   function versionName(w, opts){
     const c = opts.cws.find(c => { const v = applyColorway(w, c); return c.dial.toLowerCase() === String(w.dial).toLowerCase() && bezelOf(v) === bezelOf(w) && (!c.case || c.case === w.case); });
@@ -2797,6 +2807,27 @@ Règles :
   $("#d-credit").addEventListener("click", e => {
     const b = e.target.closest("[data-photo]"); if (!b || !detail) return;
     const a = b.dataset.photo;
+    const msg = t => { const m = $("#own-msg"); if (m) m.textContent = t; };
+    const done = async blob => { msg("Enregistrement…"); try { await setOwnRefPhoto(detail.shown, blob); detail.view = "real"; renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); } catch(err){ msg("Cette image n'a pas pu être lue. Essaie une autre photo."); } };
+    if (a === "paste"){
+      (async () => {
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.read) throw new Error("x");
+          const items = await navigator.clipboard.read();
+          for (const it of items){ const t = it.types.find(x => x.startsWith("image/")); if (t){ await done(await it.getType(t)); return; } }
+          msg("Aucune image copiée. Dans Google Images, appuie longuement sur la photo puis « Copier ».");
+        } catch(err){ msg("Le collage n'est pas disponible ici : utilise « Choisir dans mes photos » après avoir enregistré l'image."); }
+      })();
+      return;
+    }
+    if (a === "file"){ const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; inp.onchange = () => { if (inp.files[0]) done(inp.files[0]); }; inp.click(); return; }
+    if (a === "wrong"){
+      const key = modelKey(detail.shown), c = refCache[key], cur = c && refChoice(detail.shown, c.list);
+      if (c && cur){ c.list = c.list.filter(x => x.url !== cur.url); saveRef(); }
+      if (state.refPick[key] && !state.refPick[key].own){ delete state.refPick[key]; persist(); }
+      renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render();
+      return;
+    }
     if (a === "render"){ detail.view = "render"; renderHero(detail.shown); }
     else if (a === "real"){ detail.view = "real"; renderHero(detail.shown); }
     else openPhotoPicker(detail.shown);
@@ -2876,7 +2907,7 @@ Règles :
     }
   };
   async function loadPhotos(){
-    const ids = [...state.collection, ...state.wishlist].map(w => w.photo).filter(Boolean);
+    const ids = [...state.collection, ...state.wishlist].map(w => w.photo).concat(Object.values(state.refPick || {}).map(p => p && p.own)).filter(Boolean);
     for (const id of ids){
       if (PHOTO_URLS[id]) continue;
       try { const b = await tx("readonly", s => s.get(id)); if (b) PHOTO_URLS[id] = URL.createObjectURL(b); } catch(e){}
@@ -3018,17 +3049,20 @@ Règles :
     return state[kind === "w" ? "wishlist" : "collection"].find(x => x.id === id);
   }
   // ---------- Photos réelles (Wikimedia Commons, licences libres, auteur crédité) ----------
-  const REF_KEY = "mes-montres-photos-ref-v2", COMMONS = "https://commons.wikimedia.org/w/api.php";
+  const REF_KEY = "mes-montres-photos-ref-v3", COMMONS = "https://commons.wikimedia.org/w/api.php";
   let refCache = {}; try { refCache = JSON.parse(localStorage.getItem(REF_KEY) || "{}") || {}; } catch(e){}
   const refMem = new Map(); let refChain = Promise.resolve(), refChainHi = Promise.resolve();
   const modelKey = w => fold(w.brand) + "|" + fold(w.model);
   const stripTags = h => String(h || "").replace(/<[^>]*>/g, " ").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
   const GENERIC = new Set(["automatique","automatic","chronographe","chronograph","date","quartz","remontage","manuel","mecanique","classic","edition","the","de","du","la","le","les","et","auto","watch","montre","mm","powermatic","small","seconds","jour","day","gmt"]);
   function modelTokens(model){
-    return fold(model).replace(/[()/,.'’-]/g, " ").split(/\s+/).filter(t => t && !GENERIC.has(t) && !/^\d{1,2}$/.test(t) && !/^\d+[.,]\d+$/.test(t));
+    return fold(model).replace(/[()/,’]/g, " ").split(/\s+/).map(t => t.replace(/^[.'-]+|[.'-]+$/g, ""))
+      .filter(t => t && !GENERIC.has(t) && !/^\d{1,2}$/.test(t) && !/^\d+[.,]\d+$/.test(t) && !/^(19|20)\d\d$/.test(t));
   }
+  const compact = x => String(x).replace(/[\s._'-]/g, "");
+  const isRef = t => /\d/.test(t) && (/[a-z]/.test(t) || t.length >= 4);
   // MobileNet (classes ImageNet + 1) : horloge analogique, chronomètre, montre/horloge numérique, pendule, boussole
-  const WATCH_CLASSES = [410, 827, 532, 531, 893, 636], WATCH_MIN = .2;
+  const WATCH_CLASSES = [410, 827, 532, 531, 893, 636], WATCH_MIN = .3;
   let mnP = null;
   function loadMobilenet(){
     if (!mnP) mnP = new Promise((res, rej) => {
@@ -3063,16 +3097,24 @@ Règles :
     const j = await r.json();
     return Object.values((j.query && j.query.pages) || {}).sort((a, b) => (a.index || 0) - (b.index || 0));
   }
-  function scoreCommons(p, brand, toks){
+  function scoreCommons(p, brand, toks, mainRefs){
     const ii = (p.imageinfo || [])[0]; if (!ii || !/jpe?g|png|webp/i.test(ii.mime || "") || (ii.width || 0) < 400) return null;
     const em = ii.extmetadata || {};
     const title = fold(String(p.title || "").replace(/^file:/i, "").replace(/\.[a-z]+$/i, "").replace(/[_-]/g, " "));
     const hay = title + " " + fold(stripTags(em.ImageDescription && em.ImageDescription.value)) + " " + fold(stripTags(em.ObjectName && em.ObjectName.value));
     const bTok = fold(brand).split(/\s+/)[0];
     if (!hay.includes(bTok)) return null;
-    let sc = title.includes(bTok) ? 4 : 2, hits = 0;
-    toks.forEach(t => { if (title.includes(t)) { sc += 3; hits++; } else if (hay.includes(t)) { sc += 1; hits++; } });
-    if (toks.length && !hits) return null;
+    let sc = title.includes(bTok) ? 4 : 2;
+    const cT = compact(title), cH = compact(hay);
+    const inT = t => isRef(t) ? cT.includes(compact(t)) : new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(title);
+    const inH = t => isRef(t) ? cH.includes(compact(t)) : new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(hay);
+    const refs = toks.filter(isRef), words = toks.filter(t => !isRef(t));
+    const refHit = refs.filter(inH).length, wordHit = words.filter(inH).length;
+    // la référence du nom (EFK-110, 5811…) est obligatoire ; sinon tous les mots du modèle
+    const must = (mainRefs || []).filter(r => toks.includes(r));
+    if (must.length){ if (!must.some(inH)) return null; }
+    else if (toks.length && !(refHit || (words.length && wordHit === words.length))) return null;
+    toks.forEach(t => { sc += inT(t) ? 3 : inH(t) ? 1 : 0; });
     if (/\b(logo|boutique|store|shop|magasin|advert|publicite|box|caliber|calibre|movement|mouvement|factory|usine|catalog|signage|building)\b/.test(title)) sc -= 6;
     if (sc < 4) return null;
     return { sc, thumb: ii.thumburl || ii.url, url: ii.url, page: ii.descriptionurl, title: String(p.title || "").replace(/^File:/, ""),
@@ -3097,7 +3139,8 @@ Règles :
         let pages = [];
         try { pages = await searchCommons(q); } catch(e){ if (!found.length) throw e; break; }
         const need = level === "proche" ? toks.slice(0, 1) : toks;
-        pages.forEach(p => { const x = scoreCommons(p, w.brand, need); if (x && !found.some(f => f.url === x.url)){ x.level = level; x.sc += level === "exact" ? 4 : 0; found.push(x); } });
+        const mainRefs = level === "proche" ? [] : modelTokens(w.model.replace(/\([^)]*\)/g, " ")).filter(isRef);
+        pages.forEach(p => { const x = scoreCommons(p, w.brand, need, mainRefs); if (x && !found.some(f => f.url === x.url)){ x.level = level; x.sc += level === "exact" ? 4 : 0; found.push(x); } });
         if (found.filter(f => f.level === "exact").length >= 5) break;
         await new Promise(r => setTimeout(r, 150));
       }
@@ -3108,11 +3151,12 @@ Règles :
       for (const x of found){
         if (checks++ >= 9) break;
         const ws = await watchScore(x.thumb);
-        if (ws === null){ kept.push(x); continue; }       // reconnaissance indisponible : on garde le tri par texte
+        if (ws === null) break;                            // reconnaissance indisponible : aucune photo non vérifiée n'est montrée
         x.watch = Math.round(ws * 100) / 100;
         if (ws >= WATCH_MIN) kept.push(x);
         if (kept.length >= (urgent ? 6 : 3)) break;
       }
+      if (kept.some(x => x.level === "exact")) for (let i = kept.length - 1; i >= 0; i--) if (kept[i].level !== "exact") kept.splice(i, 1);
       kept.sort((a, b) => (b.level === "exact") - (a.level === "exact") || (b.sc + (b.watch || 0) * 6) - (a.sc + (a.watch || 0) * 6));
       refCache[key] = { t: Date.now(), list: kept }; saveRef();
       return kept;
@@ -3126,10 +3170,19 @@ Règles :
   function refChoice(w, list){
     const pick = state.refPick[modelKey(w)];
     if (pick === "none") return null;
+    if (pick && pick.own) return PHOTO_URLS[pick.own] ? { ...pick, thumb: PHOTO_URLS[pick.own], url: PHOTO_URLS[pick.own], page: "" } : null;
     if (pick && typeof pick === "object") return pick;
     return (list || []).length ? list[0] : null;
   }
-  function refReady(w){ const c = refCache[modelKey(w)]; return c ? refChoice(w, c.list) : undefined; }
+  async function setOwnRefPhoto(w, blob){
+    const small = await shrink(blob, 1400, .86);
+    const key = modelKey(w), old = state.refPick[key];
+    const { id } = await localAssets.upload(small);
+    if (old && old.own) localAssets.delete(old.own).catch(() => {});
+    state.refPick[key] = { own: id, author: "Ma photo", license: "usage personnel", level: "exact" };
+    persist();
+  }
+  function refReady(w){ const pk = state.refPick[modelKey(w)]; if (pk && pk.own) return refChoice(w, []); const c = refCache[modelKey(w)]; return c ? refChoice(w, c.list) : undefined; }
   const realImg = (x, cls) => `<img class="th real ${cls || ""}" src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy">`;
   function fillThumb(el){
     if (el.dataset.filled) return; el.dataset.filled = "1";
@@ -3165,7 +3218,7 @@ Règles :
   const toDataURL = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); });
   $("#bk-export").addEventListener("click", async () => {
     const photos = {};
-    for (const w of [...state.collection, ...state.wishlist]){
+    for (const w of [...state.collection, ...state.wishlist, ...Object.values(state.refPick || {}).filter(p => p && p.own).map(p => ({ photo: p.own }))]){
       if (!w.photo || photos[w.photo]) continue;
       try { const b = await tx("readonly", s => s.get(w.photo)); if (b) photos[w.photo] = await toDataURL(b); } catch(e){}
     }
