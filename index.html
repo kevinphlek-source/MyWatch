@@ -601,6 +601,11 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <button type="button" class="btn" id="m-export">Exporter une sauvegarde</button>
       <button type="button" class="btn" id="m-import">Restaurer une sauvegarde</button>
     </div>
+    <h3>Recherche automatique sur internet</h3>
+    <p class="help">Pour les montres absentes du catalogue, l'app cherche leurs caractéristiques sur internet avec Claude et remplit la fiche. Il faut ta clé API Claude (console.anthropic.com › API Keys). Chaque recherche est facturée quelques centimes sur ton compte Anthropic. La clé reste uniquement dans ce téléphone.</p>
+    <label>Clé API Claude<input type="password" id="m-key" placeholder="sk-ant-…" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <div class="menu-list"><button type="button" class="btn" id="m-key-save">Enregistrer la clé</button></div>
+    <p class="help" id="m-key-msg"></p>
     <h3>Taille des montres sur tes photos</h3>
     <p class="help">Largeur du boîtier dans l'image, identique pour toutes les photos.</p>
     <label class="size-row"><input type="range" id="m-size" min="45" max="80" step="1"><span id="m-size-v"></span></label>
@@ -635,7 +640,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     </div>
     <div class="web-links f-web" id="f-web"></div>
     <div class="ai hidden" id="ai">
-      <button type="button" class="ai-btn" id="ai-btn">Remplir avec l'IA</button>
+      <button type="button" class="ai-btn" id="ai-btn">Rechercher sur internet</button>
       <span class="msg" id="ai-msg" aria-live="polite"></span>
     </div>
 
@@ -892,7 +897,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 17; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 18; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -2205,9 +2210,9 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   form.addEventListener("change", e => { if (["comp", ...STYLE_FIELDS].includes(e.target.name) && !currentPhotoSrc()) refreshPreview(); });
   function current(){ return editing && editing.id ? state[editing.list].find(x => x.id === editing.id) : null; }
   function syncCaps(){
-    $("#ai").classList.toggle("hidden", !sampleFn);
+    $("#ai").classList.remove("hidden");
     $("#photo-pick").classList.toggle("hidden", !assetsNs);
-    if (!$("#ai-msg").textContent) $("#ai-msg").textContent = canSendImages ? "À partir de la marque, du modèle ou d'une photo" : "À partir de la marque et du modèle";
+    if (!$("#ai-msg").textContent) $("#ai-msg").textContent = sampleFn ? "Trouve les caractéristiques à partir de la marque et du modèle" : "Ajoute ta clé Claude dans Réglages pour activer la recherche";
   }
   function openSheet(list, id){
     editing = { list, id, mode: id ? "edit" : "new" }; presetFor = ""; aiFor = "";
@@ -2361,9 +2366,9 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     if (w && fold(w.brand) + "|" + fold(w.model) === key) return; // modèle inchangé en modification
     if (key === presetFor || key === aiFor) return;
     dialOpts = variantsFor(brand, model); dialOptsFromAI = false; renderSwatches();
-    if (applyPreset(brand, model)){ presetFor = key; $("#ai-msg").textContent = sampleFn ? "Apparence pré-remplie. L'IA peut compléter calibre et prix." : "Apparence pré-remplie."; return; }
+    if (applyPreset(brand, model)){ presetFor = key; $("#ai-msg").textContent = sampleFn ? "Apparence pré-remplie. « Rechercher sur internet » peut compléter calibre et prix." : "Apparence pré-remplie."; return; }
     if (sampleFn && !currentPhotoSrc()){ aiFor = key; runAI(true); }
-    else if (!sampleFn) $("#ai-msg").textContent = "Modèle inconnu : règle l'apparence à la main.";
+    else if (!sampleFn) $("#ai-msg").textContent = "Modèle inconnu de l'app. Ajoute ta clé Claude dans Réglages pour le trouver automatiquement, ou remplis à la main.";
   }
   form.elements.model.addEventListener("change", autoDesign);
   form.elements.brand.addEventListener("change", () => { if (form.elements.model.value.trim()) autoDesign(); });
@@ -2451,17 +2456,19 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     const btn = $("#ai-btn"), msg = t => $("#ai-msg").textContent = t;
     if (aiCtl){ if (!auto) aiCtl.abort(); return; }
     closeSuggest();
+    if (!sampleFn){ msg("Pour chercher automatiquement, ajoute ta clé API Claude dans Réglages."); return; }
     const brand = form.elements.brand.value.trim(), model = form.elements.model.value.trim();
     const useImage = canSendImages && pendingPhoto;
     if (!brand && !model && !useImage){ msg(canSendImages ? "Tape au moins la marque ou le modèle, ou ajoute une photo." : "Tape au moins la marque ou le modèle."); return; }
     const isWish = isWishForm();
     const prompt = `Tu es un expert en horlogerie. Identifie la montre décrite ci-dessous${useImage ? " et sur la photo jointe (prise par son propriétaire)" : ""} et donne ses caractéristiques.
+Utilise la recherche web pour trouver sa fiche technique réelle (site officiel de la marque, revendeurs, sites horlogers spécialisés) avant de répondre. La saisie peut contenir des fautes ou un surnom : retrouve le vrai nom du modèle.
 
 Saisie de l'utilisateur (peut être partielle) :
 - Marque : ${brand || "(vide)"}
 - Modèle : ${model || "(vide)"}
 
-Réponds uniquement avec un objet JSON de cette forme :
+Ta réponse finale doit être uniquement un objet JSON de cette forme, sans texte autour :
 {"brand":"Omega","model":"Speedmaster Moonwatch","ref":"310.30.42.50.01.001","movement_type":"manuel","calibre":"Omega 3861","size":"42","water":"50","glass":"hesalite","display":"analogique","dial":"#15181C","shape":"rond","case":"acier","strap":"acier","bezel":"tachy","complications":["chrono"],"dial_texture":"lisse","indices":"batons","hands":"baton","strap_color":"#1E2226","dial_variants":[{"name":"Noir","hex":"#15181C"},{"name":"Blanc","hex":"#F2F2F0"}],"retail_eur":7900,"confidence":"haute"}
 
 Valeurs autorisées :
@@ -2485,7 +2492,7 @@ Règles :
 - "retail_eur" : prix public neuf indicatif en France, entier, ou null si inconnu.
 - "confidence" : haute, moyenne ou basse.
 - Champ inconnu : chaîne vide. N'invente rien si tu n'es pas sûr.`;
-    aiCtl = new AbortController(); btn.textContent = "Arrêter"; msg(auto ? "Modèle inconnu de l'app, l'IA dessine ta montre…" : "Analyse en cours…");
+    aiCtl = new AbortController(); btn.textContent = "Arrêter"; msg("Recherche sur internet… (environ 30 secondes)");
     try {
       const opts = { signal: aiCtl.signal, modelTier: "default" };
       if (useImage) opts.images = pendingPhoto;
@@ -2511,12 +2518,69 @@ Règles :
       msg((conf === "basse" ? "Identification incertaine, vérifie les champs." : "Champs remplis, vérifie-les.") + (rr ? ` Rareté : ${rr.label}.` : ""));
     } catch(err){
       const code = err && err.code;
-      const copy = { cancelled: "Analyse arrêtée.", not_granted: "L'IA n'a pas été autorisée. Remplis les champs à la main.", rate_limited: "Trop de demandes d'un coup. Réessaie dans une minute.", invalid_json: "Réponse illisible. Précise le modèle et réessaie.", images_unavailable: "La photo ne peut pas être analysée ici. Tape la marque et le modèle.", image_rejected: "Cette photo n'a pas pu être lue. Essaie une autre image." };
+      const copy = { cancelled: "Analyse arrêtée.", not_granted: "L'IA n'a pas été autorisée. Remplis les champs à la main.", rate_limited: "Trop de demandes d'un coup. Réessaie dans une minute.", invalid_json: "Réponse illisible. Précise le modèle et réessaie.", bad_key: "Clé API refusée : vérifie-la dans Réglages.", no_credit: "Crédit API épuisé : recharge ton compte sur console.anthropic.com.", overloaded: "Le service est surchargé. Réessaie dans un instant.", images_unavailable: "La photo ne peut pas être analysée ici. Tape la marque et le modèle.", image_rejected: "Cette photo n'a pas pu être lue. Essaie une autre image." };
       msg(copy[code] || "L'IA n'a pas répondu. Réessaie dans un instant.");
       if (code === "not_granted") btn.disabled = true;
-    } finally { aiCtl = null; btn.textContent = "Remplir avec l'IA"; }
+    } finally { aiCtl = null; btn.textContent = "Rechercher sur internet"; }
   }
   $("#ai-btn").addEventListener("click", () => runAI(false));
+
+  // ---------- Recherche sur internet (API Claude, clé de l'utilisateur) ----------
+  const KEY_LS = "mywatch-claude-key";
+  function apiKey(){ try { return localStorage.getItem(KEY_LS) || ""; } catch(e){ return ""; } }
+  let sdkP = null;
+  const loadSDK = () => sdkP || (sdkP = import("./vendor/anthropic-sdk.js").then(m => m.default).catch(e => { sdkP = null; throw e; }));
+  function lastJSON(text){
+    const end = text.lastIndexOf("}");
+    for (let i = text.indexOf("{"); i >= 0 && i < end; i = text.indexOf("{", i + 1)){
+      try { const o = JSON.parse(text.slice(i, end + 1)); if (o && typeof o === "object") return o; } catch(e){}
+    }
+    return null;
+  }
+  async function claudeJSON(prompt, opts){
+    let Anthropic;
+    try { Anthropic = await loadSDK(); } catch(e){ throw { code: "offline" }; }
+    const client = new Anthropic({ apiKey: apiKey(), dangerouslyAllowBrowser: true, maxRetries: 2 });
+    const content = [];
+    if (opts.images) content.push({ type: "image", source: { type: "base64", media_type: opts.images.type || "image/jpeg", data: (await toDataURL(opts.images)).split(",")[1] } });
+    content.push({ type: "text", text: prompt });
+    const messages = [{ role: "user", content }];
+    let res;
+    try {
+      for (let i = 0; i < 4; i++){
+        res = await client.messages.create({
+          model: "claude-opus-5-5",
+          max_tokens: 16000,
+          tools: [{ type: "web_search_20260209", name: "web_search", max_uses: 5 }],
+          messages
+        }, { signal: opts.signal });
+        if (res.stop_reason !== "pause_turn") break;
+        messages.push({ role: "assistant", content: res.content });
+      }
+    } catch(err){
+      if (opts.signal && opts.signal.aborted) throw { code: "cancelled" };
+      const s = err && err.status, m = String(err && err.message || "");
+      if (s === 401 || s === 403) throw { code: "bad_key" };
+      if (s === 429) throw { code: "rate_limited" };
+      if (s === 529) throw { code: "overloaded" };
+      if (s === 400 && /credit|billing/i.test(m)) throw { code: "no_credit" };
+      throw { code: "failed" };
+    }
+    const r = lastJSON(res.content.filter(b => b.type === "text").map(b => b.text).join(""));
+    if (!r) throw { code: "invalid_json" };
+    return r;
+  }
+  function setupClaude(){
+    const on = !!apiKey();
+    sampleFn = on ? { json: claudeJSON } : null; canSendImages = on;
+  }
+  setupClaude();
+  $("#m-key-save").addEventListener("click", () => {
+    const v = $("#m-key").value.trim();
+    try { if (v) localStorage.setItem(KEY_LS, v); else localStorage.removeItem(KEY_LS); } catch(e){}
+    setupClaude(); render();
+    $("#m-key-msg").textContent = v ? (/^sk-ant-/.test(v) ? "Clé enregistrée : la recherche automatique est active." : "Clé enregistrée, mais elle ne ressemble pas à une clé Claude (sk-ant-…).") : "Clé supprimée : recherche automatique désactivée.";
+  });
 
 
   // ---------- Vue 360° ----------
@@ -2718,9 +2782,9 @@ Règles :
   function webCard(q, n){
     const { brand, model } = splitQuery(q);
     return `<div class="web-card"><b>${n ? "Pas la bonne ?" : "Pas encore dans le catalogue"}</b>
-      <p>Cherche « ${esc(q)} » sur internet, puis crée sa fiche : marque <strong>${esc(brand)}</strong>${model ? `, modèle <strong>${esc(model)}</strong>` : ""}. Tu pourras y coller une photo.</p>
+      <p>${sampleFn ? `L'app va chercher « ${esc(q)} » sur internet et remplir sa fiche toute seule (diamètre, mouvement, étanchéité, couleurs, prix…).` : `Crée sa fiche : marque <strong>${esc(brand)}</strong>${model ? `, modèle <strong>${esc(model)}</strong>` : ""}. Pour qu'elle se remplisse toute seule depuis internet, ajoute ta clé Claude dans Réglages.`}</p>
       <div class="web-links"><a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Images</a></div>
-      <div class="btns"><button type="button" class="btn small primary" data-newwatch="collection">Je l'ai : créer la fiche</button><button type="button" class="btn small" data-newwatch="wishlist">Ajouter à mes envies</button></div></div>`;
+      <div class="btns"><button type="button" class="btn small primary" data-newwatch="collection">${sampleFn ? "Je l'ai : rechercher et créer" : "Je l'ai : créer la fiche"}</button><button type="button" class="btn small" data-newwatch="wishlist">Ajouter à mes envies</button></div></div>`;
   }
   listEl.addEventListener("click", e => {
     const b = e.target.closest("[data-newwatch]"); if (!b) return;
@@ -2728,9 +2792,10 @@ Règles :
     const { brand, model } = splitQuery(state.view.catalog.q.trim());
     openSheet(b.dataset.newwatch, null);
     form.elements.brand.value = brand; form.elements.model.value = model;
-    if (typeof autoDesign === "function") autoDesign();
     updateFormWeb();
-    $("#ai-msg").textContent = "Complète ce que tu sais (mouvement, diamètre, couleurs…), puis enregistre. Ajoute ensuite sa photo depuis sa fiche.";
+    if (sampleFn && !catalogEntry(brand, model)){ presetFor = aiFor = fold(brand) + "|" + fold(model); runAI(false); return; }
+    autoDesign();
+    if (!sampleFn) $("#ai-msg").textContent = "Complète ce que tu sais (mouvement, diamètre, couleurs…), puis enregistre. Pour un remplissage automatique, ajoute ta clé Claude dans Réglages.";
   }, true);
   function entryToWatch(e){
     return { id: uid(), colorway: e.colorway || "", bezelColor: e.bezelColor || "", gmtColors: e.gmtColors || "", brand: e.brand, model: e.model, movementType: e.movementType, movement: "", size: e.size, water: e.water, glass: e.glass, display: e.display, dial: e.dial, shape: e.shape, case: e.case, strap: e.strap, strapColor: e.strapColor || STRAP_DEFAULT[e.strap] || "", bezel: e.bezel, comps: [...e.comps], dialTexture: e.dialTexture, indices: e.indices, hands: e.hands, current: e.retail, retail: e.retail, target: "", priority: "2", photo: "" };
@@ -3201,7 +3266,7 @@ Règles :
   ["input", "change"].forEach(ev => { form.elements.brand.addEventListener(ev, updateFormWeb); form.elements.model.addEventListener(ev, updateFormWeb); });
   new MutationObserver(() => { if (sheet.open) updateFormWeb(); }).observe(sheet, { attributes: true, attributeFilter: ["open"] });
   $("#menu-btn").addEventListener("click", () => {
-    $("#m-version").textContent = `Version ${APP_VERSION}. L'app se met à jour toute seule quand une nouvelle version est publiée.`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
+    $("#m-version").textContent = `Version ${APP_VERSION}. L'app se met à jour toute seule quand une nouvelle version est publiée.`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#m-key").value = apiKey(); $("#m-key-msg").textContent = apiKey() ? "Recherche automatique active." : ""; $("#msheet").showModal(); });
   $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
   $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
