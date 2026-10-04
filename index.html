@@ -234,7 +234,7 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .cat-actions .cat-add[disabled]{background:var(--ok-soft);border-color:var(--ok-soft);color:var(--ok);cursor:default}
 .card.cat{cursor:pointer}
 .detail{max-width:560px}
-.d-hero{position:relative;aspect-ratio:1/1;display:grid;place-items:center;border:0;padding:0;width:100%;cursor:zoom-in;overflow:hidden;background:radial-gradient(circle at 50% 38%,#2C3644,#0D1117 75%)}
+.d-hero{position:relative;aspect-ratio:1/1;display:grid;place-items:center;border:0;padding:0;width:100%;overflow:hidden;background:radial-gradient(circle at 50% 38%,#2C3644,#0D1117 75%)}
 .d-hero>svg{width:78%;height:auto}
 .d-hero>img{width:100%;height:100%;object-fit:cover;display:block}
 .d-hero .d-3d{position:absolute;right:12px;bottom:12px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:7px 14px;font-weight:800;font-size:.85rem;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -473,7 +473,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
       <line x1="133" y1="42.8" x2="128.5" y2="50.6"/><line x1="157.2" y1="67" x2="149.4" y2="71.5"/><line x1="157.2" y1="133" x2="149.4" y2="128.5"/><line x1="133" y1="157.2" x2="128.5" y2="149.4"/>
       <line x1="67" y1="157.2" x2="71.5" y2="149.4"/><line x1="42.8" y1="133" x2="50.6" y2="128.5"/><line x1="42.8" y1="67" x2="50.6" y2="71.5"/><line x1="67" y1="42.8" x2="71.5" y2="50.6"/>
     </g>
-    <text x="100" y="134" text-anchor="middle" font-family="Bodoni Moda,serif" font-weight="700" font-size="10.5" letter-spacing="1.5" fill="#F4D98A">MES MONTRES</text>
+    <text x="100" y="134" text-anchor="middle" font-family="Bodoni Moda,serif" font-weight="700" font-size="11.5" letter-spacing="1.2" fill="#F4D98A">MyWatch</text>
     <text x="100" y="145" text-anchor="middle" font-family="Manrope,sans-serif" font-weight="700" font-size="5.5" letter-spacing="2" fill="#9AA6B2">AUTOMATIC</text>
     <g class="hand-h"><path d="M96.5 104 L98 62 L100 56 L102 62 L103.5 104Z" fill="url(#sp-hand)"/></g>
     <g class="hand-m"><path d="M97.5 106 L98.8 42 L100 36 L101.2 42 L102.5 106Z" fill="url(#sp-hand)"/></g>
@@ -481,7 +481,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
     <circle cx="100" cy="100" r="4.5" fill="#F4D98A"/>
     <ellipse class="glint" cx="78" cy="70" rx="58" ry="22" transform="rotate(-30 78 70)" fill="#fff"/>
   </svg>
-  <div class="s-name">Mes montres</div>
+  <div class="s-name">MyWatch</div>
   <div class="s-tag">Collection · Envies · Catalogue</div>
 </div>
 <div class="wrap">
@@ -579,7 +579,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
     <div class="photo-zone" id="photo-zone">
       <button type="button" class="photo-preview" id="photo-preview" aria-label="Aperçu de la montre"></button>
       <div class="photo-actions">
-        <span class="hint" id="photo-hint">Touche l'illustration pour la voir en 360°.</span>
+        <span class="hint" id="photo-hint">Le dessin suit tes choix ci-dessous.</span>
         <button type="button" class="btn small" id="photo-pick">Ajouter une photo</button>
         <button type="button" class="btn small danger hidden" id="photo-remove">Retirer la photo</button>
       </div>
@@ -771,7 +771,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 <dialog id="dsheet" class="detail" aria-label="Fiche de la montre">
   <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
   <button type="button" class="d-close" id="d-close" aria-label="Fermer">✕</button>
-  <button type="button" class="d-hero" id="d-hero" aria-label="Voir en 3D"></button>
+  <div class="d-hero" id="d-hero"></div>
   <div class="d-credit" id="d-credit"></div>
   <div class="d-body">
     <div>
@@ -1468,61 +1468,103 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     const dialShape = attrs => d.kind === "c" ? `<circle cx="50" cy="50" r="${d.rx}" ${attrs}/>` : `<rect x="${50-d.rx}" y="${50-d.ry}" width="${d.rx*2}" height="${d.ry*2}" rx="${d.r}" ${attrs}/>`;
     defs += `<clipPath id="${k}c">${dialShape("")}</clipPath>`;
 
-    // ---- bracelet
-    const sw = g.strapW, sx = 50 - sw/2, top = shape === "rect" ? 20 : 24, bot = shape === "rect" ? 80 : 76;
-    const strap = w.strap || "acier";
+    // ---- bracelet (dessiné à plat, s'estompe vers les bords de l'image)
+    const sig = signatureOf(w);
+    const strap = w.strap || "acier", metalBand = ["acier","jubile","titane","milanais"].includes(strap);
+    const integ = sig.integrated && metalBand;
+    let sw = g.strapW + (integ ? 4 : 0);
+    if (sig.brancards) sw = 33;
+    const top = sig.brancards ? 16 : ({ rond: 21.6, coussin: 21.4, octo: 21, carre: 23.2, rect: 19.4, tonneau: 16.4 })[shape] ?? 22;
+    const bot = 100 - top, sx = 50 - sw/2;
     const stc = /^#[0-9a-f]{6}$/i.test(w.strapColor || "") ? w.strapColor : (STRAP_DEFAULT[strap] || "#23282F");
+    const wAt = y => { const t = y < 50 ? (top - y) / (top + 4) : (y - bot) / (104 - bot); return sw * (1 - .17 * Math.max(0, Math.min(1, t))); };
+    defs += `<linearGradient id="${k}fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".13" stop-color="#fff" stop-opacity="1"/><stop offset=".87" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><mask id="${k}fm" maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="120"><rect x="-10" y="0" width="120" height="100" fill="url(#${k}fade)"/></mask>`;
+    const outline = (y0, y1) => { const a0 = wAt(y0) / 2, a1 = wAt(y1) / 2; return `M${f1(50-a0)} ${f1(y0)} L${f1(50+a0)} ${f1(y0)} L${f1(50+a1)} ${f1(y1)} L${f1(50-a1)} ${f1(y1)}Z`; };
+    const segs = []; // [y0, y1] des deux brins, du boîtier vers l'extérieur
     let band = "";
-    const bothEnds = fn => fn(-28, top, -1) + fn(bot, 128, 1);
-    if (["acier","jubile","titane"].includes(strap)){
-      const SM = strap === "titane" ? METAL.titane : (goldish && false ? M : METAL.acier);
-      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${SM[4]}"/><stop offset=".25" stop-color="${SM[1]}"/><stop offset=".5" stop-color="${SM[0]}"/><stop offset=".75" stop-color="${SM[1]}"/><stop offset="1" stop-color="${SM[4]}"/></linearGradient>`;
-      defs += `<linearGradient id="${k}bp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="${SM[1]}"/><stop offset="1" stop-color="${SM[3]}"/></linearGradient>`;
-      band = bothEnds((y0, y1) => {
-        let s = `<rect x="${sx}" y="${y0}" width="${sw}" height="${y1-y0}" fill="url(#${k}b)"/>`;
-        const step = strap === "jubile" ? 3.4 : 5.2;
-        for (let y = (y0 < 0 ? y1 - Math.ceil((y1 - y0) / step) * step : y0); y < y1; y += step){
-          if (strap === "jubile"){
-            s += `<rect x="${f1(50-sw*0.17)}" y="${f1(y+.4)}" width="${f1(sw*0.34)}" height="${f1(step-.8)}" rx=".6" fill="url(#${k}bp)" opacity=".95"/>`;
-            s += `<line x1="${50}" y1="${f1(y+.4)}" x2="50" y2="${f1(y+step-.4)}" stroke="#000" stroke-opacity=".2" stroke-width=".35"/>`;
+    const SM = strap === "titane" ? METAL.titane : METAL.acier;
+    if (metalBand && strap !== "milanais"){
+      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${SM[3]}"/><stop offset=".3" stop-color="${SM[1]}"/><stop offset=".55" stop-color="${SM[2]}"/><stop offset="1" stop-color="${SM[3]}"/></linearGradient>`;
+      defs += `<linearGradient id="${k}bp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${SM[3]}"/><stop offset=".35" stop-color="#FFFFFF"/><stop offset=".6" stop-color="${SM[1]}"/><stop offset="1" stop-color="${SM[4]}"/></linearGradient>`;
+      const piece = (cx, y, wd, h, fill, rx) => `<rect x="${f1(cx - wd/2)}" y="${f1(y)}" width="${f1(wd)}" height="${f1(h)}" rx="${f1(rx ?? .8)}" fill="${fill}"/>`;
+      const rows = (yStart, dir) => {
+        let out = "";
+        const L = sig.beads ? 3 : strap === "jubile" ? 3.3 : integ ? 4.6 : 5.3;
+        for (let i = 0; ; i++){
+          const ya = dir < 0 ? yStart - (i + 1) * L : yStart + i * L, yb = ya + L;
+          if (dir < 0 ? yb < -6 : ya > 106) break;
+          const W = wAt(ya + L/2), gap = .42, y = ya + gap/2, h = L - gap;
+          if (sig.beads){
+            out += piece(50 - W*.39, y, W*.22, h, `url(#${k}b)`) + piece(50 + W*.39, y, W*.22, h, `url(#${k}b)`);
+            for (let j = -2; j <= 2; j++){ const off = (j + i) % 2 ? L/2 : 0; out += `<ellipse cx="${f1(50 + j * W*.11)}" cy="${f1(ya + L/2 + (off ? .0 : 0))}" rx="${f1(W*.045)}" ry="${f1(L*.36)}" fill="url(#${k}bp)"/>`; }
+          } else if (strap === "jubile"){
+            out += piece(50 - W*.37, y, W*.26, h, `url(#${k}b)`) + piece(50 + W*.37, y, W*.26, h, `url(#${k}b)`);
+            out += piece(50 - W*.17, y, W*.12, h, `url(#${k}bp)`, .6) + piece(50 + W*.17, y, W*.12, h, `url(#${k}bp)`, .6);
+            out += piece(50, ya + L/2 + gap/2, W*.12, h, `url(#${k}bp)`, .6);
+          } else if (integ){
+            out += piece(50 - W*.36, y, W*.28, h, `url(#${k}b)`, .5) + piece(50 + W*.36, y, W*.28, h, `url(#${k}b)`, .5);
+            out += piece(50, y, W*.42, h, `url(#${k}b)`, .5) + `<rect x="${f1(50 - W*.21)}" y="${f1(y)}" width="${f1(W*.42)}" height=".45" fill="#fff" fill-opacity=".7"/>`;
           } else {
-            s += `<rect x="${f1(50-sw*0.16)}" y="${f1(y+.3)}" width="${f1(sw*0.32)}" height="${f1(step-.6)}" rx=".5" fill="url(#${k}bp)"/>`;
+            out += piece(50 - W*.33, y, W*.34, h, `url(#${k}b)`, 1) + piece(50 + W*.33, y, W*.34, h, `url(#${k}b)`, 1);
+            out += piece(50, y - .15, W*.31, h + .3, strap === "titane" ? `url(#${k}b)` : `url(#${k}bp)`, 1);
           }
-          s += `<line x1="${sx}" y1="${f1(y)}" x2="${sx+sw}" y2="${f1(y)}" stroke="#000" stroke-opacity=".28" stroke-width=".4"/>`;
         }
-        s += `<line x1="${f1(50-sw*0.17)}" y1="${y0}" x2="${f1(50-sw*0.17)}" y2="${y1}" stroke="#000" stroke-opacity=".22" stroke-width=".35"/><line x1="${f1(50+sw*0.17)}" y1="${y0}" x2="${f1(50+sw*0.17)}" y2="${y1}" stroke="#000" stroke-opacity=".22" stroke-width=".35"/>`;
-        return s;
-      });
+        return out;
+      };
+      band = `<path d="${outline(-6, top + 2)} ${outline(bot - 2, 106)}" fill="${shade(SM[3], -.25)}"/>` + rows(top + 1.5, -1) + rows(bot - 1.5, 1);
     } else if (strap === "milanais"){
-      defs += `<pattern id="${k}mil" width="1.2" height="1.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="1.2" height="1.2" fill="${METAL.acier[1]}"/><rect width=".6" height="1.2" fill="${METAL.acier[3]}" opacity=".6"/></pattern>`;
-      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>`;
-      band = bothEnds((y0, y1) => `<rect x="${sx}" y="${y0}" width="${sw}" height="${y1-y0}" fill="url(#${k}mil)"/><rect x="${sx}" y="${y0}" width="${sw}" height="${y1-y0}" fill="url(#${k}b)"/>`);
+      defs += `<pattern id="${k}mil" width="1.1" height="1.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="1.1" height="1.1" fill="${METAL.acier[1]}"/><rect width=".55" height="1.1" fill="${METAL.acier[3]}" opacity=".7"/></pattern>`;
+      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".35"/><stop offset=".45" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>`;
+      band = [outline(-6, top + 2), outline(bot - 2, 106)].map(p => `<path d="${p}" fill="url(#${k}mil)"/><path d="${p}" fill="url(#${k}b)"/>`).join("");
     } else {
-      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(stc, -.35)}"/><stop offset=".15" stop-color="${stc}"/><stop offset=".5" stop-color="${shade(stc, .12)}"/><stop offset=".85" stop-color="${stc}"/><stop offset="1" stop-color="${shade(stc, -.35)}"/></linearGradient>`;
-      const stitch = strap === "cuir" ? (lum(stc) > .5 ? "#6B4A2A" : "#E8D6B8") : null;
-      band = bothEnds((y0, y1, dir) => {
-        let s = `<rect x="${sx+1}" y="${y0 - (dir < 0 ? 0 : 1)}" width="${sw-2}" height="${y1-y0+1}" rx="1.5" fill="url(#${k}b)"/>`;
+      const gator = sig.gator && strap === "cuir";
+      defs += `<linearGradient id="${k}b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(stc, -.4)}"/><stop offset=".12" stop-color="${stc}"/><stop offset=".5" stop-color="${shade(stc, strap === "cuir" ? .16 : .06)}"/><stop offset=".88" stop-color="${stc}"/><stop offset="1" stop-color="${shade(stc, -.4)}"/></linearGradient>`;
+      if (gator) defs += `<pattern id="${k}gt" width="3.2" height="2.3" patternUnits="userSpaceOnUse"><rect x=".15" y=".15" width="2.9" height="2" rx=".7" fill="#000" fill-opacity=".05" stroke="#000" stroke-opacity=".28" stroke-width=".22"/></pattern>`;
+      const stitch = lum(stc) > .5 ? "#6B4A2A" : "#E9DCC4";
+      const half = (y0, y1, isTop) => {
+        let s = `<path d="${outline(y0, y1)}" fill="url(#${k}b)"/>`;
+        if (gator) s += `<path d="${outline(y0, y1)}" fill="url(#${k}gt)"/>`;
         if (strap === "cuir"){
-          s += `<line x1="${sx+2.6}" y1="${y0}" x2="${sx+2.6}" y2="${y1}" stroke="${stitch}" stroke-opacity=".75" stroke-dasharray="1.3 1" stroke-width=".55"/><line x1="${sx+sw-2.6}" y1="${y0}" x2="${sx+sw-2.6}" y2="${y1}" stroke="${stitch}" stroke-opacity=".75" stroke-dasharray="1.3 1" stroke-width=".55"/>`;
-          if (dir > 0) s += [8, 14].map(t => `<ellipse cx="50" cy="${y0+t}" rx="1" ry=".7" fill="#000" fill-opacity=".45"/>`).join("");
-          else s += `<rect x="${sx+.4}" y="${y1-7}" width="${sw-.8}" height="3" rx=".8" fill="${shade(stc, -.15)}" stroke="#000" stroke-opacity=".2" stroke-width=".3"/>`;
+          const a0 = wAt(y0) / 2 - 1.7, a1 = wAt(y1) / 2 - 1.7;
+          s += `<path d="M${f1(50-a0)} ${f1(y0)} L${f1(50-a1)} ${f1(y1)} M${f1(50+a0)} ${f1(y0)} L${f1(50+a1)} ${f1(y1)}" stroke="${stitch}" stroke-opacity=".85" stroke-dasharray="1.15 .85" stroke-width=".45"/>`;
+          if (isTop){ const ky = top - 12, kw = wAt(ky) + 1.4; s += `<rect x="${f1(50 - kw/2)}" y="${f1(ky)}" width="${f1(kw)}" height="3.4" rx="1" fill="${shade(stc, -.08)}" stroke="#000" stroke-opacity=".25" stroke-width=".3"/>`; }
+          else [12, 17.5, 23].forEach(t => { s += `<ellipse cx="50" cy="${f1(bot + t)}" rx=".95" ry=".7" fill="#000" fill-opacity=".5"/><ellipse cx="50" cy="${f1(bot + t + .25)}" rx=".95" ry=".45" fill="#fff" fill-opacity=".15"/>`; });
         } else if (strap === "caoutchouc"){
-          for (let y = y0 + 3; y < y1 - 1; y += 3.2) s += `<rect x="${sx+3}" y="${f1(y)}" width="${sw-6}" height="1.2" rx=".6" fill="#000" fill-opacity=".28"/>`;
+          for (let y = (isTop ? y1 - 3 : y0 + 2); isTop ? y > y0 : y < y1; y += isTop ? -3 : 3){ const a = wAt(y) / 2 - 3; s += `<rect x="${f1(50 - a)}" y="${f1(y)}" width="${f1(a*2)}" height="1.1" rx=".55" fill="#000" fill-opacity=".3"/>`; }
         } else if (strap === "nato"){
           const sc2 = lum(stc) > .5 ? "#1B2430" : "#D8DDE2";
-          s += `<rect x="${f1(50-sw*0.14)}" y="${y0}" width="${f1(sw*0.08)}" height="${y1-y0}" fill="${sc2}" fill-opacity=".65"/><rect x="${f1(50+sw*0.06)}" y="${y0}" width="${f1(sw*0.08)}" height="${y1-y0}" fill="${sc2}" fill-opacity=".65"/>`;
-          if (dir > 0) s += `<rect x="${sx}" y="${y0+6}" width="${sw}" height="2.4" rx=".8" fill="url(#${k}mv)"/>`;
+          s += `<path d="M${f1(50 - sw*.14)} ${f1(y0)} V${f1(y1)} M${f1(50 + sw*.14)} ${f1(y0)} V${f1(y1)}" stroke="${sc2}" stroke-opacity=".6" stroke-width="${f1(sw*.07)}"/>`;
+          if (isTop) s += `<rect x="${f1(50 - wAt(top-8)/2 - .6)}" y="${f1(top - 9)}" width="${f1(wAt(top-8) + 1.2)}" height="2.2" rx=".9" fill="url(#${k}mv)"/>`;
         }
         return s;
-      });
+      };
+      band = half(-6, top + 2, true) + half(bot - 2, 106, false);
     }
+    band = `<g mask="url(#${k}fm)">${band}</g>`;
     let body = band;
-    if (g.lugs) body += `<path d="M${sx} 21 h${sw} l-1.6 9 h-${sw-3.2}z M${sx} 79 h${sw} l-1.6 -9 h-${sw-3.2}z" fill="url(#${k}m)"/><path d="M${sx+.6} 21.4 l1.4 8.4 M${sx+sw-.6} 21.4 l-1.4 8.4 M${sx+.6} 78.6 l1.4 -8.4 M${sx+sw-.6} 78.6 l-1.4 -8.4" stroke="#fff" stroke-opacity=".55" stroke-width=".5"/>`;
+    // cornes : vraies cornes galbées, ou épaulement du bracelet intégré
+    if (integ){
+      const cw = (shape === "rond" ? 40 : 44);
+      body += `<path d="M${f1(50 - cw/2)} ${f1(top + 4)} L${f1(50 - sw/2)} ${f1(top - 1)} H${f1(50 + sw/2)} L${f1(50 + cw/2)} ${f1(top + 4)}Z M${f1(50 - cw/2)} ${f1(bot - 4)} L${f1(50 - sw/2)} ${f1(bot + 1)} H${f1(50 + sw/2)} L${f1(50 + cw/2)} ${f1(bot - 4)}Z" fill="url(#${k}m)"/>`;
+    } else if (g.lugs){
+      const horn = (sxs, sys) => { const xi = 50 + sxs * sw/2, xo = xi + sxs * 4.6, y0 = 50 + sys * 17.5, y1 = 50 + sys * 30.6;
+        return `<path d="M${f1(xi)} ${f1(y0)} L${f1(xi)} ${f1(y1)} Q${f1(xi)} ${f1(y1 + sys*.8)} ${f1(xi + sxs*1.2)} ${f1(y1 + sys*.8)} L${f1(xo - sxs*1.4)} ${f1(y1 + sys*.8)} Q${f1(xo)} ${f1(y1 + sys*.8)} ${f1(xo)} ${f1(y1 - sys*1.2)} L${f1(xo + sxs*1.4)} ${f1(y0)}Z" fill="url(#${k}m)"/><path d="M${f1(xo - sxs*.2)} ${f1(y1 - sys*1.4)} L${f1(xo + sxs*1)} ${f1(y0 + sys*3)}" stroke="#fff" stroke-opacity=".7" stroke-width=".55" stroke-linecap="round"/>`; };
+      body += horn(-1, -1) + horn(1, -1) + horn(-1, 1) + horn(1, 1);
+    }
+    if (sig.ears) [-1, 1].forEach(sxs => { body += `<rect x="${f1(50 + sxs * 30.4 - 1.8)}" y="44.6" width="3.6" height="10.8" rx="1.6" fill="url(#${k}m)" stroke="#000" stroke-opacity=".2" stroke-width=".3"/>`; });
 
     // ---- couronne, poussoirs, extras
     const crown = (x, y, h, ang) => { let s = `<g transform="rotate(${ang||0} ${x} ${y+h/2})"><rect x="${x-1}" y="${y}" width="5.4" height="${h}" rx="1.4" fill="url(#${k}mv)"/>`; for (let i = 1; i < 5; i++) s += `<line x1="${x-1+i*1.08}" y1="${y+.4}" x2="${x-1+i*1.08}" y2="${y+h-.4}" stroke="#000" stroke-opacity=".25" stroke-width=".3"/>`; return s + "</g>"; };
-    body += crown(g.crownX, 46.2, 7.6);
-    if (chrono){ const px = g.crownX - 3; body += `<rect x="${px}" y="33" width="5" height="4" rx="1" fill="url(#${k}mv)" transform="rotate(-28 ${px} 35)"/><rect x="${px}" y="63" width="5" height="4" rx="1" fill="url(#${k}mv)" transform="rotate(28 ${px} 65)"/>`; if (has("rattrapante")) body += `<rect x="${100-g.crownX-2}" y="33" width="5" height="4" rx="1" fill="url(#${k}mv)" transform="rotate(28 ${100-g.crownX} 35)"/>`; }
+    let side = "";
+    if (sig.onion) side += `<g fill="url(#${k}mv)" stroke="#000" stroke-opacity=".2" stroke-width=".3"><ellipse cx="${g.crownX + 1.4}" cy="50" rx="2.2" ry="5.2"/><ellipse cx="${g.crownX + 3.6}" cy="50" rx="2.4" ry="4.4"/><ellipse cx="${g.crownX + 5.4}" cy="50" rx="1.4" ry="2.6"/></g>`;
+    else side += crown(g.crownX, sig.cabochon ? 47 : 46.2, sig.cabochon ? 6 : 7.6);
+    if (sig.cabochon){ defs += `<radialGradient id="${k}cab" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#7FA2FF"/><stop offset=".5" stop-color="#1C3FAF"/><stop offset="1" stop-color="#0B1E60"/></radialGradient>`; side += `<circle cx="${g.crownX + 5.6}" cy="50" r="2.1" fill="url(#${k}cab)"/><circle cx="${g.crownX + 5}" cy="49.3" r=".6" fill="#fff" fill-opacity=".7"/>`; }
+    if (chrono){ const px = g.crownX - 3; side += `<rect x="${px}" y="33" width="5" height="4" rx="1" fill="url(#${k}mv)" transform="rotate(-28 ${px} 35)"/><rect x="${px}" y="63" width="5" height="4" rx="1" fill="url(#${k}mv)" transform="rotate(28 ${px} 65)"/>`; }
+    if (shape === "rond" && ["plongee","gmt"].includes(bezel)) side += `<path d="M${g.crownX - 2} 41.2 q3.6 -.3 3.8 2.6 l-.2 1.4 h-3.6z M${g.crownX - 2} 58.8 q3.6 .3 3.8 -2.6 l-.2 -1.4 h-3.6z" fill="url(#${k}m)"/>`;
+    if (sig.bridge) side += `<path d="M${g.crownX - 1.5} 40.5 A9.5 9.5 0 0 1 ${g.crownX - 1.5} 59.5 L${g.crownX - 1.5} 57 A7 7 0 0 0 ${g.crownX - 1.5} 43Z" fill="url(#${k}m)" stroke="#000" stroke-opacity=".25" stroke-width=".3"/><rect x="${g.crownX + 5.6}" y="44" width="2.2" height="12" rx="1" fill="url(#${k}mv)"/>`;
+    if (sig.guardArc) side += `<path d="M${g.crownX} 43 A7.5 7.5 0 0 1 ${g.crownX} 57" fill="none" stroke="url(#${k}mv)" stroke-width="1.6"/>`;
+    body += sig.crownLeft ? `<g transform="translate(100 0) scale(-1 1)">${side}</g>` : side;
+    if (sig.heValve) body += `<g transform="rotate(-60 50 50)"><rect x="77.6" y="47.6" width="4.4" height="4.8" rx="1.2" fill="url(#${k}mv)"/></g>`;
     if (has("alarm")) body += crown(g.crownX-3, 30, 5, -35);
     if (has("repeater")) body += `<rect x="${100-g.crownX-1}" y="42" width="3" height="16" rx="1.5" fill="url(#${k}mv)"/>`;
 
@@ -1567,6 +1609,12 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     } else if (["plongee","gmt","tachy"].includes(bezel)) {
       body += dialShape(`fill="none" stroke="#15181D" stroke-width="4"`);
     }
+    // détails de boîte posés sur la lunette
+    if (sig.brancards) [-1, 1].forEach(sxs => { body += `<rect x="${f1(50 + sxs * 21.2 - 2)}" y="13.2" width="4" height="73.6" rx="2" fill="url(#${k}mv)" stroke="#000" stroke-opacity=".22" stroke-width=".3"/><rect x="${f1(50 + sxs * 21.2 - .6)}" y="15" width=".7" height="70" rx=".35" fill="#fff" fill-opacity=".6"/>`; });
+    const screw = (x, y, r, rot, h) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="url(#${k}mv)" stroke="#000" stroke-opacity=".35" stroke-width=".25"/>` + (h ? `<path d="M${f1(x - r*.45)} ${f1(y - r*.5)} v${f1(r)} M${f1(x + r*.45)} ${f1(y - r*.5)} v${f1(r)} M${f1(x - r*.45)} ${f1(y)} h${f1(r*.9)}" stroke="#2A2D31" stroke-width=".35" transform="rotate(${f1(rot)} ${f1(x)} ${f1(y)})"/>` : `<line x1="${f1(x - r*.7)}" y1="${f1(y)}" x2="${f1(x + r*.7)}" y2="${f1(y)}" stroke="#2A2D31" stroke-width=".3" transform="rotate(${f1(rot)} ${f1(x)} ${f1(y)})"/>`);
+    if (sig.screws8 && shape === "carre"){ const p = 24.9; [[-p,-p],[0,-p],[p,-p],[p,0],[p,p],[0,p],[-p,p],[-p,0]].forEach(([x, y], i) => { body += screw(50 + x, 50 + y, 1, i * 37, false); }); }
+    if (sig.hScrews && d.kind === "c"){ const rr = (d.rx + 28) / 2; for (let i = 0; i < 6; i++){ const a = Math.PI/6 + i * Math.PI/3; body += screw(50 + rr * Math.cos(a), 50 + rr * Math.sin(a), 1.25, a * 180 / Math.PI + 90, true); } }
+    if (sig.gadroons && d.kind === "r") [-1, 1].forEach(sy => { for (let j = 0; j < 3; j++){ const y = 50 + sy * (d.ry + 1.6 + j * 1.25); body += `<line x1="${f1(50 - d.rx - 1.5)}" y1="${f1(y)}" x2="${f1(50 + d.rx + 1.5)}" y2="${f1(y)}" stroke="#fff" stroke-opacity=".75" stroke-width=".55"/><line x1="${f1(50 - d.rx - 1.5)}" y1="${f1(y + .5)}" x2="${f1(50 + d.rx + 1.5)}" y2="${f1(y + .5)}" stroke="#000" stroke-opacity=".25" stroke-width=".35"/>`; } });
     o += T3 ? body.slice(bezelStart) : `<g filter="url(#${k}sh)">${body}</g>`;
 
     // ---- cadran et texture
@@ -1626,12 +1674,17 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       if (!occ.has(3)){ occ.add(3); feats += win(50 + d.rx*0.66, 50, S*0.25, S*0.21, "27"); }
       else { const a = 135*Math.PI/180; feats += win(50 + d.rx*0.62*Math.sin(a), 50 - d.ry*0.62*Math.cos(a), S*0.23, S*0.19, "27"); }
     }
+    if (signatureOf(w).cyclops && (has("date") || has("daydate")) && occ.has(3) && !T3){
+      const cx = 50 + d.rx*0.66, lw = S*.42, lh = S*.34;
+      defs += `<clipPath id="${k}cy"><rect x="${f1(cx - lw/2)}" y="${f1(50 - lh/2)}" width="${f1(lw)}" height="${f1(lh)}" rx="1.6"/></clipPath>`;
+      feats += `<g clip-path="url(#${k}cy)">${win(cx, 50, S*0.34, S*0.29, "27")}</g><rect x="${f1(cx - lw/2)}" y="${f1(50 - lh/2)}" width="${f1(lw)}" height="${f1(lh)}" rx="1.6" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-opacity=".75" stroke-width=".4"/><path d="M${f1(cx - lw/2 + 1)} ${f1(50 - lh/2 + .9)} h${f1(lw - 2)}" stroke="#fff" stroke-opacity=".8" stroke-width=".5" stroke-linecap="round"/>`;
+    }
     if (has("worldtime")) feats += `<circle cx="50" cy="50" r="${f1(S*0.74)}" fill="none" stroke="${ink}" stroke-opacity=".3" stroke-width="${f1(S*0.1)}" stroke-dasharray=".8 1.4"/>`;
     if (skeleton){ const gear = (x, y, r) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="none" stroke="#C9962E" stroke-width="${f1(r*.28)}" stroke-dasharray="${f1(r*.3)} ${f1(r*.25)}" opacity=".85"/><circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r*.6)}" fill="none" stroke="url(#${k}m)" stroke-width="${f1(r*.15)}"/><circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r*.18)}" fill="#B5374A"/>`; feats += gear(50 - S*0.3, 50 - S*0.25, S*0.28) + gear(50 + S*0.32, 50 + S*0.18, S*0.24) + gear(50 - S*0.1, 50 + S*0.42, S*0.18); }
 
     // ---- inscriptions
     let txt = "";
-    const brandTxt = (w.brand || "").toUpperCase().slice(0, 14);
+    const brandTxt = (w.brand || "").toUpperCase().slice(0, 20);
     const sub2 = { automatique: "AUTOMATIC", manuel: "HAND WOUND", quartz: "QUARTZ", solaire: "SOLAR", kinetic: "KINETIC", springdrive: "SPRING DRIVE" }[w.movementType] || "";
     if (brandTxt){
       const numerals = idx === "arabes" || idx === "romains";
@@ -1639,7 +1692,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       const fsB = Math.min(S*(numerals ? 0.11 : 0.135), S * (brandTxt.length > 10 ? .8 : 1.05) / (0.72 * Math.max(1, brandTxt.length)));
       const sigL = signatureOf(w).logo;
       if (y !== null && sigL && y < 50) txt += logoSVG(sigL, 50, y - fsB * 1.25, fsB * 1.05, sigL === "rolex" ? (light ? "#8E6A1F" : "#D9B65E") : ink);
-      const fit = brandTxt.length > 8 ? ` textLength="${f1(S * Math.min(1.15, .1 * brandTxt.length))}" lengthAdjust="spacingAndGlyphs"` : "";
+      const fit = brandTxt.length > 8 ? ` textLength="${f1(S * Math.min(.92, .075 * brandTxt.length))}" lengthAdjust="spacingAndGlyphs"` : "";
       if (y !== null) txt += `<text x="50" y="${f1(y)}" font-size="${f1(Math.max(fsB, S * .1))}" text-anchor="middle" font-family="Bodoni Moda,Didot,serif" font-weight="700" letter-spacing=".35" fill="${ink}"${fit}>${esc(brandTxt)}</text>`;
     }
     if (sub2 && !occ.has(6) && !chrono) txt += `<text x="50" y="${f1(50+S*(occ.has(12) ? .44 : .38))}" font-size="${f1(S*0.075)}" text-anchor="middle" font-family="Manrope,sans-serif" font-weight="700" letter-spacing=".4" fill="${ink}" opacity=".75">${sub2}</text>`;
@@ -1738,6 +1791,10 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     if (b === "patek philippe" && /nautilus|aquanaut/.test(m)) g.ears = true;
     if (b === "iwc" && m.includes("big pilot")) g.onion = true;
     if (b === "omega" && /seamaster diver|planet ocean/.test(m)) g.heValve = true;
+    if (b === "rolex") g.cyclops = true;
+    if (/\bprx\b|royal oak(?! offshore)|nautilus|overseas|laureato|alpine eagle|highlife|aikon|ingenieur|odysseus|defy skyline|octo finissimo|polo 42|tonda pf|freelancer/.test(m) || (b === "tudor" && m === "royal") || (b === "breitling" && m.includes("chronomat"))) g.integrated = true;
+    if ((b === "doxa" && m.includes("sub")) || (b === "baltic" && m.includes("aquascaphe"))) g.beads = true;
+    if (/patek|vacheron|lange|breguet|jaeger|glashutte|blancpain|chopard|piaget|f\.p\. journe|h\. moser/.test(b) || (b === "cartier" && /tank|santos-dumont/.test(m)) || (b === "audemars piguet" && m.includes("code"))) g.gator = true;
     return g;
   }
   function logoSVG(kind, x, y, h, col){
@@ -2045,7 +2102,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     p.style.background = src ? "var(--bg)" : artBg(form.elements.dial.value);
     $("#photo-remove").classList.toggle("hidden", !src || !assetsNs);
     $("#photo-pick").textContent = src ? "Changer la photo" : "Ajouter une photo";
-    $("#photo-hint").textContent = src ? "Ta photo remplace l'illustration sur la carte. Touche-la pour voir la montre en 360°." : "Touche l'illustration pour la voir en 360°.";
+    $("#photo-hint").textContent = src ? "Ta photo remplace le dessin sur la carte." : "Le dessin suit tes choix ci-dessous.";
   }
   form.addEventListener("input", e => {
     if (e.target.name === "comp") updateCompsCount();
@@ -2264,7 +2321,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
 
   // ---------- Photos ----------
   $("#photo-pick").addEventListener("click", () => $("#photo-input").click());
-  $("#photo-preview").addEventListener("click", () => openViewer({ ...formStyle(), model: form.elements.model.value, size: form.elements.size.value, water: form.elements.water.value, glass: form.elements.glass.value, movement: form.elements.movement.value }));
+
   $("#photo-remove").addEventListener("click", () => { pendingPhoto = null; photoCleared = true; if (previewUrl){ URL.revokeObjectURL(previewUrl); previewUrl = null; } refreshPreview(); });
   $("#photo-input").addEventListener("change", async e => {
     const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
@@ -2671,7 +2728,7 @@ Règles :
     renderDetail(); dsheet.showModal(); dsheet.scrollTop = 0;
   }
   function renderHero(w){
-    const hero = $("#d-hero"), badge = `<span class="d-3d">Voir en 3D</span>`, credit = $("#d-credit");
+    const hero = $("#d-hero"), badge = "", credit = $("#d-credit");
     credit.innerHTML = "";
     if (w.photo && photoSrc(w.photo)){ hero.innerHTML = `<img src="${esc(photoSrc(w.photo))}" alt="">` + badge; return; }
     if (detail.view !== "render"){
@@ -2686,14 +2743,12 @@ Règles :
       };
       const c = refCache[modelKey(w)], pk = state.refPick[modelKey(w)];
       if ((pk && pk.own) ? showReal([]) : (c && showReal(c.list))) return;
-      hero.innerHTML = `<span class="ph-skel"></span>` + badge;
+      hero.innerHTML = watchSVG(w) + badge;
       refPhotos(w, true).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
       return;
     }
-    credit.innerHTML = `<span>Aperçu calculé de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Photos trouvées</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>` + ownPhotoBtns(w);
-    const small = thumbReady.get(thumbKey(w, 360)), big = thumbReady.get(thumbKey(w, 720));
-    hero.innerHTML = (big || small ? `<img src="${big || small}" alt="">` : (thumbsOff ? watchSVG(w) : `<span class="ph-skel"></span>`)) + badge;
-    if (!big) thumbFor(w, 720).then(url => { if (detail && detail.shown === w) hero.innerHTML = (url ? `<img src="${url}" alt="">` : watchSVG(w)) + badge; });
+    credit.innerHTML = `<span>Dessin de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Photos trouvées</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>` + ownPhotoBtns(w);
+    hero.innerHTML = watchSVG(w) + badge;
   }
   function ownPhotoBtns(w){
     const q = encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""}`);
@@ -2853,7 +2908,7 @@ Règles :
       tab === "catalog" ? renderCatalog() : render();
     };
   }
-  $("#d-hero").addEventListener("click", () => { if (detail) openViewer(detail.shown); });
+
   dsheet.addEventListener("click", ev => { if (ev.target === dsheet) dsheet.close(); });
 
   let catTimer = null;
@@ -3014,7 +3069,7 @@ Règles :
 
   // ---------- Vignettes photo-réalistes (rendu 3D mis en cache) ----------
   const THUMB_V = "v6", thumbMem = new Map(), thumbReady = new Map();
-  let thumbChain = Promise.resolve(), thumbFails = 0, thumbsOff = !window.WebGLRenderingContext;
+  let thumbChain = Promise.resolve(), thumbFails = 0, thumbsOff = true; // rendus 3D retirés : dessin à plat
   let rdbP = null;
   function rdb(){ if (!rdbP) rdbP = new Promise((res, rej) => { const r = indexedDB.open("mes-montres-rendus", 1); r.onupgradeneeded = () => r.result.createObjectStore("thumbs"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); return rdbP; }
   async function rget(k){ const d = await rdb(); return new Promise((res, rej) => { const q = d.transaction("thumbs").objectStore("thumbs").get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); }
@@ -3188,7 +3243,7 @@ Règles :
     if (el.dataset.filled) return; el.dataset.filled = "1";
     const w = thumbWatch(el.dataset.thumb); if (!w) return;
     const own = el.dataset.thumb.startsWith("c:") || el.dataset.thumb.startsWith("w:");
-    const render = () => thumbFor(w, 360).then(url => { if (!el.isConnected) return; el.innerHTML = url ? `<img class="th" src="${url}" alt="">` : watchSVG(w); });
+    const render = () => { if (el.isConnected) el.innerHTML = watchSVG(w); };
     refPhotos(w).then(list => {
       if (!el.isConnected) return;
       const x = refChoice(w, list);
@@ -3200,13 +3255,10 @@ Règles :
   function picFor(w, ref){
     const real = refReady(w);
     if (real) return realImg(real, "now");
-    if (thumbsOff && real === null) return watchSVG(w);
-    const url = real === null ? thumbReady.get(thumbKey(w, 360)) : null;
-    if (url) return `<img class="th now" src="${url}" alt="">`;
-    return `<span class="pic" data-thumb="${esc(ref)}"><span class="ph-skel"></span></span>`;
+    if (real === null) return watchSVG(w);
+    return `<span class="pic" data-thumb="${esc(ref)}">${watchSVG(w)}</span>`;
   }
   function observeThumbs(){
-    if (thumbsOff) return;
     const els = listEl.querySelectorAll("[data-thumb]:not([data-tobs])");
     if (!("IntersectionObserver" in window)) return els.forEach(fillThumb);
     // la zone .pic n'a pas de boîte propre : on observe l'illustration qui la contient
