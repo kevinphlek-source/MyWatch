@@ -2798,13 +2798,14 @@ Règles :
     const bg = [med(0), med(1), med(2)];
     const dBg = i => Math.hypot(px[i*4] - bg[0], px[i*4+1] - bg[1], px[i*4+2] - bg[2]);
     const dNb = (i, j) => Math.hypot(px[i*4] - px[j*4], px[i*4+1] - px[j*4+1], px[i*4+2] - px[j*4+2]);
+    const pale = i => { const r = px[i*4], g2 = px[i*4+1], b2 = px[i*4+2], mx = Math.max(r, g2, b2), mn = Math.min(r, g2, b2); return mn > 222 && mx - mn < 14; };
     const isBg = new Uint8Array(W * H), q = new Int32Array(W * H); let qh = 0, qt = 0;
-    border.forEach(i => { if (!isBg[i] && dBg(i) < tol * 1.6){ isBg[i] = 1; q[qt++] = i; } });
+    border.forEach(i => { if (!isBg[i] && (dBg(i) < tol * 1.6 || pale(i))){ isBg[i] = 1; q[qt++] = i; } });
     while (qh < qt){
       const i = q[qh++], x = i % W, y = (i / W) | 0;
       for (const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, y > 0 ? i - W : -1, y < H - 1 ? i + W : -1]){
         if (j < 0 || isBg[j]) continue;
-        if (dBg(j) < tol * 2.2 && dNb(i, j) < tol * .55){ isBg[j] = 1; q[qt++] = j; }
+        if ((dBg(j) < tol * 2.2 && dNb(i, j) < tol * .55) || (pale(j) && pale(i))){ isBg[j] = 1; q[qt++] = j; }
       }
     }
     // adoucissement des bords (deux flous 3x3)
@@ -2818,12 +2819,16 @@ Règles :
     g.putImageData(id, 0, 0);
     const bgFrac = 1 - fg / (W * H);
     // boîtier = rangées les plus larges (le bracelet est plus étroit) : sert à donner la même taille à toutes les montres
-    let maxW = 0; const rw = new Float32Array(H), rc = new Float32Array(H);
-    for (let y = 0; y < H; y++){ let l = -1, r = -1; for (let x = 0; x < W; x++) if (a[y * W + x] > .5){ if (l < 0) l = x; r = x; } if (l >= 0){ rw[y] = r - l + 1; rc[y] = (l + r) / 2; maxW = Math.max(maxW, rw[y]); } }
-    let sy = 0, n = 0; const centers = [];
-    for (let y = 0; y < H; y++) if (rw[y] >= maxW * .88){ sy += y; n++; centers.push(rc[y]); }
-    centers.sort((p, q) => p - q);
-    const caseInfo = n ? { w: maxW / k, cx: centers[centers.length >> 1] / k, cy: sy / n / k } : null;
+    let maxW = 0; const rw = new Float32Array(H), rl = new Float32Array(H), rr = new Float32Array(H);
+    for (let y = 0; y < H; y++){ let l = -1, r = -1; for (let x = 0; x < W; x++) if (a[y * W + x] > .5){ if (l < 0) l = x; r = x; } if (l >= 0){ rw[y] = r - l + 1; rl[y] = l; rr[y] = r; maxW = Math.max(maxW, rw[y]); } }
+    // rangées du boîtier : nettement plus larges que le bracelet ; la couronne ne touche que quelques rangées, la médiane l'ignore
+    const band = []; for (let y = 0; y < H; y++) if (rw[y] >= maxW * .8) band.push(y);
+    const median = arr => { const v = arr.slice().sort((p, q) => p - q); return v[v.length >> 1]; };
+    let caseInfo = null;
+    if (band.length){
+      const L = median(band.map(y => rl[y])), Rt = median(band.map(y => rr[y]));
+      caseInfo = { w: (Rt - L + 1) / k, cx: (L + Rt) / 2 / k, cy: (band[0] + band[band.length - 1]) / 2 / k };
+    }
     return { alpha: c, bgFrac, caseInfo, bbox: x1 < 0 ? null : { x: x0 / k, y: y0 / k, w: (x1 - x0 + 1) / k, h: (y1 - y0 + 1) / k } };
   }
   // balance des blancs (en partie) et niveaux, calculés sur la montre seulement
@@ -2847,7 +2852,7 @@ Règles :
   }
   const DEF_ADJ = { rot: 0, zoom: 1, dx: 0, dy: 0, cut: true, tol: 34, tone: true };
   const photoSize = () => (Number(state.photoSize) || 62) / 100;
-  const STD_V = 2, stdKey = () => STD_V + "-" + Math.round(photoSize() * 100);
+  const STD_V = 3, stdKey = () => STD_V + "-" + Math.round(photoSize() * 100);
   function processPhoto(src, adj){
     const q = adj.rot % 2 === 1;
     const R = document.createElement("canvas"); R.width = q ? src.height : src.width; R.height = q ? src.width : src.height;
@@ -2865,8 +2870,17 @@ Règles :
     const gr = g.createRadialGradient(OUT * .5, OUT * .4, 0, OUT * .5, OUT * .5, OUT * .72); gr.addColorStop(0, "#FFFFFF"); gr.addColorStop(.75, "#F1EBE0"); gr.addColorStop(1, "#E8E0D2");
     g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = gr; g.fillRect(0, 0, OUT, OUT);
     g.imageSmoothingQuality = "high";
-    if (P.cutOk){ g.shadowColor = "rgba(70,50,20,.30)"; g.shadowBlur = 46; g.shadowOffsetY = 24; }
-    g.drawImage(P.R, OUT / 2 - P.cx * sc + adj.dx, OUT / 2 - P.cy * sc + adj.dy, P.R.width * sc, P.R.height * sc);
+    const x = OUT / 2 - P.cx * sc + adj.dx, y = OUT / 2 - P.cy * sc + adj.dy;
+    if (P.cutOk){
+      // la montre est posée sur un calque qui s'estompe en haut et en bas (bracelet coupé de la même façon partout)
+      const L = document.createElement("canvas"); L.width = L.height = OUT; const lg = L.getContext("2d");
+      lg.imageSmoothingQuality = "high"; lg.shadowColor = "rgba(70,50,20,.30)"; lg.shadowBlur = 46; lg.shadowOffsetY = 24;
+      lg.drawImage(P.R, x, y, P.R.width * sc, P.R.height * sc);
+      lg.shadowColor = "transparent"; lg.globalCompositeOperation = "destination-in";
+      const fd = lg.createLinearGradient(0, 0, 0, OUT); fd.addColorStop(0, "rgba(0,0,0,0)"); fd.addColorStop(.1, "rgba(0,0,0,1)"); fd.addColorStop(.9, "rgba(0,0,0,1)"); fd.addColorStop(1, "rgba(0,0,0,0)");
+      lg.fillStyle = fd; lg.fillRect(0, 0, OUT, OUT);
+      g.drawImage(L, 0, 0);
+    } else g.drawImage(P.R, x, y, P.R.width * sc, P.R.height * sc);
     g.restore();
   }
   async function srcCanvas(blob){

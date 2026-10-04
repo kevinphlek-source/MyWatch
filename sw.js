@@ -1,5 +1,5 @@
 // Mode hors ligne : l'app se charge même sans réseau.
-const CACHE = "mes-montres-v12";
+const CACHE = "mes-montres-v13";
 const PHOTOS = "mes-montres-photos-v1";
 const CORE = ["./", "index.html", "manifest.webmanifest", "colorways.js", "fonts/bodoni-moda-latin-500-normal.woff2", "fonts/bodoni-moda-latin-600-normal.woff2", "fonts/bodoni-moda-latin-700-normal.woff2", "fonts/manrope-latin-400-normal.woff2", "fonts/manrope-latin-500-normal.woff2", "fonts/manrope-latin-600-normal.woff2", "fonts/manrope-latin-700-normal.woff2", "fonts/manrope-latin-800-normal.woff2", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
 
