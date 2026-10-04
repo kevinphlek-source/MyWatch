@@ -29,11 +29,11 @@ function realScale(w){ const n = parseFloat(String(w.size || "").replace(",", ".
 let renderer = null, pmrem = null, envTex = null;
 
 // Studio photo : fond sombre et grandes boîtes à lumière, pour des reflets francs sur le métal.
-function studio(){
+function studio(light){
   const sc = new THREE.Scene();
   const room = new THREE.Mesh(new THREE.SphereGeometry(100, 48, 24), new THREE.MeshBasicMaterial({ side: THREE.BackSide, vertexColors: true }));
   const pos = room.geometry.attributes.position, col = [];
-  for (let i = 0; i < pos.count; i++){ const y = pos.getY(i) / 100, v = .035 + .1 * Math.max(0, y) + .02 * (1 - Math.abs(y)); col.push(v, v * 1.02, v * 1.08); }
+  for (let i = 0; i < pos.count; i++){ const y = pos.getY(i) / 100, v = light ? .32 + .3 * Math.max(0, y) : .035 + .1 * Math.max(0, y) + .02 * (1 - Math.abs(y)); col.push(v * (light ? 1.04 : 1), v * (light ? 1.0 : 1.02), v * (light ? .94 : 1.08)); }
   room.geometry.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   sc.add(room);
   const box = (w, h, x, y, z, int, color = "#ffffff") => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(int), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); sc.add(m); };
@@ -43,6 +43,10 @@ function studio(){
   box(80, 14, 0, -20, 90, 1.1);           // bande frontale basse
   box(50, 50, 30, 40, -85, 1.2);          // contre-jour
   box(16, 16, -30, 50, 80, 6);            // point brillant
+  if (light){ // drapeaux noirs : gardent du contraste dans l'acier sur fond clair
+    const flag = (w, h, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: "#050505", side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); sc.add(m); };
+    flag(40, 120, 70, 10, 60); flag(40, 120, -70, -10, 55); flag(120, 30, 0, -75, 40);
+  }
   return sc;
 }
 
@@ -406,7 +410,41 @@ async function buildWatch(w, art, texPx = 2048){
     const end = new THREE.Mesh(new THREE.CircleGeometry(r * .62, 32), brushed); end.rotation.y = Math.PI/2; end.position.set(x + len / 2 + .01, y, z); if (!rot) root.add(end);
   };
   const zc = T * .4;
-  crown(G.crownX + 2.2, 0, zc, 2.6, 3.6);
+  const sig = meta.sig || {};
+  const crownGroup = new THREE.Group(); root.add(crownGroup);
+  { // la couronne est construite dans son propre groupe (on peut la placer à gauche, comme sur la Monaco)
+    const keep = root.add.bind(root); root.add = o => crownGroup.add(o);
+    if (sig.onion){
+      const prof = [[0, 0], [2.6, .2], [3.9, 1.4], [4.1, 2.8], [3.4, 4.6], [1.6, 6], [0, 6.3]].map(([r, h]) => new THREE.Vector2(r, h));
+      const on = new THREE.Mesh(new THREE.LatheGeometry(prof, 48), polished); on.rotation.z = -Math.PI/2; on.position.set(G.crownX + .4, 0, zc); root.add(on);
+    } else crown(G.crownX + 2.2, 0, zc, sig.cabochon ? 2.1 : 2.6, sig.cabochon ? 3.2 : 3.6);
+    if (sig.cabochon){ const cab = new THREE.Mesh(new THREE.SphereGeometry(1.75, 32, 16), new THREE.MeshPhysicalMaterial({ color: "#1C3FAF", roughness: .08, metalness: 0, clearcoat: 1, transmission: .2 })); cab.position.set(G.crownX + 4.6, 0, zc); cab.scale.x = .75; root.add(cab); }
+    if (sig.guardArc){ const ga = new THREE.Mesh(new THREE.TorusGeometry(4.6, .9, 16, 48, Math.PI * 1.15), polished); ga.rotation.z = -Math.PI * .575; ga.position.set(G.crownX + .6, 0, zc); root.add(ga); }
+    if (sig.bridge){
+      const br = new THREE.Shape(); br.absarc(0, 0, 7.4, -Math.PI/2, Math.PI/2, false); br.lineTo(0, 7.4); const hole = new THREE.Path(); hole.absarc(0, 0, 4.6, -Math.PI/2, Math.PI/2, false); hole.lineTo(0, 4.6);
+      const bg = new THREE.ExtrudeGeometry(br, { depth: T * .34, bevelEnabled: true, bevelThickness: .5, bevelSize: .5, bevelSegments: 3, curveSegments: 32 });
+      const bm = new THREE.Mesh(bg, brushed); bm.position.set(G.crownX - .6, 0, zc - T * .17); root.add(bm);
+      const lever = new THREE.Mesh(new RoundedBoxGeometry(2.2, 9, 1.4, 2, .5), polished); lever.position.set(G.crownX + 6.4, 0, zc + T * .2); root.add(lever);
+    }
+    root.add = keep;
+    if (sig.crownLeft) crownGroup.scale.x = -1;
+  }
+  if (sig.heValve){ const hv = new THREE.Group(); const keep = root.add.bind(root); root.add = o => hv.add(o); crown(31, 0, 0, 1.9, 2.6); root.add = keep; hv.rotation.z = Math.PI * 5 / 6; hv.position.z = zc; root.add(hv); }
+  if (sig.ears && shape !== "rond"){ for (const sx of [1, -1]){ const e = new THREE.Mesh(new RoundedBoxGeometry(4.6, 11, T * .5, 4, 1.6), polished); e.position.set(sx * 29.6, 0, T * .32); root.add(e); } }
+  if (sig.brancards){
+    for (const sx of [1, -1]){ const b = new THREE.Mesh(new RoundedBoxGeometry(5.4, 76, T * .7, 5, 2.2), polished); b.position.set(sx * 20.4, 0, T * .38); root.add(b); }
+  }
+  if (sig.gadroons){
+    for (const sy of [1, -1]) for (let k = 0; k < 3; k++){ const gd = new THREE.Mesh(new RoundedBoxGeometry(34, .9, 1, 2, .4), polished); gd.position.set(0, sy * (27.4 + k * 1.35), zBezel + .3); root.add(gd); }
+  }
+  const screwAt = (x, y, z, r, rot, hShape) => {
+    const sc = new THREE.Mesh(new THREE.CylinderGeometry(r, r, .7, 24).rotateX(Math.PI/2), polished); sc.position.set(x, y, z); root.add(sc);
+    const dark = new THREE.MeshStandardMaterial({ color: "#2A2D31", roughness: .4, metalness: .6 });
+    if (hShape){ [[-.5, 0, .25, 1.5], [.5, 0, .25, 1.5], [0, 0, .9, .25]].forEach(([dx, dy, wx, wy]) => { const b = new THREE.Mesh(new THREE.BoxGeometry(wx * r, wy * r, .2), dark); b.position.set(x + dx * r, y + dy * r, z + .36); b.rotation.z = rot; root.add(b); }); }
+    else { const sl = new THREE.Mesh(new THREE.BoxGeometry(r * 1.6, r * .28, .2), dark); sl.position.set(x, y, z + .36); sl.rotation.z = rot; root.add(sl); }
+  };
+  if (sig.screws8 && shape === "carre"){ const p = 24.2; [[-p,-p],[0,-p],[p,-p],[p,0],[p,p],[0,p],[-p,p],[-p,0]].forEach(([x, y], i) => screwAt(x, y, zBezel + .9, 1.15, i * .7, false)); }
+  if (sig.hScrews && d.kind === "c"){ const rr = (d.rx + 1.3 + 28.4) / 2; for (let i = 0; i < 6; i++){ const a = Math.PI/6 + i * Math.PI/3; screwAt(rr * Math.cos(a), rr * Math.sin(a), zBezel + .9, 1.35, a, true); } }
   if (shape === "rond" && ["plongee","gmt"].includes(w.bezel)){
     for (const sy of [1, -1]){ const g = new THREE.Mesh(new RoundedBoxGeometry(3.4, 3.2, T * .42, 3, .9), brushed); g.position.set(28.6, sy * 4.6, zc + .6); g.rotation.z = sy * .18; root.add(g); }
   }
@@ -521,12 +559,12 @@ async function buildWatch(w, art, texPx = 2048){
 }
 
 // ---------- scène et interactions ----------
-function makeContext(opts){
+function makeContext(opts, light = true){
   const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance", ...opts });
-  r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.15;
+  r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = .95;
   r.outputColorSpace = THREE.SRGBColorSpace;
   const pm = new THREE.PMREMGenerator(r);
-  return { r, env: pm.fromScene(studio(), .02).texture };
+  return { r, env: pm.fromScene(studio(light), .02).texture };
 }
 function lights(scene){
   const key = new THREE.DirectionalLight("#ffffff", 1.6); key.position.set(-40, 60, 90); scene.add(key);
@@ -549,7 +587,7 @@ let thumbCtx = null, thumbBg = null;
 export async function renderThumb(w, art, size = 360){
   if (!thumbCtx){
     thumbCtx = makeContext({ preserveDrawingBuffer: true, alpha: false });
-    thumbBg = canvasTex(512, 512, (g, W, H) => { const gr = g.createRadialGradient(W*.5, H*.36, 0, W*.5, H*.5, W*.75); gr.addColorStop(0, "#36414F"); gr.addColorStop(.55, "#1A212B"); gr.addColorStop(1, "#0B0F14"); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
+    thumbBg = canvasTex(512, 512, (g, W, H) => { const gr = g.createRadialGradient(W*.5, H*.36, 0, W*.5, H*.5, W*.75); gr.addColorStop(0, "#FFFFFF"); gr.addColorStop(.72, "#EEE8DD"); gr.addColorStop(1, "#E6DECF"); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
   }
   const { r, env } = thumbCtx;
   const ss = 2; r.setPixelRatio(1); r.setSize(size * ss, size * ss, false);
