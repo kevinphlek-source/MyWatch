@@ -376,7 +376,7 @@ body{background:url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3
 .layout-list .card{border-radius:16px}
 .layout-list .card-in{border-radius:15px}
 /* barre d'onglets */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:1fr 1fr 76px 1fr;align-items:end;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(255,253,248,.86);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid var(--line)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:1fr 1fr 76px 1fr 1fr;align-items:end;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(255,253,248,.86);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid var(--line)}
 .tabbar button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.68rem;font-weight:800;letter-spacing:.02em;cursor:pointer;padding:4px 0;position:relative}
 .tabbar button svg{width:24px;height:24px}
 .tabbar button[aria-selected="true"]{color:var(--ink)}
@@ -420,6 +420,9 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .st-stage canvas{width:100%;height:100%;display:block}
 .st-guide{position:absolute;left:50%;top:50%;width:66%;height:66%;transform:translate(-50%,-50%);border:2px dashed rgba(168,130,58,.6);border-radius:50%;pointer-events:none}
 .st-row{display:flex;gap:8px}
+.f-web{margin-top:-4px}
+.f-web:empty{display:none}
+.f-web .hint{font-size:.78rem;color:var(--muted);font-weight:600;align-self:center}
 .size-row{flex-direction:row;align-items:center;gap:10px}
 .size-row input{flex:1;accent-color:var(--brass)}
 .size-row span{min-width:42px;text-align:right;color:var(--ink);font-weight:800}
@@ -574,6 +577,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
   <button role="tab" data-tab="wishlist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Envies<span class="count" id="t-wishlist"></span></button>
   <button type="button" class="plus" id="tab-add" aria-label="Ajouter une montre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
   <button role="tab" data-tab="catalog" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><circle cx="17.2" cy="17.2" r="3.2"/><path d="M19.6 19.6 21.5 21.5"/></svg>Catalogue</button>
+  <button type="button" id="tab-menu" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Réglages</button>
 </nav>
 <dialog id="msheet" aria-label="Réglages">
   <form method="dialog" style="gap:12px">
@@ -612,6 +616,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
       <label>Marque<input name="brand" data-suggest="brand" autocomplete="off" autocapitalize="words" spellcheck="false"></label>
       <label>Modèle<input name="model" data-suggest="model" autocomplete="off" spellcheck="false"></label>
     </div>
+    <div class="web-links f-web" id="f-web"></div>
     <div class="ai hidden" id="ai">
       <button type="button" class="ai-btn" id="ai-btn">Remplir avec l'IA</button>
       <span class="msg" id="ai-msg" aria-live="polite"></span>
@@ -2338,6 +2343,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     }
     closeSuggest();
     if (kind === "brand") form.elements.model.focus();
+    updateFormWeb();
   }
   document.querySelectorAll("[data-suggest]").forEach(inp => {
     inp.setAttribute("role", "combobox"); inp.setAttribute("aria-autocomplete", "list");
@@ -2665,6 +2671,7 @@ Règles :
     openSheet(b.dataset.newwatch, null);
     form.elements.brand.value = brand; form.elements.model.value = model;
     if (typeof autoDesign === "function") autoDesign();
+    updateFormWeb();
     $("#ai-msg").textContent = "Complète ce que tu sais (mouvement, diamètre, couleurs…), puis enregistre. Ajoute ensuite sa photo depuis sa fiche.";
   }, true);
   function entryToWatch(e){
@@ -3090,6 +3097,14 @@ Règles :
   $("#add").addEventListener("click", () => openSheet(tab, null));
   document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.addEventListener("click", () => { if (tab !== b.dataset.tab){ tab = b.dataset.tab; render(); window.scrollTo({ top: 0, behavior: "instant" in document.documentElement.style ? "instant" : "auto" }); } }));
   $("#tab-add").addEventListener("click", () => openSheet(tab === "catalog" ? "wishlist" : tab, null));
+  $("#tab-menu").addEventListener("click", () => $("#menu-btn").click());
+  function updateFormWeb(){
+    const q = `${form.elements.brand.value} ${form.elements.model.value}`.trim();
+    $("#f-web").innerHTML = q.length < 2 ? `<span class="hint">Tape la marque et le modèle : les liens Google apparaîtront ici.</span>`
+      : `<a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}" target="_blank" rel="noopener">${G_ICON}Images</a><a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(q)}" target="_blank" rel="noopener">${G_ICON}Prix</a>`;
+  }
+  ["input", "change"].forEach(ev => { form.elements.brand.addEventListener(ev, updateFormWeb); form.elements.model.addEventListener(ev, updateFormWeb); });
+  new MutationObserver(() => { if (sheet.open) updateFormWeb(); }).observe(sheet, { attributes: true, attributeFilter: ["open"] });
   $("#menu-btn").addEventListener("click", () => { $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
   $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
   $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
