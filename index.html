@@ -2368,8 +2368,9 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   $("#photo-input").addEventListener("change", async e => {
     const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
     try {
-      const res = await openStudio(f); if (!res) return;
-      pendingPhoto = res.blob; pendingOrig = f; pendingAdj = res.adj; photoCleared = false;
+      $("#photo-hint").textContent = "Détourage et recadrage automatiques…";
+      const out = await autoStudio(f, DEF_ADJ);
+      pendingPhoto = out; pendingOrig = f; pendingAdj = { ...DEF_ADJ }; photoCleared = false;
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       previewUrl = URL.createObjectURL(pendingPhoto); refreshPreview();
     } catch(err){ $("#ai-msg").textContent = "Ce format d'image n'est pas lisible. Essaie une photo JPEG ou PNG."; }
@@ -3074,10 +3075,16 @@ Règles :
     const b = e.target.closest("[data-photo]"); if (!b || !detail) return;
     const a = b.dataset.photo, w = detail.shown, target = { kind: detail.kind, id: detail.id, w };
     const msg = t => { const m = $("#own-msg"); if (m) m.textContent = t; };
-    const edit = async (blob, fromOrig, adj) => {
-      const res = await openStudio(blob, adj); if (!res) return;
+    const edit = async (blob, fromOrig, adj, manual) => {
+      let res;
+      if (manual) { res = await openStudio(blob, adj); if (!res) return; }
+      else {
+        msg("Détourage et recadrage automatiques…");
+        try { res = { blob: await autoStudio(blob, DEF_ADJ), adj: { ...DEF_ADJ } }; }
+        catch(err){ msg("Cette image n'a pas pu être lue. Essaie une autre photo."); return; }
+      }
       msg("Enregistrement…");
-      try { await savePhoto(target, res.blob, fromOrig ? null : blob, res.adj); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); }
+      try { await savePhoto(target, res.blob, fromOrig ? null : blob, res.adj); renderHero(detail.shown); tab === "catalog" ? renderCatalog() : render(); if (!manual) msg("Photo ajoutée et harmonisée. Touche « Retoucher » pour l'ajuster."); }
       catch(err){ msg("La photo n'a pas pu être enregistrée."); }
     };
     if (a === "paste"){
@@ -3094,7 +3101,7 @@ Règles :
     } else if (a === "retouch"){
       const it = detail.kind === "catalog" ? (state.refPick[modelKey(w)] || {}) : (state[detail.kind].find(x => x.id === detail.id) || {});
       const origId = detail.kind === "catalog" ? it.orig : it.photoOrig, adj = detail.kind === "catalog" ? it.adj : it.photoAdj;
-      (async () => { const src = origId ? await tx("readonly", st => st.get(origId)) : null; edit(src || await (await fetch(photoOf(detail.kind, w).src)).blob(), !!src, adj); })();
+      (async () => { const src = origId ? await tx("readonly", st => st.get(origId)) : null; edit(src || await (await fetch(photoOf(detail.kind, w).src)).blob(), !!src, adj, true); })();
     } else if (a === "remove"){
       if (detail.kind === "catalog"){ const pk = state.refPick[modelKey(w)]; if (pk){ [pk.own, pk.orig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); delete state.refPick[modelKey(w)]; } }
       else { const it = state[detail.kind].find(x => x.id === detail.id); if (it){ [it.photo, it.photoOrig].filter(Boolean).forEach(id => localAssets.delete(id).catch(() => {})); it.photo = ""; it.photoOrig = ""; detail.shown = detail.base = it; } }
