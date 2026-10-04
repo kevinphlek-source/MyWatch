@@ -329,10 +329,10 @@ body{background:url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3
 .sec-head .more{font-size:.78rem;color:var(--muted);font-weight:700}
 /* vitrine (compacte) */
 .showcase{margin:0 -16px 22px}
-.rail{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 8px;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rail{display:flex;align-items:stretch;gap:12px;overflow-x:auto;padding:2px 16px 8px;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .rail::-webkit-scrollbar{display:none}
-.feat{flex:none;width:min(40vw,168px);scroll-snap-align:start;border:1px solid var(--line);padding:0;border-radius:18px;overflow:hidden;background:var(--surface);text-align:left;color:var(--ink);cursor:pointer;position:relative;box-shadow:0 8px 20px rgba(60,45,20,.08)}
-.feat .ph{aspect-ratio:1/1;display:grid;place-items:center;background:var(--studio)}
+.feat{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;flex:none;width:min(40vw,168px);scroll-snap-align:start;border:1px solid var(--line);padding:0;border-radius:18px;overflow:hidden;background:var(--surface);text-align:left;color:var(--ink);cursor:pointer;position:relative;box-shadow:0 8px 20px rgba(60,45,20,.08)}
+.feat .ph{flex:none;width:100%;overflow:hidden;aspect-ratio:1/1;display:grid;place-items:center;background:var(--studio)}
 .feat .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .feat .cap{display:block;padding:9px 11px 11px}
 .feat .cap span{display:block;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
@@ -423,6 +423,19 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .f-web{margin-top:-4px}
 .f-web:empty{display:none}
 .f-web .hint{font-size:.78rem;color:var(--muted);font-weight:600;align-self:center}
+.sec-head .more.link{border:0;background:none;color:var(--brass);font-weight:800;font-size:.8rem;cursor:pointer;padding:4px 0}
+.vlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.vlist li{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:6px 8px;touch-action:pan-y;transition:box-shadow .15s}
+.vlist li.drag{box-shadow:0 10px 26px rgba(30,20,5,.25);background:#fff;position:relative;z-index:2}
+.vlist li.off{opacity:.55}
+.vlist .th{width:46px;height:46px;border-radius:10px;overflow:hidden;flex:none;background:var(--studio);display:grid;place-items:center}
+.vlist .th img{width:100%;height:100%;object-fit:cover}
+.vlist .th svg{width:100%;height:100%}
+.vlist .nm{flex:1;min-width:0;font-size:.85rem;font-weight:700;line-height:1.2}
+.vlist .nm small{display:block;color:var(--brass);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase}
+.vlist input{width:22px;height:22px;accent-color:var(--brass);flex:none}
+.vlist .handle{flex:none;width:36px;height:40px;display:grid;place-items:center;color:var(--muted);touch-action:none;cursor:grab}
+.vlist .handle svg{width:20px;height:20px}
 .size-row{flex-direction:row;align-items:center;gap:10px}
 .size-row input{flex:1;accent-color:var(--brass)}
 .size-row span{min-width:42px;text-align:right;color:var(--ink);font-weight:800}
@@ -837,6 +850,15 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
     <label id="st-tol-l">Sensibilité du détourage<input type="range" id="st-tol" min="10" max="90" value="34"></label>
     <label class="st-check"><input type="checkbox" id="st-tone" checked> Harmoniser lumière et couleurs</label>
     <div class="actions"><span class="spacer"></span><button type="button" class="btn" id="st-cancel">Annuler</button><button type="button" class="btn primary" id="st-save">Enregistrer</button></div>
+  </form>
+</dialog>
+<dialog id="vsheet" aria-label="Personnaliser la vitrine">
+  <form method="dialog" style="gap:12px">
+    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    <h2 id="v-title">Ma vitrine</h2>
+    <p class="help">Coche les montres à mettre en avant et fais-les glisser par la poignée pour changer l'ordre.</p>
+    <ul class="vlist" id="v-list"></ul>
+    <div class="actions"><button type="button" class="btn" id="v-auto">Ordre automatique</button><span class="spacer"></span><button type="button" class="btn primary" id="v-save">Enregistrer</button></div>
   </form>
 </dialog>
 <dialog id="gsheet">
@@ -1427,6 +1449,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       ai: { month: ai.month || "", count: Number(ai.count) || 0, limit: Number(ai.limit) > 0 ? Number(ai.limit) : 30 },
       patches: Array.isArray(d && d.patches) ? d.patches : [],
       refPick: (d && d.refPick && typeof d.refPick === "object") ? d.refPick : {},
+      showcase: (d && d.showcase && typeof d.showcase === "object") ? d.showcase : {},
       photoSize: Number(d && d.photoSize) || 62,
       view: { layout: ["list","grid","big"].includes(v.layout) ? v.layout : "grid", catalog: { ...dv.catalog, ...(v.catalog || {}) }, collection: { ...dv.collection, ...(v.collection || {}) }, wishlist: { ...dv.wishlist, ...(v.wishlist || {}) } } };
   }
@@ -2211,8 +2234,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     if (hadNew && pendingOrig){ try { d.photoOrig = (await localAssets.upload(pendingOrig)).id; } catch(e){} d.photoAdj = pendingAdj; d.photoStd = stdKey(); }
     else if (photoCleared){ d.photoOrig = ""; d.photoAdj = null; d.photoStd = ""; }
     let saved;
-    if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); tab = "collection"; }
-    else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); }
+    if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); if (Array.isArray(state.showcase.collection)) state.showcase.collection.push(saved.id); tab = "collection"; }
+    else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); if (Array.isArray(state.showcase[editing.list])) state.showcase[editing.list].push(saved.id); }
     save.disabled = false; closeSheet(); persist(); render();
     const r = rarity(valueOf(saved, tab === "wishlist"));
     setStatus(r ? `Enregistré. Rareté : ${r.label}.` : "Enregistré. Ajoute un prix pour obtenir sa rareté.");
@@ -3237,6 +3260,48 @@ Règles :
     const img = w.photo && photoSrc(w.photo) ? `<img src="${esc(photoSrc(w.photo))}" alt="">` : picFor(w, ref);
     return `<button type="button" class="feat" data-ref="${esc(ref)}"><span class="ph">${img}</span>${tag ? `<span class="badge">${esc(tag)}</span>` : ""}<span class="cap"><span>${esc(w.brand)}</span><b>${esc(w.model)}</b>${extra || ""}</span></button>`;
   }
+  // vitrine : choix et ordre de l'utilisateur, sinon automatique (valeur ou priorité)
+  function autoShowcase(kind){
+    return kind === "collection" ? state.collection.slice().sort((a, b) => (valueOf(b) ?? 0) - (valueOf(a) ?? 0)).slice(0, 10)
+      : state.wishlist.slice().sort((a, b) => String(a.priority || "2").localeCompare(String(b.priority || "2")) || (valueOf(b, true) ?? 0) - (valueOf(a, true) ?? 0)).slice(0, 10);
+  }
+  function showcaseList(kind){
+    const ids = state.showcase && state.showcase[kind];
+    if (!Array.isArray(ids)) return autoShowcase(kind);
+    return ids.map(id => state[kind].find(w => w.id === id)).filter(Boolean);
+  }
+  let vKind = "collection";
+  function openShowcaseEditor(kind){
+    vKind = kind;
+    $("#v-title").textContent = kind === "collection" ? "Ma vitrine" : "Prochains achats";
+    const chosen = showcaseList(kind), rest = state[kind].filter(w => !chosen.includes(w));
+    $("#v-list").innerHTML = [...chosen.map(w => [w, true]), ...rest.map(w => [w, false])].map(([w, on]) => {
+      const ph = w.photo && photoSrc(w.photo) ? `<img src="${esc(photoSrc(w.photo))}" alt="">` : (refReady(w) ? `<img src="${esc(refReady(w).thumb)}" alt="">` : watchSVG(w));
+      return `<li data-id="${esc(w.id)}" class="${on ? "" : "off"}"><input type="checkbox" ${on ? "checked" : ""} aria-label="Afficher"><span class="th">${ph}</span><span class="nm"><small>${esc(w.brand)}</small>${esc(w.model)}</span><span class="handle" aria-label="Déplacer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 8h14M5 12h14M5 16h14"/></svg></span></li>`;
+    }).join("");
+    $("#vsheet").showModal();
+  }
+  $("#v-list").addEventListener("change", e => { const li = e.target.closest("li"); if (li) li.classList.toggle("off", !e.target.checked); });
+  { // glisser-déposer par la poignée
+    const list = $("#v-list"); let drag = null;
+    list.addEventListener("pointerdown", e => {
+      const h = e.target.closest(".handle"); if (!h) return;
+      e.preventDefault(); const li = h.closest("li"); drag = { li, y: e.clientY }; li.classList.add("drag"); h.setPointerCapture(e.pointerId);
+    });
+    list.addEventListener("pointermove", e => {
+      if (!drag) return; const { li } = drag;
+      const sib = [...list.children].filter(x => x !== li);
+      const before = sib.find(x => { const r = x.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; });
+      if (before){ if (li.nextElementSibling !== before) list.insertBefore(li, before); } else if (list.lastElementChild !== li) list.appendChild(li);
+    });
+    const end = () => { if (drag){ drag.li.classList.remove("drag"); drag = null; } };
+    list.addEventListener("pointerup", end); list.addEventListener("pointercancel", end);
+  }
+  $("#v-save").addEventListener("click", () => {
+    state.showcase[vKind] = [...$("#v-list").children].filter(li => li.querySelector("input").checked).map(li => li.dataset.id);
+    persist(); $("#vsheet").close(); render();
+  });
+  $("#v-auto").addEventListener("click", () => { delete state.showcase[vKind]; persist(); $("#vsheet").close(); render(); });
   function renderShowcase(){
     const box = $("#showcase");
     let html = "", items = [];
@@ -3247,15 +3312,15 @@ Règles :
         html = `<div class="sec-head" style="padding:0 16px"><h2>Les icônes</h2><span class="more">À découvrir</span></div>`;
       }
     } else if (tab === "collection"){
-      const arr = state.collection.slice().sort((a, b) => (valueOf(b) ?? 0) - (valueOf(a) ?? 0));
+      const arr = showcaseList("collection");
       if (!arr.length) html = `<div class="empty-state">${watchSVG({ dial: "#1E3F7A", brand: "", case: "doré", strap: "cuir", dialTexture: "soleille", indices: "appliques" })}<h3>Ta vitrine est vide</h3><p>Ajoute ta première montre ou pioche dans le catalogue.</p><button type="button" class="btn primary" data-go="catalog">Parcourir le catalogue</button></div>`;
-      else { html = `<div class="sec-head" style="padding:0 16px"><h2>Ma vitrine</h2><span class="more">Fais défiler</span></div>`; items = arr.slice(0, 10).map(w => ({ w, ref: "c:" + w.id, extra: `<em>${[w.colorway, money(w.price || w.retail)].filter(Boolean).map(esc).join(" · ")}</em>` })); }
+      else { html = `<div class="sec-head" style="padding:0 16px"><h2>Ma vitrine</h2><button type="button" class="more link" data-custom="collection">Personnaliser</button></div>`; items = arr.map(w => ({ w, ref: "c:" + w.id, extra: `<em>${[w.colorway, money(w.price || w.retail)].filter(Boolean).map(esc).join(" · ")}</em>` })); }
     } else {
-      const arr = state.wishlist.slice().sort((a, b) => String(a.priority || "2").localeCompare(String(b.priority || "2")) || (valueOf(b, true) ?? 0) - (valueOf(a, true) ?? 0));
+      const arr = showcaseList("wishlist");
       if (!arr.length) html = `<div class="empty-state">${watchSVG({ dial: "#15181C", brand: "", bezel: "plongee", indices: "points", hands: "glaive" })}<h3>Aucune envie pour l'instant</h3><p>Repère une montre dans le catalogue et ajoute-la ici.</p><button type="button" class="btn primary" data-go="catalog">Parcourir le catalogue</button></div>`;
       else {
-        html = `<div class="sec-head" style="padding:0 16px"><h2>Prochains achats</h2><span class="more">Par priorité</span></div>`;
-        items = arr.slice(0, 10).map(w => {
+        html = `<div class="sec-head" style="padding:0 16px"><h2>Prochains achats</h2><button type="button" class="more link" data-custom="wishlist">Personnaliser</button></div>`;
+        items = arr.map(w => {
           const c = num(w.current), t = num(w.target), pct = c && t ? Math.max(4, Math.min(100, Math.round(t / c * 100))) : null;
           const tag = c !== null && t !== null && c <= t ? "Prix cible atteint" : ({ 1: "Priorité haute", 2: "", 3: "" })[w.priority] || "";
           return { w, ref: "w:" + w.id, tag, extra: `<em>${money(w.current || w.retail)}${t ? ` · cible ${money(t)}` : ""}</em>${pct ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ""}` };
@@ -3267,6 +3332,7 @@ Règles :
     box.querySelectorAll("[data-thumb]").forEach(fillThumb);
   }
   $("#showcase").addEventListener("click", e => {
+    const cu = e.target.closest("[data-custom]"); if (cu){ openShowcaseEditor(cu.dataset.custom); return; }
     const go = e.target.closest("[data-go]"); if (go){ tab = go.dataset.go; render(); return; }
     const f = e.target.closest(".feat"); if (!f) return;
     const [k, id] = [f.dataset.ref.slice(0, 1), f.dataset.ref.slice(2)];
