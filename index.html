@@ -118,6 +118,7 @@ details.rules[open] summary::after{content:" −"}
 .pic{display:contents}
 .art.has-thumb{background:#11161D!important}
 .art img.th:not(.now),.feat img.th:not(.now){animation:fadein .35s ease}
+.art img.real,.feat img.real{object-fit:cover;object-position:center}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 .art svg{width:86%;height:auto}
 .wish .art img,.wish .art svg{filter:grayscale(.5) opacity(.88)}
@@ -272,6 +273,7 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .cw span{font-size:.74rem;font-weight:700;line-height:1.2;text-align:center}
 .cw[aria-pressed="true"] i{outline:2.5px solid var(--brass);outline-offset:6px}
 .cw[aria-pressed="true"] span{color:var(--brass)}
+.cw-sep{flex:none;align-self:center;writing-mode:vertical-rl;transform:rotate(180deg);font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);padding-left:6px;margin:0 2px}
 .d-saved{font-size:.8rem;color:var(--ok);font-weight:700;min-height:1em;margin:0}
 .d-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .d-actions .btn{width:100%}
@@ -405,6 +407,18 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
 .x-close{position:sticky;top:10px;z-index:8;display:grid;place-items:center;width:38px;height:38px;margin:10px 10px -48px auto;border-radius:50%;border:1px solid var(--line);background:rgba(255,253,248,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(30,20,5,.15)}
 .x-close svg{width:16px;height:16px}
 .d-close{display:none}
+.d-credit{display:flex;flex-direction:column;gap:8px;padding:10px 18px 0;font-size:.72rem;color:var(--muted)}
+.d-credit:empty{display:none}
+.d-credit a{color:var(--brass);font-weight:700}
+.d-pbtns{display:flex;gap:8px;flex-wrap:wrap}
+.d-pbtn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.78rem;cursor:pointer}
+.d-hero>img{object-fit:cover}
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pgrid button{border:2px solid transparent;border-radius:14px;overflow:hidden;padding:0;background:var(--studio);aspect-ratio:1/1;cursor:pointer;position:relative}
+.pgrid button[aria-pressed="true"]{border-color:var(--brass)}
+.pgrid img{width:100%;height:100%;object-fit:cover;display:block}
+.pgrid .none{display:grid;place-items:center;font-weight:800;font-size:.85rem;color:var(--muted);padding:10px;text-align:center}
+.pgrid small{position:absolute;left:0;right:0;bottom:0;background:rgba(30,28,24,.7);color:#fff;font-size:.6rem;padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .viewer{background:var(--studio)!important;color:var(--ink)}
 .viewer::backdrop{background:rgba(40,30,15,.5)}
 .v-brand{color:var(--brass)!important}
@@ -751,6 +765,7 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
   <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
   <button type="button" class="d-close" id="d-close" aria-label="Fermer">✕</button>
   <button type="button" class="d-hero" id="d-hero" aria-label="Voir en 3D"></button>
+  <div class="d-credit" id="d-credit"></div>
   <div class="d-body">
     <div>
       <span class="d-brand" id="d-brand"></span>
@@ -771,6 +786,16 @@ dialog form>.x-close{margin:-8px -6px -46px auto;flex:none}
   </div>
 </dialog>
 
+<dialog id="psheet" aria-label="Choisir une photo">
+  <form method="dialog" style="gap:12px">
+    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    <h2>Photos réelles</h2>
+    <p class="help" id="p-title"></p>
+    <p class="help">Photos libres de droits de Wikimedia Commons, auteur crédité. Choisis celle qui correspond le mieux à ta montre.</p>
+    <p class="help hidden" id="p-empty">Aucune photo trouvée pour ce modèle (ou pas de connexion). Tu peux ajouter ta propre photo depuis « Modifier ».</p>
+    <div class="pgrid" id="p-grid"></div>
+  </form>
+</dialog>
 <dialog id="gsheet">
   <form id="gform" novalidate>
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
@@ -1266,7 +1291,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   };
   const METAL_STRAPS = ["acier","jubile","milanais","titane"];
   const STRAP_DEFAULT = { cuir: "#6B4226", caoutchouc: "#23282F", nato: "#2B3A55" };
-  const DIAL_PALETTE = [["Noir","#15181C"],["Bleu","#1E3F7A"],["Blanc","#F2F3F4"],["Argent","#C9CED4"],["Gris","#50555B"],["Vert","#1F5A3A"],["Bordeaux","#6B1E2A"],["Crème","#EDE6D6"],["Champagne","#D9C18E"],["Saumon","#E3A58C"],["Marron","#5A3A2A"],["Bronze","#8C5A2E"]];
+  const DIAL_PALETTE = [["Noir","#15181C"],["Bleu","#1E3F7A"],["Blanc","#F2F3F4"],["Argent","#C9CED4"],["Gris","#50555B"],["Vert","#1F5A3A"],["Bordeaux","#6B1E2A"],["Crème","#EDE6D6"],["Champagne","#D9C18E"],["Saumon","#E3A58C"],["Marron","#5A3A2A"],["Bronze","#8C5A2E"],["Doré","#C9A04E"],["Bleu glacier","#A9C6DA"],["Turquoise","#48A6A6"],["Rose","#E8A3B5"],["Orange","#D86A2B"],["Jaune","#D8B53A"]];
   const STRAP_PALETTE = [["Noir","#1E2226"],["Marron","#6B4226"],["Cognac","#A0612E"],["Bleu marine","#22314F"],["Vert olive","#4F5A34"],["Gris","#6B7178"],["Bordeaux","#5A1E26"],["Beige","#CDB892"],["Orange","#D86A2B"],["Blanc","#EEEEEA"]];
   // Couleurs de cadran existantes pour des modèles connus
   const VARIANTS = {
@@ -1357,6 +1382,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       wishlist: Array.isArray(d && d.wishlist) ? d.wishlist : [],
       ai: { month: ai.month || "", count: Number(ai.count) || 0, limit: Number(ai.limit) > 0 ? Number(ai.limit) : 30 },
       patches: Array.isArray(d && d.patches) ? d.patches : [],
+      refPick: (d && d.refPick && typeof d.refPick === "object") ? d.refPick : {},
       view: { layout: ["list","grid","big"].includes(v.layout) ? v.layout : "grid", catalog: { ...dv.catalog, ...(v.catalog || {}) }, collection: { ...dv.collection, ...(v.collection || {}) }, wishlist: { ...dv.wishlist, ...(v.wishlist || {}) } } };
   }
   function applyPatches(st){ let c = false; PATCHES.forEach(p => { if (!st.patches.includes(p.id)){ p.apply(st); st.patches.push(p.id); c = true; } }); return c; }
@@ -1385,7 +1411,7 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   const ROMAN = ["XII","I","II","III","IV","V","VI","VII","VIII","IX","X","XI"];
   let svgSeq = 0;
   const GEO = {
-    rond:    { strapW: 26, lugs: true,  crownX: 79, ref: 41, el: `<circle cx="50" cy="50" r="29" FILL/>`, dial: { kind: "c", rx: 25, ry: 25 } },
+    rond:    { strapW: 26, lugs: true,  crownX: 79, ref: 41, el: `<circle cx="50" cy="50" r="29" FILL/>`, dial: { kind: "c", rx: 23.2, ry: 23.2 } },
     coussin: { strapW: 26, lugs: false, crownX: 79, ref: 41, el: `<rect x="21" y="21" width="58" height="58" rx="17" FILL/>`, dial: { kind: "c", rx: 23, ry: 23 } },
     octo:    { strapW: 28, lugs: false, crownX: 80, ref: 40.5, el: `<polygon points="${[...Array(8)].map((_, i) => { const a = Math.PI/8 + i*Math.PI/4; return f1(50+31*Math.cos(a)) + "," + f1(50+31*Math.sin(a)); }).join(" ")}" FILL/>`, dial: { kind: "c", rx: 22.5, ry: 22.5 } },
     carre:   { strapW: 30, lugs: false, crownX: 77, ref: 38.2, el: `<rect x="23" y="23" width="54" height="54" rx="7" FILL/>`, dial: { kind: "r", rx: 22.5, ry: 22.5, r: 3.5 } },
@@ -1606,7 +1632,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
       const fsB = Math.min(S*(numerals ? 0.11 : 0.135), S * (brandTxt.length > 10 ? .8 : 1.05) / (0.72 * Math.max(1, brandTxt.length)));
       const sigL = signatureOf(w).logo;
       if (y !== null && sigL && y < 50) txt += logoSVG(sigL, 50, y - fsB * 1.25, fsB * 1.05, sigL === "rolex" ? (light ? "#8E6A1F" : "#D9B65E") : ink);
-      if (y !== null) txt += `<text x="50" y="${f1(y)}" font-size="${f1(fsB)}" text-anchor="middle" font-family="Bodoni Moda,Didot,serif" font-weight="700" letter-spacing=".35" fill="${ink}">${esc(brandTxt)}</text>`;
+      const fit = brandTxt.length > 8 ? ` textLength="${f1(S * Math.min(1.15, .1 * brandTxt.length))}" lengthAdjust="spacingAndGlyphs"` : "";
+      if (y !== null) txt += `<text x="50" y="${f1(y)}" font-size="${f1(Math.max(fsB, S * .1))}" text-anchor="middle" font-family="Bodoni Moda,Didot,serif" font-weight="700" letter-spacing=".35" fill="${ink}"${fit}>${esc(brandTxt)}</text>`;
     }
     if (sub2 && !occ.has(6) && !chrono) txt += `<text x="50" y="${f1(50+S*(occ.has(12) ? .44 : .38))}" font-size="${f1(S*0.075)}" text-anchor="middle" font-family="Manrope,sans-serif" font-weight="700" letter-spacing=".4" fill="${ink}" opacity=".75">${sub2}</text>`;
 
@@ -2538,12 +2565,19 @@ Règles :
     const v = variantsFor(w.brand, w.model) || (Array.isArray(w.dialOptions) ? w.dialOptions : null);
     return v ? v.map(([name, dial]) => ({ name, dial })) : [];
   }
+  function strapColorName(col){
+    const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); let best = "", bd = 1e9;
+    STRAP_PALETTE.forEach(([nm, h]) => { const a = rgb(col), b = rgb(h), dd = (a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2; if (dd < bd){ bd = dd; best = nm; } });
+    return best.toLowerCase();
+  }
   const STRAP_OPT = {};
   String(window.STRAP_OPTIONS || "").trim().split("\n").forEach(line => {
     const m = /^(.+?)\|(.+?)\s=\s(.+)$/.exec(line.trim()); if (!m) return;
     STRAP_OPT[fold(m[1]) + "|" + fold(m[2])] = m[3].split(";").map(part => {
       const t = part.trim(), st = /\bs:(\S+)/.exec(t), sc = /\bsc:(#[0-9a-f]{6})/i.exec(t); if (!st) return null;
-      return { name: t.replace(/\s*\b(s|sc):\S+/g, "").trim(), strap: st[1], strapColor: sc ? sc[1] : "" };
+      let name = t.replace(/\s*\b(s|sc):\S+/g, "").trim();
+      if (sc && /^(cuir|caoutchouc|silicone|tissu|toile|alligator|textile)$/i.test(name)) name += " " + strapColorName(sc[1]);
+      return { name, strap: st[1], strapColor: sc ? sc[1] : "" };
     }).filter(Boolean);
   });
   // Couleur de lunette réellement affichée (même règle que le dessin)
@@ -2575,13 +2609,21 @@ Règles :
     });
     let straps = (STRAP_OPT[findKey(STRAP_OPT, w.brand, w.model)] || []).slice();
     if (!straps.length){
-      const base = { name: optLabel("strap", cat.strap) || "Bracelet d'origine", strap: cat.strap, strapColor: cat.strapColor || STRAP_DEFAULT[cat.strap] || "" };
-      straps = [base]; cws.forEach(c => { if (c.strap && !straps.some(x => x.strap === c.strap && (x.strapColor || "") === (c.strapColor || ""))) straps.push({ name: optLabel("strap", c.strap), strap: c.strap, strapColor: c.strapColor || "" }); });
+      const strapName = (st, col) => { const n = optLabel("strap", st) || "Bracelet d'origine"; if (METAL_STRAPS.includes(st) || !col) return n; const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); let best = "", bd = 1e9; STRAP_PALETTE.forEach(([nm, h]) => { const a = rgb(col), b = rgb(h), dd = (a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2; if (dd < bd){ bd = dd; best = nm; } }); return n.split(" /")[0].split(" (")[0] + " " + best.toLowerCase(); };
+      const bc = cat.strapColor || STRAP_DEFAULT[cat.strap] || "";
+      const base = { name: strapName(cat.strap, bc), strap: cat.strap, strapColor: bc };
+      straps = [base]; cws.forEach(c => { if (c.strap && !straps.some(x => x.strap === c.strap && (x.strapColor || "") === (c.strapColor || ""))) straps.push({ name: strapName(c.strap, c.strapColor || STRAP_DEFAULT[c.strap]), strap: c.strap, strapColor: c.strapColor || "" }); });
     }
+    // couleurs libres après les versions connues
+    const known = dials.length;
+    DIAL_PALETTE.forEach(([name, dial]) => { if (!dials.some(d => d.dial.toLowerCase() === dial.toLowerCase() || fold(d.name) === fold(name))) dials.push({ dial, name, free: true }); });
+    const known2 = straps.length;
+    [["Cuir noir","cuir","#1E2226"],["Cuir marron","cuir","#6B4226"],["Cuir cognac","cuir","#A0612E"],["Cuir bleu","cuir","#22314F"],["Cuir vert","cuir","#2E3A2A"],["Caoutchouc noir","caoutchouc","#1E2226"],["Caoutchouc bleu","caoutchouc","#22314F"],["Tissu NATO","nato","#2B3A55"],["Acier","acier",""],["Milanais","milanais",""]]
+      .forEach(([name, strap, strapColor]) => { if (!straps.some(o => o.strap === strap && (!strapColor || (o.strapColor || "").toLowerCase() === strapColor.toLowerCase()))) straps.push({ name, strap, strapColor, free: true }); });
     // la rangée « Lunette » n'a de sens que si la lunette varie indépendamment du cadran
     const combos = new Set(variants.map(({ c, v }) => c.dial.toLowerCase() + "|" + bezelOf(v)));
     const bezelRow = bezels.length > 1 && (dials.length === 1 || combos.size > dials.length) ? bezels : [];
-    return { cws, dials, bezels: bezelRow, straps };
+    return { cws, dials, bezels: bezelRow, straps, known, known2 };
   }
   const sameStrap = (w, o) => w.strap === o.strap && (METAL_STRAPS.includes(o.strap) || !o.strapColor || String(w.strapColor || "").toLowerCase() === o.strapColor.toLowerCase());
   // Combinaison existante la plus proche après un choix
@@ -2590,7 +2632,7 @@ Règles :
     const fits = c => { const v = applyColorway(w, c); return { v, dial: c.dial.toLowerCase(), bz: bezelOf(v) }; };
     const cur = { dial: String(w.dial).toLowerCase(), bz: bezelOf(w) };
     let match = null;
-    if (axis === "dial") match = cws.find(c => { const f = fits(c); return f.dial === choice.dial.toLowerCase() && f.bz === cur.bz; }) || cws.find(c => c.dial.toLowerCase() === choice.dial.toLowerCase());
+    if (axis === "dial") match = cws.find(c => { const f = fits(c); return f.dial === choice.dial.toLowerCase() && f.bz === cur.bz; }) || cws.find(c => c.dial.toLowerCase() === choice.dial.toLowerCase()) || { name: choice.name, dial: choice.dial, bezelColor: w.bezelColor, gmtColors: w.gmtColors, case: w.case };
     if (axis === "bezel") match = cws.find(c => { const f = fits(c); return f.bz === choice.key && f.dial === cur.dial; }) || cws.find(c => fits(c).bz === choice.key);
     let out = match ? applyColorway(w, match) : { ...w };
     if (axis === "strap") out = { ...w };
@@ -2617,13 +2659,31 @@ Règles :
     const base = kind === "catalog" ? entry : state[kind].find(x => x.id === id); if (!base) return;
     let shown = base;
     if (kind === "catalog"){ const first = colorwaysFor(base)[0]; if (first && first.dial.toLowerCase() === String(base.dial).toLowerCase()) shown = applyColorway(base, first); }
-    detail = { kind, id, base, shown, delArmed: false };
+    detail = { kind, id, base, shown, delArmed: false, view: "real", refList: [] };
     $("#d-saved").textContent = "";
     renderDetail(); dsheet.showModal(); dsheet.scrollTop = 0;
   }
   function renderHero(w){
-    const hero = $("#d-hero"), badge = `<span class="d-3d">Voir en 3D</span>`;
+    const hero = $("#d-hero"), badge = `<span class="d-3d">Voir en 3D</span>`, credit = $("#d-credit");
+    credit.innerHTML = "";
     if (w.photo && photoSrc(w.photo)){ hero.innerHTML = `<img src="${esc(photoSrc(w.photo))}" alt="">` + badge; return; }
+    if (detail.view !== "render"){
+      const showReal = list => {
+        if (!detail || detail.shown !== w) return false;
+        const x = refChoice(w, list);
+        detail.refList = list;
+        if (!x) return false;
+        hero.innerHTML = `<img src="${esc(x.url && x.thumb ? x.thumb : x.url)}" alt="" referrerpolicy="no-referrer">` + badge;
+        credit.innerHTML = `<span>Photo : ${esc(x.author)} · ${esc(x.license)} · <a href="${esc(x.page)}" target="_blank" rel="noopener">Wikimedia Commons</a></span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Autres photos (${list.length})</button><button type="button" class="d-pbtn" data-photo="render">Aperçu de ma version</button></span>`;
+        return true;
+      };
+      const c = refCache[modelKey(w)];
+      if (c && showReal(c.list)) return;
+      hero.innerHTML = `<span class="ph-skel"></span>` + badge;
+      refPhotos(w).then(list => { if (!showReal(list) && detail && detail.shown === w){ detail.view = "render"; renderHero(w); } });
+      return;
+    }
+    credit.innerHTML = `<span>Aperçu calculé de la version choisie (cadran, lunette, bracelet).</span><span class="d-pbtns"><button type="button" class="d-pbtn" data-photo="pick">Choisir une photo réelle</button>${(detail.refList || []).length && refChoice(w, detail.refList) ? `<button type="button" class="d-pbtn" data-photo="real">Revoir la photo</button>` : ""}</span>`;
     const small = thumbReady.get(thumbKey(w, 360)), big = thumbReady.get(thumbKey(w, 720));
     hero.innerHTML = (big || small ? `<img src="${big || small}" alt="">` : (thumbsOff ? watchSVG(w) : `<span class="ph-skel"></span>`)) + badge;
     if (!big) thumbFor(w, 720).then(url => { if (detail && detail.shown === w) hero.innerHTML = (url ? `<img src="${url}" alt="">` : watchSVG(w)) + badge; });
@@ -2650,15 +2710,16 @@ Règles :
     $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
     // versions : cadran, lunette, bracelet
     const vname = versionName(w, opts);
-    w.colorway = vname || w.colorway || "";
+    if (vname) w.colorway = vname;
     const curStrap = opts.straps.find(o => sameStrap(w, o));
-    $("#d-version").innerHTML = vname ? `Version : <strong>${esc(vname)}</strong>${curStrap ? ` · ${esc(curStrap.name)}` : ""}` : "";
+    $("#d-version").innerHTML = (vname || w.colorway) ? `Version : <strong>${esc(vname || w.colorway)}</strong>${vname ? "" : " (hors liste)"}${curStrap ? ` · ${esc(curStrap.name)}` : ""}` : "";
     const rows = { dial: opts.dials, bezel: opts.bezels, strap: opts.straps };
     const isOn = { dial: o => o.dial.toLowerCase() === String(w.dial).toLowerCase(), bezel: o => o.key === bezelOf(w), strap: o => o === curStrap };
     let any = false;
     Object.entries(rows).forEach(([axis, list]) => {
       const box = $("#d-opt-" + axis), show = list.length > 1; box.classList.toggle("hidden", !show); any = any || show;
-      if (show) box.querySelector(".cw-list").innerHTML = list.map((o, i) => swatch(axis, o, i, isOn[axis](o))).join("");
+      const cut = axis === "dial" ? opts.known : axis === "strap" ? opts.known2 : list.length;
+      if (show) box.querySelector(".cw-list").innerHTML = list.map((o, i) => (i === cut && i > 0 ? `<span class="cw-sep">Autres</span>` : "") + swatch(axis, o, i, isOn[axis](o))).join("");
     });
     $("#d-cw").classList.toggle("hidden", !any && !vname);
     // caractéristiques
@@ -2696,6 +2757,7 @@ Règles :
     const b = ev.target.closest(".cw[data-axis]"); if (!b || !detail) return;
     const axis = b.dataset.axis, list = { dial: detail.opts.dials, bezel: detail.opts.bezels, strap: detail.opts.straps }[axis], choice = list[+b.dataset.i];
     const next = pickVariant(detail.shown, detail.opts, axis, choice);
+    detail.view = "render"; // montrer tout de suite la version choisie
     if (detail.kind === "catalog") detail.shown = next;
     else {
       const w = state[detail.kind].find(x => x.id === detail.id); if (!w) return;
@@ -2731,6 +2793,34 @@ Règles :
     }
   });
   $("#d-close").addEventListener("click", () => dsheet.close());
+  $("#d-credit").addEventListener("click", e => {
+    const b = e.target.closest("[data-photo]"); if (!b || !detail) return;
+    const a = b.dataset.photo;
+    if (a === "render"){ detail.view = "render"; renderHero(detail.shown); }
+    else if (a === "real"){ detail.view = "real"; renderHero(detail.shown); }
+    else openPhotoPicker(detail.shown);
+  });
+  function openPhotoPicker(w){
+    const ps = $("#psheet"), grid = $("#p-grid"), key = modelKey(w);
+    $("#p-title").textContent = `${w.brand} ${w.model}`;
+    const draw = list => {
+      const cur = refChoice(w, list), pick = state.refPick[key];
+      grid.innerHTML = list.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${!!cur && cur.url === x.url}"><img src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy"><small>${esc(x.author)}</small></button>`).join("")
+        + `<button type="button" data-i="none" aria-pressed="${pick === "none" || !cur}"><span class="none">Pas de photo :<br>utiliser le rendu</span></button>`;
+      $("#p-empty").classList.toggle("hidden", !!list.length);
+    };
+    grid.innerHTML = `<span class="ph-skel" style="grid-column:1/-1;height:120px;border-radius:14px"></span>`;
+    ps.showModal();
+    refPhotos(w).then(draw);
+    grid.onclick = e => {
+      const b = e.target.closest("[data-i]"); if (!b) return;
+      const list = (refCache[key] && refCache[key].list) || [];
+      state.refPick[key] = b.dataset.i === "none" ? "none" : list[+b.dataset.i];
+      persist(); ps.close();
+      if (detail){ detail.view = state.refPick[key] === "none" ? "render" : "real"; renderHero(detail.shown); }
+      tab === "catalog" ? renderCatalog() : render();
+    };
+  }
   $("#d-hero").addEventListener("click", () => { if (detail) openViewer(detail.shown); });
   dsheet.addEventListener("click", ev => { if (ev.target === dsheet) dsheet.close(); });
 
@@ -2926,15 +3016,89 @@ Règles :
     if (kind === "k") return CAT_LIST[+id];
     return state[kind === "w" ? "wishlist" : "collection"].find(x => x.id === id);
   }
+  // ---------- Photos réelles (Wikimedia Commons, licences libres, auteur crédité) ----------
+  const REF_KEY = "mes-montres-photos-ref-v1", COMMONS = "https://commons.wikimedia.org/w/api.php";
+  let refCache = {}; try { refCache = JSON.parse(localStorage.getItem(REF_KEY) || "{}") || {}; } catch(e){}
+  const refMem = new Map(); let refChain = Promise.resolve();
+  const modelKey = w => fold(w.brand) + "|" + fold(w.model);
+  const stripTags = h => String(h || "").replace(/<[^>]*>/g, " ").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
+  const GENERIC = new Set(["automatique","automatic","chronographe","chronograph","date","quartz","remontage","manuel","mecanique","classic","edition","the","de","du","la","le","les","et","auto","watch","montre","mm","powermatic","small","seconds","jour","day","gmt"]);
+  function modelTokens(model){
+    return fold(model).replace(/[()/,.'’-]/g, " ").split(/\s+/).filter(t => t && !GENERIC.has(t) && !/^\d{1,2}$/.test(t) && !/^\d+[.,]\d+$/.test(t));
+  }
+  function saveRef(){ try { localStorage.setItem(REF_KEY, JSON.stringify(refCache)); } catch(e){} }
+  async function searchCommons(q){
+    const url = `${COMMONS}?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=24&gsrsearch=${encodeURIComponent(q + " filetype:bitmap")}&prop=imageinfo&iiprop=url|extmetadata|mime|size&iiurlwidth=720`;
+    const r = await fetch(url, { mode: "cors" }); if (!r.ok) throw new Error("commons " + r.status);
+    const j = await r.json();
+    return Object.values((j.query && j.query.pages) || {}).sort((a, b) => (a.index || 0) - (b.index || 0));
+  }
+  function scoreCommons(p, brand, toks){
+    const ii = (p.imageinfo || [])[0]; if (!ii || !/jpe?g|png|webp/i.test(ii.mime || "") || (ii.width || 0) < 400) return null;
+    const em = ii.extmetadata || {};
+    const title = fold(String(p.title || "").replace(/^file:/i, "").replace(/\.[a-z]+$/i, "").replace(/[_-]/g, " "));
+    const hay = title + " " + fold(stripTags(em.ImageDescription && em.ImageDescription.value)) + " " + fold(stripTags(em.ObjectName && em.ObjectName.value));
+    const bTok = fold(brand).split(/\s+/)[0];
+    if (!hay.includes(bTok)) return null;
+    let sc = title.includes(bTok) ? 4 : 2, hits = 0;
+    toks.forEach(t => { if (title.includes(t)) { sc += 3; hits++; } else if (hay.includes(t)) { sc += 1; hits++; } });
+    if (toks.length && !hits) return null;
+    if (/\b(logo|boutique|store|shop|magasin|advert|publicite|box|caliber|calibre|movement|mouvement|factory|usine|catalog|signage|building)\b/.test(title)) sc -= 6;
+    if (sc < 4) return null;
+    return { sc, thumb: ii.thumburl || ii.url, url: ii.url, page: ii.descriptionurl, title: String(p.title || "").replace(/^File:/, ""),
+      author: stripTags(em.Artist && em.Artist.value).slice(0, 80) || "Auteur inconnu", license: stripTags(em.LicenseShortName && em.LicenseShortName.value) || "Licence libre" };
+  }
+  function refPhotos(w){
+    const key = modelKey(w);
+    const c = refCache[key];
+    if (c && (c.list.length || Date.now() - c.t < 7 * 864e5)) return Promise.resolve(c.list);
+    if (refMem.has(key)) return refMem.get(key);
+    const job = refChain.then(async () => {
+      const toks = modelTokens(w.model), core = w.model.replace(/\([^)]*\)/g, " ").trim();
+      const queries = [`${w.brand} ${core}`, toks.length ? `${w.brand} ${toks.slice(0, 2).join(" ")}` : null].filter((q, i, a) => q && a.indexOf(q) === i);
+      let found = [];
+      for (const q of queries){
+        const pages = await searchCommons(q);
+        pages.forEach(p => { const x = scoreCommons(p, w.brand, toks); if (x && !found.some(f => f.url === x.url)) found.push(x); });
+        if (found.length >= 4) break;
+        await new Promise(r => setTimeout(r, 150));
+      }
+      found.sort((a, b) => b.sc - a.sc); found = found.slice(0, 10);
+      refCache[key] = { t: Date.now(), list: found }; saveRef();
+      return found;
+    });
+    refChain = job.catch(() => {});
+    const p = job.catch(() => []); // hors ligne : on réessaiera plus tard
+    refMem.set(key, p); p.then(() => refMem.delete(key));
+    return p;
+  }
+  // photo retenue pour un modèle : choix de l'utilisateur, sinon la meilleure trouvée ; null = rendu 3D
+  function refChoice(w, list){
+    const pick = state.refPick[modelKey(w)];
+    if (pick === "none") return null;
+    if (pick && typeof pick === "object") return pick;
+    return (list || []).length ? list[0] : null;
+  }
+  function refReady(w){ const c = refCache[modelKey(w)]; return c ? refChoice(w, c.list) : undefined; }
+  const realImg = (x, cls) => `<img class="th real ${cls || ""}" src="${esc(x.thumb)}" alt="" referrerpolicy="no-referrer" loading="lazy">`;
   function fillThumb(el){
     if (el.dataset.filled) return; el.dataset.filled = "1";
     const w = thumbWatch(el.dataset.thumb); if (!w) return;
-    thumbFor(w, 360).then(url => { if (!el.isConnected) return; el.innerHTML = url ? `<img class="th" src="${url}" alt="">` : watchSVG(w); });
+    const own = el.dataset.thumb.startsWith("c:") || el.dataset.thumb.startsWith("w:");
+    const render = () => thumbFor(w, 360).then(url => { if (!el.isConnected) return; el.innerHTML = url ? `<img class="th" src="${url}" alt="">` : watchSVG(w); });
+    refPhotos(w).then(list => {
+      if (!el.isConnected) return;
+      const x = refChoice(w, list);
+      if (x){ el.innerHTML = realImg(x); const img = el.querySelector("img"); img.onerror = () => { el.dataset.filled = ""; render(); }; }
+      else render();
+    });
   }
   // image prête tout de suite si elle est déjà calculée, sinon un emplacement en attente (jamais l'ancien dessin)
   function picFor(w, ref){
-    if (thumbsOff) return watchSVG(w);
-    const url = thumbReady.get(thumbKey(w, 360));
+    const real = refReady(w);
+    if (real) return realImg(real, "now");
+    if (thumbsOff && real === null) return watchSVG(w);
+    const url = real === null ? thumbReady.get(thumbKey(w, 360)) : null;
     if (url) return `<img class="th now" src="${url}" alt="">`;
     return `<span class="pic" data-thumb="${esc(ref)}"><span class="ph-skel"></span></span>`;
   }
