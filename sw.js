@@ -1,6 +1,6 @@
 // Mode hors ligne : l'app se charge même sans réseau.
-const CACHE = "mes-montres-v3";
-const CORE = ["./", "index.html", "manifest.webmanifest", "viewer3d.js", "colorways.js", "vendor/three.module.min.js", "vendor/RoundedBoxGeometry.js", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
+const CACHE = "mes-montres-v4";
+const CORE = ["./", "index.html", "manifest.webmanifest", "viewer3d.js", "colorways.js", "fonts/bodoni-moda-latin-500-normal.woff2", "fonts/bodoni-moda-latin-600-normal.woff2", "fonts/bodoni-moda-latin-700-normal.woff2", "fonts/manrope-latin-400-normal.woff2", "fonts/manrope-latin-500-normal.woff2", "fonts/manrope-latin-600-normal.woff2", "fonts/manrope-latin-700-normal.woff2", "fonts/manrope-latin-800-normal.woff2", "vendor/three.module.min.js", "vendor/RoundedBoxGeometry.js", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

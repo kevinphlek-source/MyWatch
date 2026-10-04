@@ -14,10 +14,17 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Mes montres</title>
 <!-- v10b · version iPhone -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/bodoni-moda-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/manrope-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:"Bodoni Moda";font-weight:500;font-display:swap;src:url(fonts/bodoni-moda-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Bodoni Moda";font-weight:600;font-display:swap;src:url(fonts/bodoni-moda-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bodoni Moda";font-weight:700;font-display:swap;src:url(fonts/bodoni-moda-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:400;font-display:swap;src:url(fonts/manrope-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:500;font-display:swap;src:url(fonts/manrope-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:600;font-display:swap;src:url(fonts/manrope-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:700;font-display:swap;src:url(fonts/manrope-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:800;font-display:swap;src:url(fonts/manrope-latin-800-normal.woff2) format("woff2")}
 :root{
   --bg:#E6E9EC; --surface:#F7F8F9; --ink:#1B2430; --muted:#5E6975; --line:#CDD3D9;
   --steel:#8C98A5; --brass:#9A7430; --brass-soft:#F1E6CF; --ok:#2E7D5B; --ok-soft:#DDEFE6; --danger:#A23B3B; --on-brass:#FFFFFF;
@@ -246,8 +253,17 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .d-specs .sw-dot{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.25);vertical-align:-2px;margin-right:6px}
 .d-comps{display:flex;flex-wrap:wrap;gap:6px}
 .d-comps span{font-size:.8rem;font-weight:700;background:var(--brass-soft);border:1px solid var(--brass);border-radius:999px;padding:3px 10px}
-.d-cw h3{margin:0 0 8px;font-size:.95rem;font-weight:800}
-.d-cw h3 small{color:var(--muted);font-weight:600}
+.d-cw{display:flex;flex-direction:column;gap:12px}
+.d-version{margin:0;font-size:.85rem;color:var(--muted);font-weight:600}
+.d-version strong{color:var(--ink)}
+.d-opt h3{margin:0 0 6px;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cw i.strap{border-radius:14px;width:44px;height:58px}
+.cw i.strap.metal{background:repeating-linear-gradient(180deg,#E9ECEF 0 6px,#9AA3AD 6px 7px,#C9CFD5 7px 12px)!important}
+.cw i.strap.jubile{background:repeating-linear-gradient(180deg,#F4F6F8 0 3px,#8E969E 3px 4px)!important}
+.cw i.strap.milanais{background:repeating-linear-gradient(45deg,#C9CFD5 0 2px,#8E969E 2px 3px)!important}
+.cw i.strap.titane{background:repeating-linear-gradient(180deg,#C7C4BD 0 6px,#86837D 6px 7px)!important}
+.cw i.bezel{background:#0B0F14!important}
+.cw i.bezel::after{content:"";position:absolute;inset:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a4350,#11161D)}
 .cw-list{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
 .cw{flex:none;width:84px;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start;color:var(--ink)}
 .cw i{position:relative;width:58px;height:58px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);display:block}
@@ -265,11 +281,171 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .hidden{display:none!important}
 @media (max-width:420px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.photo-zone{grid-template-columns:130px minmax(0,1fr)}.photo-preview{width:130px;height:130px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{transform:none!important}}
+
+/* ================= Thème « écrin » ================= */
+:root,:root[data-theme],:root:not([data-theme="light"]){
+  --bg:#0A0D12; --bg2:#0F141B; --surface:#141A22; --surface2:#1B232E; --ink:#F2EDE3; --muted:#8E99A6; --line:rgba(255,255,255,.08);
+  --steel:#6F7C8A; --brass:#D2AA5C; --brass-2:#F1D69A; --brass-soft:rgba(210,170,92,.14); --ok:#5CC08F; --ok-soft:rgba(92,192,143,.15); --danger:#E37C7C; --on-brass:#16110A;
+  --r-common:#7D8792; --r-rare:#5B8FDB; --r-epic:#A876E6; --r-leg:#E0B04A;
+  color-scheme:dark;
+}
+body{background:radial-gradient(120% 60% at 50% -10%,#1A2230 0%,var(--bg) 60%) fixed,var(--bg);letter-spacing:.005em}
+.wrap{padding:calc(14px + env(safe-area-inset-top,0px)) 16px calc(110px + env(safe-area-inset-bottom,0px));max-width:820px}
+:root{padding-top:0}
+/* barre du haut */
+.appbar{display:flex;align-items:center;gap:10px;margin:2px 0 16px}
+.appbar .logo{width:34px;height:34px;flex:none}
+.appbar h1{font-family:var(--serif);font-size:1.55rem;font-weight:700;margin:0;flex:1;letter-spacing:.01em}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);display:grid;place-items:center;cursor:pointer;flex:none}
+.icon-btn svg{width:20px;height:20px}
+/* carte de synthèse */
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:20px 18px 18px;margin-bottom:22px;border:1px solid rgba(210,170,92,.22);
+  background:radial-gradient(90% 120% at 100% 0%,rgba(210,170,92,.20),transparent 55%),repeating-radial-gradient(circle at 115% -20%,rgba(255,255,255,.035) 0 1px,transparent 1px 7px),linear-gradient(160deg,#1A2230,#10151C 70%)}
+.hero .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.hero .big{font-family:var(--serif);font-size:clamp(2.2rem,10vw,3rem);font-weight:700;line-height:1.05;margin:6px 0 2px;font-variant-numeric:lining-nums}
+.hero .sub{color:var(--muted);font-size:.9rem;font-weight:600}
+.hero .sub strong{color:var(--ink)}
+.rbar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);margin:16px 0 8px;gap:2px}
+.rbar span{display:block;height:100%}
+.rlegend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.75rem;font-weight:700;color:var(--muted)}
+.rlegend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.tile{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:14px;padding:10px 10px 9px;min-width:0}
+.tile b{display:block;font-size:1.02rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile small{display:block;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.hero .search{margin-top:14px;position:relative}
+.hero .search input{border-radius:14px;padding:12px 14px 12px 40px;background:rgba(0,0,0,.28);border-color:rgba(255,255,255,.1)}
+.hero .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--muted)}
+.chips-row{display:flex;gap:8px;overflow-x:auto;margin:14px -18px -4px;padding:0 18px 4px;scrollbar-width:none}
+.chips-row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);border-radius:999px;padding:7px 13px;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--brass);color:var(--on-brass);border-color:var(--brass)}
+/* titres de section */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 12px}
+.sec-head h2{font-family:var(--serif);font-size:1.35rem;margin:0;font-weight:700}
+.sec-head .more{font-size:.8rem;color:var(--muted);font-weight:700}
+/* vitrine */
+.showcase{margin:0 -16px 24px}
+.rail{display:flex;gap:14px;overflow-x:auto;padding:2px 16px 6px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rail::-webkit-scrollbar{display:none}
+.feat{flex:none;width:min(74vw,320px);scroll-snap-align:center;border:0;padding:0;border-radius:22px;overflow:hidden;background:var(--surface);text-align:left;color:var(--ink);cursor:pointer;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.45);border:1px solid var(--line)}
+.feat .ph{aspect-ratio:1/1;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#2C3644,#0D1117 75%)}
+.feat .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.feat .ph svg{width:80%}
+.feat .cap{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 14px;background:linear-gradient(transparent,rgba(5,8,12,.92))}
+.feat .cap span{display:block;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.feat .cap b{display:block;font-family:var(--serif);font-size:1.3rem;line-height:1.15;margin-top:2px}
+.feat .cap em{font-style:normal;font-size:.85rem;color:#C9D1DA;font-weight:600}
+.feat .badge{position:absolute;top:12px;left:12px;font-size:.7rem;font-weight:800;padding:4px 9px;border-radius:999px;background:rgba(10,13,18,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff}
+.feat .prog{height:5px;border-radius:999px;background:rgba(255,255,255,.15);margin-top:8px;overflow:hidden}
+.feat .prog i{display:block;height:100%;background:var(--ok);border-radius:999px}
+.empty-state{text-align:center;padding:36px 18px 30px;border:1px dashed rgba(210,170,92,.35);border-radius:22px;margin:0 16px;background:rgba(210,170,92,.04)}
+.empty-state svg{width:110px;height:110px;margin-bottom:6px}
+.empty-state h3{font-family:var(--serif);font-size:1.3rem;margin:4px 0 6px}
+.empty-state p{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+/* barre d'outils de liste */
+.toolbar{margin-bottom:10px}
+.tabs{display:none}
+.summary,.rarities,details.rules,.cat-tools{display:none!important}
+.layouts,.filter-btn{background:var(--surface);border-color:var(--line)}
+.layouts button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.filter-btn .n{color:var(--on-brass)}
+.shown{margin:0 0 12px;font-size:.78rem}
+/* cartes */
+.grid{gap:12px}
+.card{--frame:rgba(255,255,255,.07);padding:1px;border-radius:20px;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.card.rare{--frame:linear-gradient(160deg,rgba(91,143,219,.85),rgba(91,143,219,.15) 45%,rgba(91,143,219,.5))}
+.card.epic{--frame:linear-gradient(160deg,rgba(168,118,230,.9),rgba(168,118,230,.15) 45%,rgba(168,118,230,.6))}
+.card.leg{--frame:linear-gradient(160deg,#F4D98A,rgba(224,176,74,.2) 40%,#C9962E 75%,#FBE7A8)}
+.card-in{border-radius:19px;background:linear-gradient(180deg,var(--surface),#11161D)}
+.card.epic::after,.card.leg::after{inset:1px;border-radius:19px;opacity:.5}
+.art{background:radial-gradient(circle at 50% 38%,#2C3644,#0D1117 75%)!important}
+.info{padding:10px 12px 12px;gap:3px}
+.info .brand{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.info .model{font-size:1.08rem}
+.pill{background:rgba(255,255,255,.08);color:var(--muted)}
+.pill.rare,.rare .pill{background:rgba(91,143,219,.18);color:#9DBDF0}
+.pill.epic,.epic .pill{background:rgba(168,118,230,.2);color:#CDB0F5}
+.pill.leg,.leg .pill{background:rgba(224,176,74,.2);color:#F1D08A}
+.stamp{background:rgba(10,13,18,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.cat-actions button{background:rgba(255,255,255,.06);border-color:var(--line)}
+.cat-actions .cat-add{background:var(--brass);color:var(--on-brass);border-color:var(--brass)}
+.layout-list .card{border-radius:16px}
+.layout-list .card-in{border-radius:15px}
+/* barre d'onglets */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:1fr 1fr 76px 1fr;align-items:end;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(10,13,18,.78);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid var(--line)}
+.tabbar button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.68rem;font-weight:800;letter-spacing:.02em;cursor:pointer;padding:4px 0;position:relative}
+.tabbar button svg{width:24px;height:24px}
+.tabbar button[aria-selected="true"]{color:var(--brass)}
+.tabbar .count{position:absolute;top:0;left:calc(50% + 8px);min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:var(--brass);color:var(--on-brass);font-size:.62rem;display:grid;place-items:center;font-weight:800}
+.tabbar .count:empty{display:none}
+.tabbar .plus{order:0;width:56px;height:56px;margin:0 auto 4px;border-radius:50%;background:linear-gradient(145deg,#F1D69A,#C9962E);color:var(--on-brass);box-shadow:0 8px 22px rgba(210,170,92,.45),inset 0 1px 0 rgba(255,255,255,.5);display:grid;place-items:center;padding:0}
+.tabbar .plus svg{width:26px;height:26px}
+.fab{display:none!important}
+.backup{display:none}
+/* feuilles */
+dialog{background:var(--surface);border:1px solid var(--line)}
+dialog::backdrop{background:rgba(3,5,8,.7);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.d-specs dt{background:rgba(255,255,255,.03)}
+.d-comps span{background:var(--brass-soft);border-color:rgba(210,170,92,.5);color:var(--brass-2)}
+input,select,textarea{background:rgba(0,0,0,.25);border-color:rgba(255,255,255,.1)}
+.btn{border-color:rgba(255,255,255,.14);color:var(--ink)}
+.btn.primary{background:var(--brass);border-color:var(--brass);color:var(--on-brass)}
+.btn.buy{background:var(--ok);border-color:var(--ok);color:#06150D}
+.chips label{background:rgba(255,255,255,.05)}
+.menu-list{display:flex;flex-direction:column;gap:8px}
+.menu-list .btn{text-align:left}
+/* écran de lancement */
+#splash{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(80% 60% at 50% 42%,#1C2533,#0A0D12 70%);transition:opacity .6s ease,transform .6s ease}
+#splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
+#splash svg{width:min(52vw,230px);height:auto;filter:drop-shadow(0 22px 40px rgba(0,0,0,.6))}
+#splash .s-name{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--ink);letter-spacing:.02em;opacity:0;animation:sIn .8s .35s ease forwards}
+#splash .s-tag{font-size:.72rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--brass);opacity:0;animation:sIn .8s .6s ease forwards;margin-top:-10px}
+#splash .hand-h{--to:304deg;transform-origin:100px 100px;transform:rotate(304deg);animation:spinTo 2.2s cubic-bezier(.3,0,.15,1) both}
+#splash .hand-m{--to:768deg;transform-origin:100px 100px;transform:rotate(768deg);animation:spinTo 2.2s cubic-bezier(.3,0,.15,1) both}
+@keyframes spinTo{from{transform:rotate(calc(var(--to) - 1440deg))}to{transform:rotate(var(--to))}}
+#splash .hand-s{transform-origin:100px 100px;animation:spin .6s linear infinite}
+#splash .glint{animation:glint 2.4s ease-in-out infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes sIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes glint{0%,100%{opacity:.08}50%{opacity:.22}}
+@media (prefers-reduced-motion:reduce){#splash .hand-h,#splash .hand-m,#splash .hand-s{animation:none}}
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true">
+  <svg viewBox="0 0 200 200">
+    <defs>
+      <linearGradient id="sp-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8E6717"/><stop offset=".35" stop-color="#F4D98A"/><stop offset=".6" stop-color="#C9962E"/><stop offset="1" stop-color="#7A5810"/></linearGradient>
+      <radialGradient id="sp-dial" cx=".45" cy=".38" r=".75"><stop offset="0" stop-color="#26324A"/><stop offset=".7" stop-color="#121A28"/><stop offset="1" stop-color="#090D14"/></radialGradient>
+      <linearGradient id="sp-hand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C9CFD5"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset=".51" stop-color="#9AA3AD"/><stop offset="1" stop-color="#E4E7EA"/></linearGradient>
+    </defs>
+    <rect x="80" y="-6" width="40" height="40" rx="6" fill="#1B222C"/><rect x="80" y="166" width="40" height="40" rx="6" fill="#1B222C"/>
+    <rect x="168" y="92" width="14" height="16" rx="3" fill="url(#sp-gold)"/>
+    <circle cx="100" cy="100" r="84" fill="url(#sp-gold)"/>
+    <circle cx="100" cy="100" r="76" fill="#1A1408" opacity=".35"/>
+    <circle cx="100" cy="100" r="73" fill="url(#sp-dial)"/>
+    <g fill="#F4D98A">
+      <rect x="97" y="34" width="6" height="16" rx="1.5"/><rect x="97" y="150" width="6" height="16" rx="1.5"/>
+      <rect x="34" y="97" width="16" height="6" rx="1.5"/><rect x="150" y="97" width="16" height="6" rx="1.5"/>
+    </g>
+    <g stroke="#E9DDBF" stroke-width="2.4" stroke-linecap="round" opacity=".9">
+      <line x1="133" y1="42.8" x2="128.5" y2="50.6"/><line x1="157.2" y1="67" x2="149.4" y2="71.5"/><line x1="157.2" y1="133" x2="149.4" y2="128.5"/><line x1="133" y1="157.2" x2="128.5" y2="149.4"/>
+      <line x1="67" y1="157.2" x2="71.5" y2="149.4"/><line x1="42.8" y1="133" x2="50.6" y2="128.5"/><line x1="42.8" y1="67" x2="50.6" y2="71.5"/><line x1="67" y1="42.8" x2="71.5" y2="50.6"/>
+    </g>
+    <text x="100" y="134" text-anchor="middle" font-family="Bodoni Moda,serif" font-weight="700" font-size="10.5" letter-spacing="1.5" fill="#F4D98A">MES MONTRES</text>
+    <text x="100" y="145" text-anchor="middle" font-family="Manrope,sans-serif" font-weight="700" font-size="5.5" letter-spacing="2" fill="#9AA6B2">AUTOMATIC</text>
+    <g class="hand-h"><path d="M96.5 104 L98 62 L100 56 L102 62 L103.5 104Z" fill="url(#sp-hand)"/></g>
+    <g class="hand-m"><path d="M97.5 106 L98.8 42 L100 36 L101.2 42 L102.5 106Z" fill="url(#sp-hand)"/></g>
+    <g class="hand-s"><rect x="99.2" y="40" width="1.6" height="76" rx=".8" fill="#D2AA5C"/><circle cx="100" cy="112" r="3.2" fill="#D2AA5C"/></g>
+    <circle cx="100" cy="100" r="4.5" fill="#F4D98A"/>
+    <ellipse class="glint" cx="78" cy="70" rx="58" ry="22" transform="rotate(-30 78 70)" fill="#fff"/>
+  </svg>
+  <div class="s-name">Mes montres</div>
+  <div class="s-tag">Collection · Envies · Catalogue</div>
+</div>
 <div class="wrap">
-  <div class="top">
+  <header class="appbar">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
       <defs><linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A87A1F"/><stop offset=".45" stop-color="#F4D98A"/><stop offset=".7" stop-color="#C9962E"/><stop offset="1" stop-color="#8E6717"/></linearGradient></defs>
       <rect x="9" y="6" width="40" height="52" rx="8" transform="rotate(-9 29 32)" fill="var(--steel)" opacity=".55"/>
@@ -283,7 +459,11 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
       <rect x="23" y="47" width="24" height="3" rx="1.5" fill="#F4D98A" opacity=".8"/>
     </svg>
     <h1>Mes montres</h1>
-  </div>
+    <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages et sauvegarde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
+  </header>
+  <section class="hero" id="hero"></section>
+  <section class="showcase" id="showcase"></section>
+  <div class="sec-head"><h2 id="list-title">Mes montres</h2><span class="more" id="list-count"></span></div>
   <p class="summary" id="summary">&nbsp;</p>
   <ul class="rarities" id="rarities"></ul>
   <details class="rules">
@@ -303,11 +483,7 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
     <span class="g-num" id="g-num"></span>
   </button>
 
-  <div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="collection">Collection<span class="count" id="c-collection"></span></button>
-    <button role="tab" aria-selected="false" data-tab="wishlist">Recherchées<span class="count" id="c-wishlist"></span></button>
-    <button role="tab" aria-selected="false" data-tab="catalog">Catalogue</button>
-  </div>
+  <span hidden id="c-collection"></span><span hidden id="c-wishlist"></span>
 
   <div class="toolbar">
     <div class="layouts" role="group" aria-label="Affichage">
@@ -335,6 +511,25 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 </div>
 
 <button class="fab" id="add">Ajouter une montre</button>
+<nav class="tabbar" role="tablist" aria-label="Sections">
+  <button role="tab" data-tab="collection" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="8" y="18" width="8" height="4" rx="1"/><circle cx="12" cy="12" r="6"/><path d="M12 9v3l2 1.5"/></svg>Collection<span class="count" id="t-collection"></span></button>
+  <button role="tab" data-tab="wishlist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Envies<span class="count" id="t-wishlist"></span></button>
+  <button type="button" class="plus" id="tab-add" aria-label="Ajouter une montre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button role="tab" data-tab="catalog" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><circle cx="17.2" cy="17.2" r="3.2"/><path d="M19.6 19.6 21.5 21.5"/></svg>Catalogue</button>
+</nav>
+<dialog id="msheet" aria-label="Réglages">
+  <form method="dialog" style="gap:12px">
+    <h2>Réglages</h2>
+    <div class="menu-list">
+      <button type="button" class="btn" id="m-export">Exporter une sauvegarde</button>
+      <button type="button" class="btn" id="m-import">Restaurer une sauvegarde</button>
+    </div>
+    <h3>Comment la rareté est calculée</h3>
+    <p class="help">D'après le prix public neuf de chaque montre (à défaut, le prix payé ou constaté).</p>
+    <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>de 200 à 399 €</span><span class="pill epic">Épique</span><span>de 400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
+    <div class="actions"><span class="spacer"></span><button class="btn primary" value="close">Fermer</button></div>
+  </form>
+</dialog>
 
 <dialog id="sheet">
   <form id="form" novalidate autocomplete="off">
@@ -540,8 +735,10 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
     </div>
     <div class="d-price" id="d-price"></div>
     <div class="d-cw" id="d-cw">
-      <h3>Coloris <small id="d-cw-name"></small></h3>
-      <div class="cw-list" id="d-cw-list"></div>
+      <p class="d-version" id="d-version"></p>
+      <div class="d-opt" id="d-opt-dial"><h3>Cadran</h3><div class="cw-list" data-axis="dial"></div></div>
+      <div class="d-opt" id="d-opt-bezel"><h3>Lunette</h3><div class="cw-list" data-axis="bezel"></div></div>
+      <div class="d-opt" id="d-opt-strap"><h3>Bracelet</h3><div class="cw-list" data-axis="strap"></div></div>
       <p class="d-saved" id="d-saved" aria-live="polite"></p>
     </div>
     <dl class="d-specs" id="d-specs"></dl>
@@ -1382,7 +1579,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     if (brandTxt){
       const numerals = idx === "arabes" || idx === "romains";
       const y = !occ.has(12) ? 50 - S*(numerals ? 0.3 : 0.36) : (!occ.has(6) ? 50 + S*0.3 : null);
-      if (y !== null) txt += `<text x="50" y="${f1(y)}" font-size="${f1(S*(numerals ? 0.11 : 0.135))}" text-anchor="middle" font-family="Bodoni Moda,Didot,serif" font-weight="700" letter-spacing=".35" fill="${ink}">${esc(brandTxt)}</text>`;
+      const fsB = Math.min(S*(numerals ? 0.11 : 0.135), S * (brandTxt.length > 10 ? .8 : 1.05) / (0.72 * Math.max(1, brandTxt.length)));
+      if (y !== null) txt += `<text x="50" y="${f1(y)}" font-size="${f1(fsB)}" text-anchor="middle" font-family="Bodoni Moda,Didot,serif" font-weight="700" letter-spacing=".35" fill="${ink}">${esc(brandTxt)}</text>`;
     }
     if (sub2 && !occ.has(6) && !chrono) txt += `<text x="50" y="${f1(50+S*(occ.has(12) ? .44 : .38))}" font-size="${f1(S*0.075)}" text-anchor="middle" font-family="Manrope,sans-serif" font-weight="700" letter-spacing=".4" fill="${ink}" opacity=".75">${sub2}</text>`;
 
@@ -1458,8 +1656,18 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     o += track + feats + txt + ix + hands + glare();
     return wrap(defs, scaleWrap(SC, o));
   }
+  // polices intégrées aux textures 3D (une image SVG ne peut pas charger de police externe)
+  let FONT_CSS = "", fontP = null;
+  function loadFontCSS(){
+    if (!fontP) fontP = Promise.all([["Bodoni Moda", 600, "bodoni-moda-latin-600-normal"], ["Bodoni Moda", 700, "bodoni-moda-latin-700-normal"], ["Manrope", 700, "manrope-latin-700-normal"], ["Manrope", 800, "manrope-latin-800-normal"]].map(async ([fam, wt, file]) => {
+      const b = await (await fetch("fonts/" + file + ".woff2")).blob();
+      const url = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); });
+      return `@font-face{font-family:"${fam}";font-weight:${wt};src:url(${url}) format("woff2")}`;
+    })).then(a => { FONT_CSS = a.join(""); }).catch(() => {});
+    return fontP;
+  }
   const TEX_HALF = 32, TEXVB = `${50 - TEX_HALF} ${50 - TEX_HALF} ${TEX_HALF * 2} ${TEX_HALF * 2}`;
-  function wrap(defs, body, vb){ return `<svg viewBox="${vb || "0 0 100 100"}"${vb ? ` xmlns="http://www.w3.org/2000/svg" width="2048" height="2048"` : ""} aria-hidden="true"><defs>${defs}</defs>${body}</svg>`; }
+  function wrap(defs, body, vb){ return `<svg viewBox="${vb || "0 0 100 100"}"${vb ? ` xmlns="http://www.w3.org/2000/svg" width="2048" height="2048"` : ""} aria-hidden="true"><defs>${vb && FONT_CSS ? `<style>${FONT_CSS}</style>` : ""}${defs}</defs>${body}</svg>`; }
   // ---------- Dos de la montre (fond de boîte) ----------
   function backSVG(w, opts){
     const k = "b" + (++svgSeq);
@@ -1646,12 +1854,14 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
   function render(){
     $("#c-collection").textContent = state.collection.length;
     $("#c-wishlist").textContent = state.wishlist.length;
-    document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+    document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+    $("#t-collection").textContent = state.collection.length || ""; $("#t-wishlist").textContent = state.wishlist.length || "";
+    renderHeroCard(); renderShowcase();
     const isCat = tab === "catalog";
     $("#cat-tools").classList.toggle("hidden", !isCat);
     $("#rarities").classList.toggle("hidden", isCat);
     $("#add").classList.toggle("hidden", isCat);
-    if (isCat) return renderCatalog();
+    if (isCat){ renderHeroCard(); return renderCatalog(); }
     const wish = tab === "wishlist", arr = state[tab];
     if (!wish){
       const total = arr.reduce((s, w) => s + (num(w.price) ?? num(w.retail) ?? 0), 0);
@@ -1666,6 +1876,8 @@ Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
     const colors = { leg: "var(--r-leg)", epic: "var(--r-epic)", rare: "var(--r-rare)", common: "var(--r-common)" };
     $("#rarities").innerHTML = RAR.filter(r => counts[r.key]).map(r => `<li style="color:${colors[r.key]}">${counts[r.key]} ${r.label}${counts[r.key] > 1 ? "s" : ""}</li>`).join("") + (none ? `<li style="color:var(--muted)">${none} sans prix</li>` : "");
     const items = applyView(arr, wish), nf = activeFilters(view());
+    $("#list-title").textContent = wish ? "Toutes mes envies" : "Toutes mes montres";
+    $("#list-count").textContent = arr.length ? `${arr.length} pièce${arr.length > 1 ? "s" : ""}` : "";
     const layout = state.view.layout || "grid";
     listEl.className = "grid layout-" + layout;
     document.querySelectorAll(".layouts button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
@@ -2083,6 +2295,7 @@ Règles :
       viewer.showModal();
       try {
         const m = await import("./viewer3d.js");
+        await loadFontCSS();
         const meta = {}, top = watchSVG(w, { tex3d: true, meta }), back = backSVG(w, { tex3d: true });
         const h = await m.open(vStage, w, { top, back, meta }, { state: V, cancelDrag(){ V.drag = null; V.vel = 0; } });
         if (seq !== v3dSeq || !viewer.open){ h.close(); return; }
@@ -2216,6 +2429,10 @@ Règles :
     const s = { "brand": byBrand, "price-asc": (a, b) => (num(a.e.retail) || 0) - (num(b.e.retail) || 0), "price-desc": (a, b) => (num(b.e.retail) || 0) - (num(a.e.retail) || 0), "rarity": (a, b) => rIdx(a.e) - rIdx(b.e) || (num(b.e.retail) || 0) - (num(a.e.retail) || 0), "size": (a, b) => (num(b.e.size) || 0) - (num(a.e.size) || 0) }[v.sort] || byBrand;
     catItems.sort(s);
     const brands = new Set(catItems.map(x => x.e.brand)).size, nf = activeFilters(v);
+    $("#list-title").textContent = v.q || nf ? "Résultats" : "Tous les modèles";
+    $("#list-count").textContent = `${catItems.length} modèle${catItems.length > 1 ? "s" : ""}`;
+    document.querySelectorAll("#brand-chips .chip").forEach(c => c.setAttribute("aria-pressed", String((c.dataset.brand || "") === (v.brand || ""))));
+    renderShowcase();
     $("#summary").innerHTML = `<strong>${catItems.length}</strong> modèle${catItems.length > 1 ? "s" : ""} de <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}`;
     $("#filter-n").textContent = nf; $("#filter-n").classList.toggle("hidden", !nf);
     const sortLabel = (SORTS.catalog.find(x => x[0] === v.sort) || SORTS.catalog[0])[1];
@@ -2274,6 +2491,67 @@ Règles :
     const v = variantsFor(w.brand, w.model) || (Array.isArray(w.dialOptions) ? w.dialOptions : null);
     return v ? v.map(([name, dial]) => ({ name, dial })) : [];
   }
+  const STRAP_OPT = {};
+  String(window.STRAP_OPTIONS || "").trim().split("\n").forEach(line => {
+    const m = /^(.+?)\|(.+?)\s=\s(.+)$/.exec(line.trim()); if (!m) return;
+    STRAP_OPT[fold(m[1]) + "|" + fold(m[2])] = m[3].split(";").map(part => {
+      const t = part.trim(), st = /\bs:(\S+)/.exec(t), sc = /\bsc:(#[0-9a-f]{6})/i.exec(t); if (!st) return null;
+      return { name: t.replace(/\s*\b(s|sc):\S+/g, "").trim(), strap: st[1], strapColor: sc ? sc[1] : "" };
+    }).filter(Boolean);
+  });
+  // Couleur de lunette réellement affichée (même règle que le dessin)
+  function bezelOf(w){
+    if (!["plongee","gmt","tachy"].includes(w.bezel) || !["rond","coussin","octo", undefined, ""].includes(w.shape)) return "";
+    if (w.bezel === "gmt") return w.gmtColors || "#9E2A2B/#23407A";
+    if (/^#[0-9a-f]{6}$/i.test(w.bezelColor || "")) return w.bezelColor.toLowerCase();
+    const d = /^#[0-9a-f]{6}$/i.test(w.dial || "") ? w.dial : "#2F3B4C";
+    return (lum(d) <= .55 && lum(d) < .35 && Math.abs(parseInt(d.slice(1,3),16) - parseInt(d.slice(5,7),16)) > 18 ? shade(d, -.25) : "#15181D").toLowerCase();
+  }
+  // Nom de couleur le plus proche (pour nommer cadrans et lunettes)
+  const NAMED = (() => { const m = new Map(); DIAL_PALETTE.forEach(([n, h]) => m.set(h.toLowerCase(), n)); Object.values(CW).flat().forEach(c => { if (/^[A-Za-zÀ-ÿ' -]+$/.test(c.name) && c.name.split(" ").length <= 2 && !m.has(c.dial.toLowerCase())) m.set(c.dial.toLowerCase(), c.name); }); [["#111418","Noir"],["#15181d","Noir"],["#9e2a2b","Rouge"],["#23407a","Bleu"],["#d86a2b","Orange"],["#d8b53a","Jaune"],["#6b1e2a","Bordeaux"]].forEach(([h, n]) => m.set(h, n)); return m; })();
+  function nearestName(hex){
+    hex = String(hex || "").toLowerCase(); if (NAMED.has(hex)) return NAMED.get(hex);
+    const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const a = rgb(hex); let best = "", bd = 1e9;
+    NAMED.forEach((n, h) => { const b = rgb(h), d = (a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2; if (d < bd){ bd = d; best = n; } });
+    return best || "Personnalisé";
+  }
+  const simpleName = n => /[«»()]|lunette|boîtier/i.test(n) ? "" : n;
+  const strapMeta = st => ({ acier: "metal", titane: "titane", jubile: "jubile", milanais: "milanais" })[st] || "";
+  // Options proposées pour une montre : cadrans, lunettes et bracelets existants
+  function optionsFor(w){
+    const cws = colorwaysFor(w), cat = catalogEntry(w.brand, w.model) || w;
+    const variants = cws.map(c => ({ c, v: applyColorway(w, c) }));
+    const dials = [], bezels = [];
+    variants.forEach(({ c, v }) => {
+      if (!dials.some(d => d.dial.toLowerCase() === c.dial.toLowerCase())) dials.push({ dial: c.dial, name: simpleName(c.name.replace(/\s*\(.*\)$/, "")) || nearestName(c.dial) });
+      const bz = bezelOf(v); if (bz && !bezels.some(x => x.key === bz)){ const nick = /«\s*([^»]+?)\s*»/.exec(c.name); bezels.push({ key: bz, bezelColor: c.bezelColor || "", gmtColors: c.gmtColors || "", name: (v.bezel === "gmt" && nick) ? nick[1] : bz.includes("/") ? bz.split("/").map(nearestName).join(" et ") : nearestName(bz) }); }
+    });
+    let straps = (STRAP_OPT[findKey(STRAP_OPT, w.brand, w.model)] || []).slice();
+    if (!straps.length){
+      const base = { name: optLabel("strap", cat.strap) || "Bracelet d'origine", strap: cat.strap, strapColor: cat.strapColor || STRAP_DEFAULT[cat.strap] || "" };
+      straps = [base]; cws.forEach(c => { if (c.strap && !straps.some(x => x.strap === c.strap && (x.strapColor || "") === (c.strapColor || ""))) straps.push({ name: optLabel("strap", c.strap), strap: c.strap, strapColor: c.strapColor || "" }); });
+    }
+    // la rangée « Lunette » n'a de sens que si la lunette varie indépendamment du cadran
+    const combos = new Set(variants.map(({ c, v }) => c.dial.toLowerCase() + "|" + bezelOf(v)));
+    const bezelRow = bezels.length > 1 && (dials.length === 1 || combos.size > dials.length) ? bezels : [];
+    return { cws, dials, bezels: bezelRow, straps };
+  }
+  const sameStrap = (w, o) => w.strap === o.strap && (METAL_STRAPS.includes(o.strap) || !o.strapColor || String(w.strapColor || "").toLowerCase() === o.strapColor.toLowerCase());
+  // Combinaison existante la plus proche après un choix
+  function pickVariant(w, opts, axis, choice){
+    const { cws } = opts;
+    const fits = c => { const v = applyColorway(w, c); return { v, dial: c.dial.toLowerCase(), bz: bezelOf(v) }; };
+    const cur = { dial: String(w.dial).toLowerCase(), bz: bezelOf(w) };
+    let match = null;
+    if (axis === "dial") match = cws.find(c => { const f = fits(c); return f.dial === choice.dial.toLowerCase() && f.bz === cur.bz; }) || cws.find(c => c.dial.toLowerCase() === choice.dial.toLowerCase());
+    if (axis === "bezel") match = cws.find(c => { const f = fits(c); return f.bz === choice.key && f.dial === cur.dial; }) || cws.find(c => fits(c).bz === choice.key);
+    let out = match ? applyColorway(w, match) : { ...w };
+    if (axis === "strap") out = { ...w };
+    // le bracelet choisi est conservé quand on change de cadran ou de lunette
+    const keepStrap = axis === "strap" ? choice : (opts.straps.find(o => sameStrap(w, o)) || null);
+    if (keepStrap){ out.strap = keepStrap.strap; out.strapColor = METAL_STRAPS.includes(keepStrap.strap) ? "" : (keepStrap.strapColor || STRAP_DEFAULT[keepStrap.strap] || ""); out.strapName = keepStrap.name; }
+    return out;
+  }
   function applyColorway(w, cw){
     const base = catalogEntry(w.brand, w.model) || w;
     const strap = cw.strap || base.strap || w.strap;
@@ -2281,25 +2559,18 @@ Règles :
       strapColor: METAL_STRAPS.includes(strap) ? "" : (cw.strapColor || (base !== w ? (base.strapColor || STRAP_DEFAULT[strap] || "") : (w.strapColor || STRAP_DEFAULT[strap] || ""))),
       bezelColor: cw.bezelColor || "", gmtColors: cw.gmtColors || "" };
   }
-  function currentColorway(w, list){
-    let i = list.findIndex(c => w.colorway && fold(c.name) === fold(w.colorway));
-    if (i < 0) i = list.findIndex(c => c.dial.toLowerCase() === String(w.dial || "").toLowerCase() && (c.bezelColor || "") === (w.bezelColor || "") && (c.gmtColors || "") === (w.gmtColors || ""));
-    if (i < 0) i = list.findIndex(c => c.dial.toLowerCase() === String(w.dial || "").toLowerCase());
-    return i;
-  }
 
   // ---------- Fiche d'une montre (catalogue, collection, recherchées) ----------
   const dsheet = $("#dsheet");
-  let detail = null; // { kind, id, base, shown, list, sel }
+  let detail = null; // { kind, id, base, shown, opts, delArmed }
   const optLabel = (name, v) => { const o = v && form.elements[name] ? [...form.elements[name].options].find(x => x.value === v) : null; return o ? o.textContent.trim() : ""; };
   const colorName = hex => { const all = [...DIAL_PALETTE, ...Object.values(VARIANTS).flat()]; const f = all.find(([, h]) => h.toLowerCase() === String(hex).toLowerCase()); if (f) return f[0]; const l = lum(hex); return l > .7 ? "Clair" : l < .12 ? "Noir" : "Coloré"; };
   function openDetail(e){ openWatchSheet("catalog", null, e); }
   function openWatchSheet(kind, id, entry){
     const base = kind === "catalog" ? entry : state[kind].find(x => x.id === id); if (!base) return;
-    const list = colorwaysFor(base);
-    detail = { kind, id, base, list, sel: currentColorway(base, list), shown: base };
-    if (kind === "catalog" && detail.sel < 0 && list.length) detail.sel = 0;
-    if (kind === "catalog" && detail.sel >= 0) detail.shown = applyColorway(base, list[detail.sel]);
+    let shown = base;
+    if (kind === "catalog"){ const first = colorwaysFor(base)[0]; if (first && first.dial.toLowerCase() === String(base.dial).toLowerCase()) shown = applyColorway(base, first); }
+    detail = { kind, id, base, shown, delArmed: false };
     $("#d-saved").textContent = "";
     renderDetail(); dsheet.showModal(); dsheet.scrollTop = 0;
   }
@@ -2309,40 +2580,55 @@ Règles :
     hero.innerHTML = watchSVG(w) + badge;
     thumbFor(w, 720).then(url => { if (url && detail && detail.shown === w) hero.innerHTML = `<img src="${url}" alt="">` + badge; });
   }
+  function versionName(w, opts){
+    const c = opts.cws.find(c => { const v = applyColorway(w, c); return c.dial.toLowerCase() === String(w.dial).toLowerCase() && bezelOf(v) === bezelOf(w) && (!c.case || c.case === w.case); });
+    return c ? c.name : "";
+  }
+  function swatch(axis, o, i, on){
+    let inner = "", cls = "";
+    if (axis === "dial") inner = `<i style="background:radial-gradient(circle at 35% 30%, ${shade(o.dial, .25)}, ${esc(o.dial)} 60%, ${shade(o.dial, -.3)})"></i>`;
+    else if (axis === "bezel"){ const [t, b] = o.key.split("/"); inner = `<i class="bezel">${b ? `<em style="--g1:${esc(t)};--g2:${esc(b)}"></em>` : `<b style="--ring:${esc(t)}"></b>`}</i>`; }
+    else { const m = strapMeta(o.strap); cls = "strap " + m; inner = `<i class="${cls}" style="background:${m ? "" : `linear-gradient(90deg, ${shade(o.strapColor || STRAP_DEFAULT[o.strap] || "#23282F", -.3)}, ${esc(o.strapColor || STRAP_DEFAULT[o.strap] || "#23282F")} 30% 70%, ${shade(o.strapColor || STRAP_DEFAULT[o.strap] || "#23282F", -.3)})`}"></i>`; }
+    return `<button type="button" class="cw" data-axis="${axis}" data-i="${i}" aria-pressed="${on}">${inner}<span>${esc(o.name)}</span></button>`;
+  }
   function renderDetail(){
-    const { kind, list, sel } = detail, w = detail.shown, wish = kind === "wishlist";
+    const { kind } = detail, w = detail.shown, wish = kind === "wishlist";
     const own = kind === "catalog" ? ownedState(w) : kind;
     const val = kind === "catalog" ? num(w.retail) : valueOf(w, wish), r = rarity(val);
+    const opts = detail.opts = optionsFor(w);
     renderHero(w);
     $("#d-brand").textContent = w.brand; $("#d-model").textContent = w.model;
     const priceShown = kind === "collection" ? (w.price || w.retail) : kind === "wishlist" ? (w.current || w.retail) : w.retail;
     $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
-    // coloris
-    $("#d-cw").classList.toggle("hidden", !list.length);
-    $("#d-cw-name").textContent = sel >= 0 ? "· " + list[sel].name : (list.length ? "· personnalisé" : "");
-    $("#d-cw-list").innerHTML = list.map((c, i) => {
-      const ring = c.bezelColor ? `<b style="--ring:${esc(c.bezelColor)}"></b>` : "";
-      const g = c.gmtColors ? (() => { const [t, bo] = c.gmtColors.split("/"); return `<em style="--g1:${esc(t)};--g2:${esc(bo)}"></em>`; })() : "";
-      const caseRing = c.case && !c.bezelColor && !c.gmtColors ? `<b style="--ring:${({ "doré": "#E3C06A", "or-rose": "#E2AE95", noir: "#2A2D31", titane: "#AEB4BA", bronze: "#C58E52", resine: "#2A2F35" })[c.case] || "transparent"}"></b>` : "";
-      return `<button type="button" class="cw" data-cw="${i}" aria-pressed="${i === sel}"><i style="background:radial-gradient(circle at 35% 30%, ${shade(c.dial, .25)}, ${esc(c.dial)} 60%, ${shade(c.dial, -.3)})">${ring}${g}${caseRing}</i><span>${esc(c.name)}</span></button>`;
-    }).join("");
+    // versions : cadran, lunette, bracelet
+    const vname = versionName(w, opts);
+    w.colorway = vname || w.colorway || "";
+    const curStrap = opts.straps.find(o => sameStrap(w, o));
+    $("#d-version").innerHTML = vname ? `Version : <strong>${esc(vname)}</strong>${curStrap ? ` · ${esc(curStrap.name)}` : ""}` : "";
+    const rows = { dial: opts.dials, bezel: opts.bezels, strap: opts.straps };
+    const isOn = { dial: o => o.dial.toLowerCase() === String(w.dial).toLowerCase(), bezel: o => o.key === bezelOf(w), strap: o => o === curStrap };
+    let any = false;
+    Object.entries(rows).forEach(([axis, list]) => {
+      const box = $("#d-opt-" + axis), show = list.length > 1; box.classList.toggle("hidden", !show); any = any || show;
+      if (show) box.querySelector(".cw-list").innerHTML = list.map((o, i) => swatch(axis, o, i, isOn[axis](o))).join("");
+    });
+    $("#d-cw").classList.toggle("hidden", !any && !vname);
     // caractéristiques
-    const rows = [
-      ["Coloris", sel >= 0 ? esc(list[sel].name) : ""],
+    const specs = [
       ["Mouvement", esc(MOVE[w.movementType] || "")],
       [w.shape === "rect" || w.shape === "tonneau" ? "Hauteur" : w.shape === "carre" ? "Largeur" : "Diamètre", w.size ? String(w.size).replace(".", ",") + " mm" : ""],
       ["Étanchéité", w.water ? (w.water === "1000" ? "1 000 m et plus" : w.water + " m") : ""],
       ["Verre", esc(optLabel("glass", w.glass))],
       ["Boîtier", esc([optLabel("shape", w.shape), optLabel("case", w.case).toLowerCase()].filter(Boolean).join(", "))],
       ["Lunette", esc(optLabel("bezel", w.bezel))],
-      ["Cadran", `<span class="sw-dot" style="background:${esc(w.dial)}"></span>${esc(sel >= 0 ? list[sel].name.replace(/\s*\(.*\)$/, "") : colorName(w.dial))}, ${esc(optLabel("dialTexture", w.dialTexture).toLowerCase())}`],
+      ["Cadran", `<span class="sw-dot" style="background:${esc(w.dial)}"></span>${esc((opts.dials.find(o => isOn.dial(o)) || {}).name || nearestName(w.dial))}, ${esc(optLabel("dialTexture", w.dialTexture).toLowerCase())}`],
       ["Index", esc(optLabel("indices", w.indices))],
       ["Aiguilles", esc(optLabel("hands", w.hands))],
-      ["Bracelet", esc(optLabel("strap", w.strap))],
+      ["Bracelet", esc(curStrap ? curStrap.name : optLabel("strap", w.strap))],
       ...(kind === "collection" ? [["Prix payé", money(w.price)], ["Prix public", money(w.retail)], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
       ...(kind === "wishlist" ? [["Prix constaté", money(w.current)], ["Prix cible", money(w.target)], ["Priorité", ({ 1: "Haute", 2: "Moyenne", 3: "Basse" })[w.priority] || ""]] : [])
     ].filter(([, v]) => v);
-    $("#d-specs").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+    $("#d-specs").innerHTML = specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
     $("#d-comps").innerHTML = (w.comps || []).map(c => `<span>${esc(COMP_LABEL[c] || c)}</span>`).join("");
     // actions
     let act = "";
@@ -2354,22 +2640,25 @@ Règles :
     } else {
       act = `<button type="button" class="btn" data-act="edit" style="grid-column:1/-1">Modifier le prix ou la date</button>`;
     }
+    if (kind !== "catalog") act += `<button type="button" class="btn danger${detail.delArmed ? " armed" : ""}" data-act="delete" style="grid-column:1/-1">${detail.delArmed ? "Toucher encore pour confirmer la suppression" : wish ? "Retirer de mes recherchées" : "Retirer de ma collection"}</button>`;
     $("#d-actions").innerHTML = act;
-    $("#d-photos").href = "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(`${w.brand} ${w.model}${sel >= 0 ? " " + list[sel].name.replace(/[«»]/g, "") : ""} montre`);
+    $("#d-photos").href = "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(`${w.brand} ${w.model}${vname ? " " + vname.replace(/[«»()]/g, "") : ""} montre`);
   }
-  $("#d-cw-list").addEventListener("click", ev => {
-    const b = ev.target.closest("[data-cw]"); if (!b || !detail) return;
-    const i = +b.dataset.cw, cw = detail.list[i];
-    detail.sel = i;
-    if (detail.kind === "catalog"){ detail.shown = applyColorway(detail.base, cw); }
+  $("#d-cw").addEventListener("click", ev => {
+    const b = ev.target.closest(".cw[data-axis]"); if (!b || !detail) return;
+    const axis = b.dataset.axis, list = { dial: detail.opts.dials, bezel: detail.opts.bezels, strap: detail.opts.straps }[axis], choice = list[+b.dataset.i];
+    const next = pickVariant(detail.shown, detail.opts, axis, choice);
+    if (detail.kind === "catalog") detail.shown = next;
     else {
       const w = state[detail.kind].find(x => x.id === detail.id); if (!w) return;
-      Object.assign(w, applyColorway(w, cw)); detail.base = detail.shown = w;
+      ["dial","colorway","case","strap","strapColor","bezelColor","gmtColors"].forEach(k => w[k] = next[k] ?? "");
+      detail.base = detail.shown = w;
       persist(); render();
-      $("#d-saved").textContent = `Coloris « ${cw.name} » enregistré.`;
+      $("#d-saved").textContent = "Enregistré.";
     }
-    const keep = $("#d-cw-list").scrollLeft;
-    renderDetail(); $("#d-cw-list").scrollLeft = keep;
+    const scroll = [...$("#d-cw").querySelectorAll(".cw-list")].map(l => l.scrollLeft);
+    renderDetail();
+    [...$("#d-cw").querySelectorAll(".cw-list")].forEach((l, i) => l.scrollLeft = scroll[i] || 0);
   });
   $("#d-actions").addEventListener("click", ev => {
     const b = ev.target.closest("[data-act]"); if (!b || !detail) return;
@@ -2384,6 +2673,14 @@ Règles :
       setStatus(`${w.brand} ${w.model}${w.colorway ? " (" + w.colorway + ")" : ""} ajoutée à ${act === "own" ? "ta collection" : "tes recherchées"}.`);
     } else if (act === "edit"){ dsheet.close(); openSheet(detail.kind, detail.id); }
     else if (act === "bought"){ dsheet.close(); openSheet("wishlist", detail.id); $("#buy").click(); }
+    else if (act === "delete"){
+      if (!detail.delArmed){ detail.delArmed = true; renderDetail(); return; }
+      const w = state[detail.kind].find(x => x.id === detail.id);
+      if (w && w.photo && assetsNs) assetsNs.delete(w.photo).catch(() => {});
+      state[detail.kind] = state[detail.kind].filter(x => x.id !== detail.id);
+      persist(); dsheet.close(); render();
+      setStatus(`${w ? w.brand + " " + w.model : "Montre"} retirée.`);
+    }
   });
   $("#d-close").addEventListener("click", () => dsheet.close());
   $("#d-hero").addEventListener("click", () => { if (detail) openViewer(detail.shown); });
@@ -2394,7 +2691,11 @@ Règles :
 
   // ---------- Navigation ----------
   $("#add").addEventListener("click", () => openSheet(tab, null));
-  document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => { tab = b.dataset.tab; render(); }));
+  document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.addEventListener("click", () => { if (tab !== b.dataset.tab){ tab = b.dataset.tab; render(); window.scrollTo({ top: 0, behavior: "instant" in document.documentElement.style ? "instant" : "auto" }); } }));
+  $("#tab-add").addEventListener("click", () => openSheet(tab === "catalog" ? "wishlist" : tab, null));
+  $("#menu-btn").addEventListener("click", () => $("#msheet").showModal());
+  $("#m-export").addEventListener("click", () => { $("#msheet").close(); $("#bk-export").click(); });
+  $("#m-import").addEventListener("click", () => { $("#msheet").close(); $("#bk-import").click(); });
   listEl.addEventListener("click", e => {
     if (tab === "catalog") return catalogClick(e);
     const b = e.target.closest(".card"); if (!b) return;
@@ -2442,8 +2743,109 @@ Règles :
     }
   }
 
+  // ---------- Carte de synthèse et vitrine ----------
+  const RCOL = { leg: "var(--r-leg)", epic: "var(--r-epic)", rare: "var(--r-rare)", common: "var(--r-common)" };
+  let heroFor = "";
+  function rarityBar(arr, wish){
+    const counts = {}; arr.forEach(w => { const r = rarity(valueOf(w, wish)); counts[r ? r.key : "none"] = (counts[r ? r.key : "none"] || 0) + 1; });
+    const keys = [...RAR.map(r => r.key), "none"].filter(k => counts[k]);
+    if (!keys.length) return "";
+    const label = k => (RAR.find(r => r.key === k) || { label: "Sans prix" }).label;
+    return `<div class="rbar">${keys.map(k => `<span style="flex:${counts[k]};background:${RCOL[k] || "var(--muted)"}"></span>`).join("")}</div>
+      <div class="rlegend">${keys.map(k => `<span><i style="background:${RCOL[k] || "var(--muted)"}"></i>${counts[k]} ${label(k)}${counts[k] > 1 && k !== "none" ? "s" : ""}</span>`).join("")}</div>`;
+  }
+  function renderHeroCard(){
+    const hero = $("#hero");
+    if (tab === "catalog"){
+      if (heroFor !== "catalog"){
+        const brands = Object.entries(CAT_LIST.reduce((m, e) => (m[e.brand] = (m[e.brand] || 0) + 1, m), {})).sort((a, b) => b[1] - a[1]).slice(0, 14).map(x => x[0]);
+        const prices = CAT_LIST.map(e => num(e.retail)).filter(Boolean);
+        hero.innerHTML = `<span class="eyebrow">Catalogue de référence</span>
+          <div class="big">${CAT_LIST.length} modèles</div>
+          <div class="sub"><strong>${new Set(CAT_LIST.map(e => e.brand)).size}</strong> marques, de ${eur.format(Math.min(...prices))} à ${eur.format(Math.max(...prices))}</div>
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+          <div class="chips-row" id="brand-chips"><button type="button" class="chip" data-brand="">Toutes</button>${brands.map(b => `<button type="button" class="chip" data-brand="${esc(b)}">${esc(b)}</button>`).join("")}</div>`;
+        hero.querySelector(".search").appendChild($("#cat-q"));
+        heroFor = "catalog";
+      }
+      return;
+    }
+    if (heroFor === "catalog") $("#cat-tools").appendChild($("#cat-q"));
+    heroFor = tab;
+    const wish = tab === "wishlist", arr = state[tab];
+    if (!wish){
+      const total = arr.reduce((t, w) => t + (num(w.price) ?? num(w.retail) ?? 0), 0);
+      const auto = arr.filter(w => ["automatique","manuel","springdrive"].includes(w.movementType)).length;
+      const sizes = arr.map(w => num(w.size)).filter(Boolean), avg = sizes.length ? Math.round(sizes.reduce((a, b) => a + b, 0) / sizes.length * 10) / 10 : null;
+      const top = arr.slice().sort((a, b) => (valueOf(b) ?? 0) - (valueOf(a) ?? 0))[0];
+      const brands = new Set(arr.map(w => fold(w.brand))).size;
+      hero.innerHTML = `<span class="eyebrow">Ma collection</span>
+        <div class="big">${eur.format(total)}</div>
+        <div class="sub"><strong>${arr.length}</strong> montre${arr.length > 1 ? "s" : ""} · <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}</div>
+        ${rarityBar(arr, false)}
+        <div class="tiles"><div class="tile"><b>${arr.length ? auto + " / " + arr.length : "–"}</b><small>Mécaniques</small></div><div class="tile"><b>${avg ? String(avg).replace(".", ",") + " mm" : "–"}</b><small>Diamètre moyen</small></div><div class="tile"><b>${top ? esc(top.brand) : "–"}</b><small>Pièce maîtresse</small></div></div>`;
+    } else {
+      const total = arr.reduce((t, w) => t + (num(w.current) || num(w.retail) || num(w.target) || 0), 0);
+      const deals = arr.filter(w => { const c = num(w.current), t = num(w.target); return c !== null && t !== null && c <= t; }).length;
+      const save = arr.reduce((t, w) => { const c = num(w.current), g = num(w.target); return t + (c !== null && g !== null && c > g ? c - g : 0); }, 0);
+      const high = arr.filter(w => String(w.priority) === "1").length;
+      hero.innerHTML = `<span class="eyebrow">Mes envies</span>
+        <div class="big">${eur.format(total)}</div>
+        <div class="sub"><strong>${arr.length}</strong> montre${arr.length > 1 ? "s" : ""} en vue${deals ? ` · <strong>${deals}</strong> au prix cible` : ""}</div>
+        ${rarityBar(arr, true)}
+        <div class="tiles"><div class="tile"><b>${high}</b><small>Priorité haute</small></div><div class="tile"><b>${deals}</b><small>Au prix cible</small></div><div class="tile"><b>${save ? eur.format(save) : "–"}</b><small>Écart aux cibles</small></div></div>`;
+    }
+  }
+  const ICONS = ["Rolex|Submariner Date","Omega|Speedmaster Moonwatch Professional","Audemars Piguet|Royal Oak 41 (15510ST)","Patek Philippe|Nautilus 5811/1G","Cartier|Tank Must","TAG Heuer|Monaco","Cartier|Santos de Cartier","Tudor|Black Bay 58","Jaeger-LeCoultre|Reverso Tribute Petite Seconde","Tissot|PRX Powermatic 80","Breitling|Navitimer B01 Chronographe 43","Grand Seiko|Snowflake SBGA211"];
+  function featCard(w, ref, tag, extra){
+    const img = w.photo && photoSrc(w.photo) ? `<img src="${esc(photoSrc(w.photo))}" alt="">` : `<span class="pic" data-feat="1">${watchSVG(w)}</span>`;
+    return `<button type="button" class="feat" data-ref="${esc(ref)}"><span class="ph">${img}</span>${tag ? `<span class="badge">${esc(tag)}</span>` : ""}<span class="cap"><span>${esc(w.brand)}</span><b>${esc(w.model)}</b>${extra || ""}</span></button>`;
+  }
+  function renderShowcase(){
+    const box = $("#showcase");
+    let html = "", items = [];
+    if (tab === "catalog"){
+      const v = state.view.catalog;
+      if (!v.q && !activeFilters(v)){
+        items = ICONS.map(k => { const i = CAT_LIST.findIndex(e => e.brand + "|" + e.model === k); return i < 0 ? null : { w: CAT_LIST[i], ref: "k:" + i, extra: `<em>${money(CAT_LIST[i].retail)}</em>` }; }).filter(Boolean);
+        html = `<div class="sec-head" style="padding:0 16px"><h2>Les icônes</h2><span class="more">À découvrir</span></div>`;
+      }
+    } else if (tab === "collection"){
+      const arr = state.collection.slice().sort((a, b) => (valueOf(b) ?? 0) - (valueOf(a) ?? 0));
+      if (!arr.length) html = `<div class="empty-state">${watchSVG({ dial: "#1E3F7A", brand: "", case: "doré", strap: "cuir", dialTexture: "soleille", indices: "appliques" })}<h3>Ta vitrine est vide</h3><p>Ajoute ta première montre ou pioche dans le catalogue.</p><button type="button" class="btn primary" data-go="catalog">Parcourir le catalogue</button></div>`;
+      else { html = `<div class="sec-head" style="padding:0 16px"><h2>Ma vitrine</h2><span class="more">Fais défiler</span></div>`; items = arr.slice(0, 10).map(w => ({ w, ref: "c:" + w.id, extra: `<em>${[w.colorway, money(w.price || w.retail)].filter(Boolean).map(esc).join(" · ")}</em>` })); }
+    } else {
+      const arr = state.wishlist.slice().sort((a, b) => String(a.priority || "2").localeCompare(String(b.priority || "2")) || (valueOf(b, true) ?? 0) - (valueOf(a, true) ?? 0));
+      if (!arr.length) html = `<div class="empty-state">${watchSVG({ dial: "#15181C", brand: "", bezel: "plongee", indices: "points", hands: "glaive" })}<h3>Aucune envie pour l'instant</h3><p>Repère une montre dans le catalogue et ajoute-la ici.</p><button type="button" class="btn primary" data-go="catalog">Parcourir le catalogue</button></div>`;
+      else {
+        html = `<div class="sec-head" style="padding:0 16px"><h2>Prochains achats</h2><span class="more">Par priorité</span></div>`;
+        items = arr.slice(0, 10).map(w => {
+          const c = num(w.current), t = num(w.target), pct = c && t ? Math.max(4, Math.min(100, Math.round(t / c * 100))) : null;
+          const tag = c !== null && t !== null && c <= t ? "Prix cible atteint" : ({ 1: "Priorité haute", 2: "", 3: "" })[w.priority] || "";
+          return { w, ref: "w:" + w.id, tag, extra: `<em>${money(w.current || w.retail)}${t ? ` · cible ${money(t)}` : ""}</em>${pct ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ""}` };
+        });
+      }
+    }
+    box.innerHTML = html + (items.length ? `<div class="rail">${items.map(x => featCard(x.w, x.ref, x.tag, x.extra)).join("")}</div>` : "");
+    box.classList.toggle("hidden", !html);
+    box.querySelectorAll(".feat").forEach(el => {
+      const w = thumbWatch(el.dataset.ref); const pic = el.querySelector("[data-feat]");
+      if (w && pic) thumbFor(w, 720).then(url => { if (url && pic.isConnected) pic.innerHTML = `<img class="th" src="${url}" alt="">`; });
+    });
+  }
+  $("#showcase").addEventListener("click", e => {
+    const go = e.target.closest("[data-go]"); if (go){ tab = go.dataset.go; render(); return; }
+    const f = e.target.closest(".feat"); if (!f) return;
+    const [k, id] = [f.dataset.ref.slice(0, 1), f.dataset.ref.slice(2)];
+    if (k === "k") openDetail(CAT_LIST[+id]); else openWatchSheet(k === "w" ? "wishlist" : "collection", id);
+  });
+  $("#hero").addEventListener("click", e => {
+    const c = e.target.closest("#brand-chips .chip"); if (!c) return;
+    state.view.catalog.brand = c.dataset.brand || ""; persist(); renderCatalog();
+  });
+
   // ---------- Vignettes photo-réalistes (rendu 3D mis en cache) ----------
-  const THUMB_V = "v2", thumbMem = new Map();
+  const THUMB_V = "v4", thumbMem = new Map();
   let thumbChain = Promise.resolve(), thumbFails = 0, thumbsOff = !window.WebGLRenderingContext;
   let rdbP = null;
   function rdb(){ if (!rdbP) rdbP = new Promise((res, rej) => { const r = indexedDB.open("mes-montres-rendus", 1); r.onupgradeneeded = () => r.result.createObjectStore("thumbs"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); return rdbP; }
@@ -2458,6 +2860,7 @@ Règles :
       try { const b = await rget(key); if (b) return URL.createObjectURL(b); } catch(e){}
       const job = thumbChain.then(async () => {
         await new Promise(r => setTimeout(r, 20));
+        await loadFontCSS();
         const m = await import("./viewer3d.js");
         const meta = {}, art = { top: watchSVG(w, { tex3d: true, meta }), back: null, meta };
         const blob = await m.renderThumb(w, art, size);
@@ -2526,11 +2929,18 @@ Règles :
     } catch(err){ setStatus("Ce fichier n'est pas une sauvegarde Mes montres valide."); }
   });
 
+  const splashT0 = performance.now();
+  function hideSplash(){
+    const sp = $("#splash"); if (!sp) return;
+    const wait = Math.max(0, 2300 - (performance.now() - splashT0));
+    setTimeout(() => { sp.classList.add("out"); setTimeout(() => sp.remove(), 650); }, wait);
+  }
   async function init(){
     const needSave = applyPatches(state);
     assetsNs = localAssets;
     await loadPhotos();
     render();
+    hideSplash();
     if (needSave) persist();
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
     if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js").catch(() => {});

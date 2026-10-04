@@ -226,11 +226,47 @@ async function buildWatch(w, art, texPx = 2048){
   const zDial = T * .74, zBezel = T * .86, caseTop = T * .55;
 
   // ---- carrure
+  const strapW = shape === "carre" ? 30 : shape === "rond" ? 27 : 28;
   if (shape === "rond"){
-    const prof = [[25.4, 0], [27.6, .5], [28.7, 1.6], [29.2, T*.18], [29.3, T*.42], [29.2, T*.58], [28.9, T*.66], [28.4, T*.7]].map(([r, z]) => new THREE.Vector2(r, z));
-    const mid = new THREE.Mesh(new THREE.LatheGeometry(prof, 128), brushed); mid.rotation.x = Math.PI/2; root.add(mid);
-    // flanc poli (biseau)
-    const chamfer = new THREE.Mesh(new THREE.LatheGeometry([[29.25, T*.2], [29.32, T*.42], [29.25, T*.56]].map(([r, z]) => new THREE.Vector2(r, z)), 128), polished); chamfer.rotation.x = Math.PI/2; chamfer.scale.setScalar(1.002); root.add(chamfer);
+    // carrure et cornes d'un seul bloc : contour vu de dessus, extrudé avec des arêtes adoucies
+    const Rc = 28.6, xi = strapW / 2 + .15, xo = xi + 4.4, yt = 35.8;
+    const yo = Math.sqrt(Rc*Rc - xo*xo), yi = Math.sqrt(Rc*Rc - xi*xi);
+    const sh = new THREE.Shape();
+    const lugQ = (sx, sy) => { // une corne : du cercle vers la pointe, puis retour
+      sh.lineTo(sx * xo, sy * (yo + 1.5));
+      sh.quadraticCurveTo(sx * (xo + .3), sy * (yt - 3), sx * (xo - .2), sy * (yt - .6));
+      sh.quadraticCurveTo(sx * (xo - .6), sy * yt, sx * (xo - 1.6), sy * yt);
+      sh.lineTo(sx * (xi + 1), sy * yt);
+      sh.quadraticCurveTo(sx * xi, sy * yt, sx * xi, sy * (yt - 1));
+      sh.lineTo(sx * xi, sy * (yi + .4));
+    };
+    const lugR = (sx, sy) => { // même corne parcourue dans l'autre sens (intérieur vers extérieur)
+      sh.lineTo(sx * xi, sy * (yt - 1));
+      sh.quadraticCurveTo(sx * xi, sy * yt, sx * (xi + 1), sy * yt);
+      sh.lineTo(sx * (xo - 1.6), sy * yt);
+      sh.quadraticCurveTo(sx * (xo - .6), sy * yt, sx * (xo - .2), sy * (yt - .6));
+      sh.quadraticCurveTo(sx * (xo + .3), sy * (yt - 3), sx * xo, sy * (yo + 1.5));
+    };
+    const ang = (x, y) => Math.atan2(y, x);
+    sh.moveTo(xi, yi + .4);
+    sh.absarc(0, 0, Rc, ang(xi, yi), ang(-xi, yi), false);          // haut (entre les cornes)
+    sh.lineTo(-xi, yi + .4); lugR(-1, 1);                           // corne haut gauche
+    sh.absarc(0, 0, Rc, ang(-xo, yo), ang(-xo, -yo), false);        // flanc gauche
+    lugQ(-1, -1);
+    sh.absarc(0, 0, Rc, ang(-xi, -yi), ang(xi, -yi), false);        // bas
+    sh.lineTo(xi, -(yi + .4)); lugR(1, -1);
+    sh.absarc(0, 0, Rc, ang(xo, -yo), ang(xo, yo), false);          // flanc droit
+    lugQ(1, 1);
+    const Tc = T * .66;
+    const geo = new THREE.ExtrudeGeometry(sh, { depth: Tc - 2.2, bevelEnabled: true, bevelThickness: 1.1, bevelSize: .9, bevelSegments: 5, curveSegments: 72 });
+    // les cornes plongent vers le poignet
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++){
+      const y = Math.abs(pos.getY(i)), z = pos.getZ(i), x = Math.abs(pos.getX(i));
+      if (y > 24 && x < xo + 2){ const t = Math.min(1, (y - 24) / (yt - 24)); const drop = t * t * (Tc * .42); const k = z / (Tc - .2); pos.setZ(i, z - drop * Math.max(.25, k)); }
+    }
+    geo.computeVertexNormals();
+    const m = new THREE.Mesh(geo, [brushed, polished]); m.position.z = 1.1; root.add(m);
   } else {
     const geo = new THREE.ExtrudeGeometry(outline(shape, 1.4), { depth: caseTop - 3.2, bevelEnabled: true, bevelThickness: 1.6, bevelSize: 1.4, bevelSegments: 6, curveSegments: 64 });
     const m = new THREE.Mesh(geo, brushed); m.position.z = 1.6; root.add(m);
@@ -241,17 +277,18 @@ async function buildWatch(w, art, texPx = 2048){
   if (shape === "rond" || (d.kind === "c" && shape !== "octo")){
     const insert = meta.insertBezel;
     const pts = insert
-      ? [[28.4, T*.7], [29.0, T*.72], [29.1, T*.8], [28.7, zBezel], [R + .2, zBezel + .05], [R, zBezel - .1]]
-      : [[28.4, T*.7], [28.8, T*.73], [28.6, T*.79], [rIn + 3, zBezel + .4], [rIn + 1.3, zBezel + .3], [rIn + 1, zDial + .9]];
-    const geo = new THREE.LatheGeometry(pts.map(([r, z]) => new THREE.Vector2(r, z)), 360);
+      ? [[27.6, T*.66], [28.7, T*.69], [28.9, T*.73], [28.95, T*.8], [28.6, zBezel], [R + .2, zBezel + .05], [R, zBezel - .1]]
+      : [[27.6, T*.66], [28.4, T*.68], [28.6, T*.73], [28.3, T*.78], [rIn + 3, zBezel + .4], [rIn + 1.3, zBezel + .3], [rIn + 1, zDial + .9]];
+    const fluted = w.bezel === "cannelee" && !insert;
+    const geo = new THREE.LatheGeometry(pts.map(([r, z]) => new THREE.Vector2(r, z)), fluted ? 1440 : 360);
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++){
       const x = pos.getX(i), z = pos.getZ(i), r = Math.hypot(x, z), a = Math.atan2(z, x), h = pos.getY(i);
       if (insert && r > 28.5 && h > T*.71){ const f = 1 - .022 * (Math.cos(a * 120) > .2 ? 1 : 0); pos.setX(i, x * f); pos.setZ(i, z * f); }
-      if (w.bezel === "cannelee" && !insert && r > rIn + 1.5 && r < 28.7 && h > T*.74){ pos.setY(i, h + .55 * Math.max(0, Math.cos(a * 72))); }
+      if (fluted && r > rIn + 1.6 && r < 28.5 && h > T*.74){ const f = (a / (Math.PI * 2) * 72 % 1 + 1) % 1, tri = 1 - Math.abs(f - .5) * 2; pos.setY(i, h + .32 * tri); }
     }
     geo.computeVertexNormals();
-    const bz = new THREE.Mesh(geo, polished); bz.rotation.x = Math.PI/2; root.add(bz);
+    const bz = new THREE.Mesh(geo, fluted ? metal(.06, mt.color, { envMapIntensity: 1.9 }) : polished); bz.rotation.x = Math.PI/2; root.add(bz);
     if (insert){
       const ring = planarUV(new THREE.RingGeometry(R - 6.05, R, 256, 1));
       const insMat = new THREE.MeshPhysicalMaterial({ map: topTex, color: topTex ? "#fff" : "#15181D", roughness: w.bezel === "plongee" ? .12 : .25, metalness: .1, clearcoat: 1, clearcoatRoughness: .05 });
@@ -275,7 +312,12 @@ async function buildWatch(w, art, texPx = 2048){
   // ---- cadran
   const dialGeo = planarUV(d.kind === "c" ? new THREE.CircleGeometry(d.rx + .2, 160) : new THREE.ShapeGeometry(new THREE.Shape(dialPath(d, .9).getPoints(48)), 24));
   const tex = (w.dialTexture || "lisse");
-  const dialMat = new THREE.MeshPhysicalMaterial({ map: topTex, color: topTex ? "#fff" : meta.dial, roughness: tex === "soleille" ? .3 : tex === "lisse" ? .45 : .55, metalness: tex === "soleille" ? .35 : .1, clearcoat: .35, clearcoatRoughness: .3 });
+  const sun = tex === "soleille";
+  const dialMat = new THREE.MeshPhysicalMaterial({ map: topTex, color: topTex ? "#fff" : meta.dial, roughness: sun ? .3 : tex === "lisse" ? .45 : .55, metalness: sun ? .5 : .1, clearcoat: .35, clearcoatRoughness: .3 });
+  if (sun){
+    dialMat.anisotropy = .85;
+    dialMat.anisotropyMap = canvasTex(256, 256, (g, W, H) => { const im = g.createImageData(W, H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){ const a = Math.atan2(y - H/2, x - W/2), i = (y * W + x) * 4; im.data[i] = (-Math.sin(a) * .5 + .5) * 255; im.data[i+1] = (Math.cos(a) * .5 + .5) * 255; im.data[i+2] = 255; im.data[i+3] = 255; } g.putImageData(im, 0, 0); }, false);
+  }
   const dial = new THREE.Mesh(dialGeo, dialMat); dial.position.z = zDial; root.add(dial);
   // rehaut (anneau incliné entre cadran et verre)
   if (!meta.insertBezel && d.kind === "c"){
@@ -341,6 +383,13 @@ async function buildWatch(w, art, texPx = 2048){
     const geo = new THREE.SphereGeometry(sr, 96, 24, 0, Math.PI*2, 0, th).rotateX(Math.PI/2);
     const rim = zBezel + .3;
     const gl = new THREE.Mesh(geo, glassMat); gl.position.z = rim - (sr - dome); gl.renderOrder = 2; root.add(gl);
+    const sheen = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: "#ffffff", metalness: 1, roughness: .04, transparent: true, opacity: .1, depthWrite: false, envMapIntensity: 2 }));
+    sheen.position.copy(gl.position); sheen.renderOrder = 3; root.add(sheen);
+    // loupe de date (cyclope) des Rolex
+    if (/rolex/i.test(w.brand || "") && (has("date") || has("daydate")) && occ.has(3)){
+      const cy = new THREE.Mesh(new RoundedBoxGeometry(S * .36, S * .3, 1.6, 4, .7), glassMat);
+      cy.position.set(d.rx * .66, 0, rim + dome + .2); cy.renderOrder = 4; root.add(cy);
+    }
   } else {
     const s = new THREE.Shape(); s.setFromPoints(dialPath(d, 1.3).getPoints(32));
     const gl = new THREE.Mesh(new THREE.ShapeGeometry(s, 24), glassMat); gl.position.z = zBezel + .2; gl.renderOrder = 2; root.add(gl);
@@ -356,8 +405,11 @@ async function buildWatch(w, art, texPx = 2048){
     const stem = new THREE.Mesh(new THREE.CylinderGeometry(r * .55, r * .55, 2, 24), polished); stem.rotation.z = Math.PI/2 + rot; stem.position.set(x - Math.cos(rot) * len * .7, y - Math.sin(rot) * len * .7, z); root.add(stem);
     const end = new THREE.Mesh(new THREE.CircleGeometry(r * .62, 32), brushed); end.rotation.y = Math.PI/2; end.position.set(x + len / 2 + .01, y, z); if (!rot) root.add(end);
   };
-  const zc = T * .44;
+  const zc = T * .4;
   crown(G.crownX + 2.2, 0, zc, 2.6, 3.6);
+  if (shape === "rond" && ["plongee","gmt"].includes(w.bezel)){
+    for (const sy of [1, -1]){ const g = new THREE.Mesh(new RoundedBoxGeometry(3.4, 3.2, T * .42, 3, .9), brushed); g.position.set(28.6, sy * 4.6, zc + .6); g.rotation.z = sy * .18; root.add(g); }
+  }
   if (meta.chrono){ for (const s of [1, -1]){ const a = s * .55, r0 = G.crownX + 1.4; const p = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 3.8, 32), polished); p.rotation.z = a - Math.PI/2; p.position.set(r0 * Math.cos(a), r0 * Math.sin(a), zc); root.add(p); const cap = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 1, 32), polished); cap.rotation.z = a - Math.PI/2; cap.position.set((r0 + 2) * Math.cos(a), (r0 + 2) * Math.sin(a), zc); root.add(cap); } }
 
   // ---- fond de boîte
@@ -367,22 +419,10 @@ async function buildWatch(w, art, texPx = 2048){
     m.rotation.y = Math.PI; m.position.z = -.02; root.add(m);
   }
 
-  // ---- cornes
-  const strapW = shape === "carre" ? 30 : shape === "rond" ? 27 : 28;
+  // ---- attaches du bracelet
   let yA, zA = T * .3;
   if (G.lugs){
-    const lug = new THREE.Shape(); lug.moveTo(22, T*.12); lug.lineTo(22, T*.66); lug.bezierCurveTo(28, T*.66, 32, T*.6, 35.5, T*.42); lug.lineTo(35.6, T*.2); lug.bezierCurveTo(33, T*.12, 30, T*.08, 22, T*.12);
-    const geo = new THREE.ExtrudeGeometry(lug, { depth: 3.6, bevelEnabled: true, bevelThickness: .5, bevelSize: .5, bevelSegments: 3, curveSegments: 24 });
-    // profil dessiné dans le plan (sortie, hauteur) puis extrudé sur la largeur
-    geo.applyMatrix4(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0)));
-    for (const sy of [1, -1]) for (const sx of [1, -1]){
-      const m = new THREE.Mesh(geo, brushed);
-      m.scale.y = sy; m.position.x = sx > 0 ? strapW/2 + .2 : -strapW/2 - 3.8;
-      root.add(m);
-    }
-    yA = 31.5;
-    const bar = new THREE.Mesh(new THREE.CylinderGeometry(.6, .6, strapW + 2, 16), polished); bar.rotation.z = Math.PI/2;
-    for (const sy of [1, -1]){ const b2 = bar.clone(); b2.position.set(0, sy * yA, zA); root.add(b2); }
+    yA = 32.2; zA = T * .22;
   } else {
     yA = ({ coussin: 26, octo: 27, carre: 24, rect: 28, tonneau: 30 })[shape] || 27;
   }
@@ -396,7 +436,7 @@ async function buildWatch(w, art, texPx = 2048){
   const half = new THREE.CubicBezierCurve3(P0, P1, P2, P3), hl = half.getLength();
   const frameAt = s => { const u = Math.max(0, Math.min(1, s / hl)); return { p: half.getPointAt(u), t: half.getTangentAt(u) }; };
   const both = obj => { root.add(obj); const m = obj.clone(); m.scale.y = -1; root.add(m); };
-  const widthAt = s => strapW * (1 - .2 * Math.min(1, s / hl));
+  const widthAt = s => (G.lugs ? strapW - .4 : strapW) * (1 - .22 * Math.min(1, s / hl));
   const metalStrap = ["acier","jubile","titane","milanais"].includes(strap);
   const bMat = strap === "titane" ? new THREE.MeshPhysicalMaterial({ color: METALS.titane.color, metalness: 1, roughness: .38, roughnessMap: brushedMap }) : new THREE.MeshPhysicalMaterial({ color: (w.case === "doré" && false) ? mt.color : METALS.acier.color, metalness: 1, roughness: .34, roughnessMap: brushedMap });
   const pMat = new THREE.MeshPhysicalMaterial({ color: strap === "titane" ? METALS.titane.color : METALS.acier.color, metalness: 1, roughness: .1 });
@@ -404,12 +444,12 @@ async function buildWatch(w, art, texPx = 2048){
     const fa = frameAt;
     if (strap === "acier" || strap === "titane" || strap === "jubile"){
       const outer = new Builder(), center = new Builder();
-      const step = strap === "jubile" ? 3.4 : 5.2, gap = .28;
+      const step = strap === "jubile" ? 3.2 : 4.6, gap = .16;
       for (let s = 0, k = 0; s < hl - .5; s += step, k++){
         const s1 = Math.min(hl, s + step) - gap, W = widthAt(s);
         if (strap === "jubile"){
-          sweep(outer, fa, s, s1, 3, () => roundedSection(-W/2, -W*.3, 3, .9));
-          sweep(outer, fa, s, s1, 3, () => roundedSection(W*.3, W/2, 3, .9));
+          sweep(outer, fa, s, s1, 4, () => roundedSection(-W/2, -W*.3, 2.5, 1, 5));
+          sweep(outer, fa, s, s1, 4, () => roundedSection(W*.3, W/2, 2.5, 1, 5));
           const m1 = s + step / 2;
           sweep(center, fa, s, m1 - gap, 2, () => roundedSection(-W*.3 + .2, -W*.1 - .1, 3.3, .7));
           sweep(center, fa, m1, s1, 2, () => roundedSection(-W*.3 + .2, -W*.1 - .1, 3.3, .7));
@@ -417,9 +457,9 @@ async function buildWatch(w, art, texPx = 2048){
           sweep(center, fa, s, m1 - gap, 2, () => roundedSection(W*.1 + .1, W*.3 - .2, 3.3, .7));
           sweep(center, fa, m1, s1, 2, () => roundedSection(W*.1 + .1, W*.3 - .2, 3.3, .7));
         } else {
-          sweep(outer, fa, s, s1, 3, () => roundedSection(-W/2, -W*.17 - .15, 3.1, 1.1));
-          sweep(outer, fa, s, s1, 3, () => roundedSection(W*.17 + .15, W/2, 3.1, 1.1));
-          sweep(strap === "titane" ? outer : center, fa, s, s1, 3, () => roundedSection(-W*.17, W*.17, 3.3, 1));
+          sweep(outer, fa, s, s1, 4, () => roundedSection(-W/2, -W*.17 - .1, 2.5, 1.15, 5));
+          sweep(outer, fa, s, s1, 4, () => roundedSection(W*.17 + .1, W/2, 2.5, 1.15, 5));
+          sweep(strap === "titane" ? outer : center, fa, s, s1, 4, () => roundedSection(-W*.17, W*.17, 2.75, 1.1, 5));
         }
       }
       both(new THREE.Mesh(outer.geometry(), bMat));
@@ -512,7 +552,7 @@ export async function renderThumb(w, art, size = 360){
     thumbBg = canvasTex(512, 512, (g, W, H) => { const gr = g.createRadialGradient(W*.5, H*.36, 0, W*.5, H*.5, W*.75); gr.addColorStop(0, "#36414F"); gr.addColorStop(.55, "#1A212B"); gr.addColorStop(1, "#0B0F14"); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
   }
   const { r, env } = thumbCtx;
-  r.setPixelRatio(1); r.setSize(size, size, false);
+  const ss = 2; r.setPixelRatio(1); r.setSize(size * ss, size * ss, false);
   const scene = new THREE.Scene(); scene.environment = env; scene.background = thumbBg; lights(scene);
   const model = await buildWatch(w, art, size > 500 ? 2048 : 1024);
   setTime(model, new Date(2024, 0, 1, 10, 8, 37));
@@ -525,7 +565,9 @@ export async function renderThumb(w, art, size = 360){
   const span = Math.max(84, ext + 10);
   camera.position.set(0, -3, span / 2 / Math.tan(THREE.MathUtils.degToRad(13)) * 1.02); camera.lookAt(0, -1, 0);
   r.render(scene, camera);
-  const blob = await new Promise(res => r.domElement.toBlob(res, "image/jpeg", .86));
+  const out = document.createElement("canvas"); out.width = out.height = size;
+  const g2 = out.getContext("2d"); g2.imageSmoothingQuality = "high"; g2.drawImage(r.domElement, 0, 0, size, size);
+  const blob = await new Promise(res => out.toBlob(res, "image/jpeg", .88));
   dispose(model);
   return blob;
 }
