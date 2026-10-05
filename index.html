@@ -334,6 +334,39 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .c-item small{display:block;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .c-item strong{font-size:.9rem}
 .c-item em{margin-left:auto;font-style:normal;color:var(--muted);font-size:.8rem;white-space:nowrap}
+
+.c-radar{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.c-radar svg{width:100%;max-width:320px;height:auto;overflow:visible}
+.c-radar text{font-size:9.5px;font-weight:700;fill:var(--muted);font-family:inherit}
+.c-radar .pa{fill:var(--ca);fill-opacity:.18;stroke:var(--ca);stroke-width:2.2;stroke-linejoin:round}
+.c-radar .pb{fill:var(--cb);fill-opacity:.12;stroke:var(--cb);stroke-width:2.2;stroke-dasharray:6 4;stroke-linejoin:round}
+.c-radar .pa,.c-radar .pb{transform-origin:150px 120px;transform:scale(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.cmp.go .c-radar .pa,.cmp.go .c-radar .pb{transform:scale(1)}
+.c-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:.75rem;font-weight:700}
+.c-legend span{display:flex;align-items:center;gap:6px}
+.c-legend i{width:14px;height:4px;border-radius:2px;background:var(--ca)} .c-legend .b i{background:var(--cb)}
+.c-legend em{font-style:normal;font-weight:600;color:var(--muted)}
+.src-tag{font-size:.62rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:1px 7px;background:var(--line);color:var(--muted)}
+.src-tag.net{background:var(--ok-soft);color:var(--ok)}
+.stars{color:var(--brass);letter-spacing:1px}
+.c-rev{display:flex;flex-direction:column;gap:8px;border:1px dashed rgba(168,130,58,.5);border-radius:16px;padding:12px;text-align:center}
+.c-rev p{margin:0;font-size:.82rem;color:var(--muted)}
+.c-rev textarea{font-size:16px;min-height:60px}
+.c-pc{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.8rem;margin-top:12px}
+.c-pc div{display:flex;flex-direction:column;gap:4px;border-radius:14px;padding:10px;background:var(--surface2,#F8F3EA);border-top:3px solid var(--ca)}
+.c-pc div.b{border-top-color:var(--cb)}
+.c-pc b{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.c-pc .plus::before{content:"+ ";color:var(--ok);font-weight:800}
+.c-pc .minus::before{content:"− ";color:var(--danger);font-weight:800}
+.c-src{font-size:.72rem;color:var(--muted);text-align:center;margin:0}
+.c-how{font-size:.8rem;color:var(--muted)} .c-how summary{cursor:pointer;font-weight:700;color:var(--ink)} .c-how p{margin:6px 0 0}
+.d-scores{display:flex;flex-direction:column;gap:6px}
+.d-scores h3{margin:4px 0 0;display:flex;align-items:center;gap:8px}
+.d-sc{display:grid;grid-template-columns:110px 1fr 38px;align-items:center;gap:8px;font-size:.82rem}
+.d-sc span:first-child{color:var(--muted);font-weight:700}
+.d-sc .bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.d-sc .bar i{display:block;height:100%;border-radius:999px;background:var(--brass)}
+.d-sc b{text-align:right}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -906,6 +939,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     </div>
     <dl class="d-specs" id="d-specs"></dl>
     <div class="d-comps" id="d-comps"></div>
+    <div class="d-scores" id="d-scores"></div>
     <div class="d-actions" id="d-actions"></div>
     <a class="d-link" id="d-photos" target="_blank" rel="noopener">Voir de vraies photos sur Google Images ↗</a>
   </div>
@@ -934,6 +968,11 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
     <h2 id="c-title">Comparateur</h2>
     <div id="c-main"></div>
+    <div class="c-rev hidden" id="c-rev">
+      <p id="c-rev-msg"></p>
+      <button type="button" class="btn small primary" id="c-rev-paste">Coller la réponse de Claude</button>
+      <textarea id="c-rev-text" rows="3" placeholder="…ou colle sa réponse ici"></textarea>
+    </div>
     <div class="c-pick hidden" id="c-pick">
       <input type="search" id="c-q" placeholder="Rechercher une marque ou un modèle" autocomplete="off" spellcheck="false">
       <div id="c-results"></div>
@@ -969,7 +1008,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 20; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 21; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1635,6 +1674,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
       refPick: (d && d.refPick && typeof d.refPick === "object") ? d.refPick : {},
       showcase: (d && d.showcase && typeof d.showcase === "object") ? d.showcase : {},
       photoSize: Number(d && d.photoSize) || 62,
+      reviews: (d && d.reviews && typeof d.reviews === "object") ? d.reviews : {},
       view: { layout: ["list","grid","big"].includes(v.layout) ? v.layout : "grid", catalog: { ...dv.catalog, ...(v.catalog || {}) }, collection: { ...dv.collection, ...(v.collection || {}) }, wishlist: { ...dv.wishlist, ...(v.wishlist || {}) } } };
   }
   function applyPatches(st){ let c = false; PATCHES.forEach(p => { if (!st.patches.includes(p.id)){ p.apply(st); st.patches.push(p.id); c = true; } }); return c; }
@@ -3252,6 +3292,8 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
     ].filter(([, v]) => v);
     $("#d-specs").innerHTML = specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
     $("#d-comps").innerHTML = (w.comps || []).map(c => `<span>${esc(COMP_LABEL[c] || c)}</span>`).join("");
+    { const q = qualityOf(w, kind === "wishlist"), rv = reviewOf(w);
+      $("#d-scores").innerHTML = `<h3>Notes <span class="src-tag${q.net ? " net" : ""}">${q.net ? "Avis internet" : "Estimation"}</span></h3>` + (rv && rv.rating ? `<div class="d-sc"><span>Utilisateurs</span><span class="stars">${starStr(rv.rating)}</span><b>${fr1(rv.rating)}/5</b></div>` : "") + QUAL.map(([k, lbl]) => q[k] == null ? "" : `<div class="d-sc"><span>${lbl}</span><span class="bar"><i style="width:${q[k] * 10}%"></i></span><b>${fr1(q[k])}</b></div>`).join(""); }
     // actions
     let act = "";
     if (kind === "catalog"){
@@ -3432,31 +3474,132 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
     return `<div class="duel"><div class="lbl">${label}${opt.note ? ` <em>· ${opt.note}</em>` : ""}</div>
       <div class="va${w === 0 ? " win" : ""}">${w === 0 ? CROWN : ""}${a || "—"}</div><div class="vb${w === 1 ? " win" : ""}">${b || "—"}${w === 1 ? CROWN : ""}</div>${bars}${same ? `<span class="same">Pareil</span>` : ""}</div>`;
   }
-  const better = (x, y, higher = true) => x == null || y == null || x === y ? -1 : (higher ? (x > y ? 0 : 1) : (x < y ? 0 : 1));
+  const better = (x, y, higher = true, tol = 0) => x == null || y == null || Math.abs(x - y) <= tol ? -1 : (higher ? (x > y ? 0 : 1) : (x < y ? 0 : 1));
+  // ---------- Notes de qualité ----------
+  const BRAND_TIER = { "patek philippe": 10, "a. lange & sohne": 10, "f.p. journe": 10, "vacheron constantin": 10, "audemars piguet": 10, "breguet": 10, "h. moser & cie": 9.8, "richard mille": 9.5, "parmigiani fleurier": 9.6, "blancpain": 9.5, "jaeger-lecoultre": 9.5, "glashutte original": 9.4, "piaget": 9.4, "girard-perregaux": 9, "ulysse nardin": 9, "chopard": 9, "rolex": 9.5, "grand seiko": 9.5, "omega": 9.1, "zenith": 9, "iwc": 8.8, "bvlgari": 8.8, "cartier": 8.5, "panerai": 8.5, "breitling": 8.5, "tudor": 8.5, "hublot": 8.3, "hermes": 8.3, "nomos": 8.3, "montblanc": 8, "sinn": 8, "longines": 7.8, "oris": 7.8, "tag heuer": 7.8, "bell & ross": 7.5, "doxa": 7.5, "rado": 7.5, "ball": 7.5, "frederique constant": 7.3, "christopher ward": 7.3, "stowa": 7.3, "junghans": 7, "raymond weil": 7, "alpina": 7, "maurice lacroix": 7, "nivada grenchen": 7, "zodiac": 7, "squale": 7, "mido": 7, "laco": 6.8, "yema": 6.8, "baltic": 6.8, "certina": 6.8, "hamilton": 6.8, "lorier": 6.5, "furlan marri": 6.5, "tissot": 6.5, "studio underd0g": 6.3, "seiko": 6.2, "citizen": 6, "victorinox": 6, "movado": 5.8, "bulova": 5.8, "orient": 5.5, "dan henry": 5.5, "michel herbelin": 5.5, "lip": 5.2, "mondaine": 5.2, "casio": 5, "sea-gull": 5, "timex": 4.8, "swatch": 4.8, "spinnaker": 4.8, "vostok": 4.5, "festina": 4.5, "briston": 4.5, "nixon": 4.3, "invicta": 4.2, "pierre lannier": 4.2, "fossil": 4, "hugo boss": 4, "daniel wellington": 3.8, "lacoste": 3.8, "tommy hilfiger": 3.8, "michael kors": 3.6, "ice-watch": 3.5 };
+  const QUAL = [["movement", "Mouvement"], ["accuracy", "Précision"], ["finish", "Finitions"], ["strap", "Bracelet"], ["robustness", "Robustesse"], ["value", "Qualité / prix"]];
+  const clamp10 = n => Math.round(Math.max(1, Math.min(10, n)) * 10) / 10;
+  const fr1 = n => String(Math.round(n * 10) / 10).replace(".", ",");
+  const starStr = r => { const f = Math.round(r * 2) / 2; return "★".repeat(Math.floor(f)) + (f % 1 ? "½" : "") + "☆".repeat(5 - Math.ceil(f)); };
+  const revKey = w => fold(w.brand) + "|" + fold(w.model);
+  function reviewOf(w){ return (state.reviews || {})[revKey(w)] || null; }
+  function tierOf(w){
+    let t = BRAND_TIER[fold(w.brand)] ?? 5; const m = fold(w.model);
+    if (/prospex|presage/.test(m)) t += .5; if (/^5 |seiko 5|snk|essentials/.test(m)) t -= .5;
+    if (/orient star/.test(m)) t += 1; if (/promaster|series 8|zenshin/.test(m)) t += .4;
+    if (/full metal|gw-5000|frogman|mudmaster|mtg/.test(m)) t += .8;
+    return t;
+  }
+  function estimateQuality(w, wish){
+    const t = tierOf(w), mt = w.movementType || "automatique", comps = w.comps || [];
+    const mech = ["automatique", "manuel"].includes(mt);
+    const movement = clamp10(t + ({ springdrive: 1, solaire: .2, quartz: -.3 }[mt] || 0) + (comps.some(c => ["tourbillon", "perpetual", "repeater"].includes(c)) ? .5 : comps.some(c => ["chrono", "gmt", "flyback", "annual"].includes(c)) ? .2 : 0));
+    const accuracy = clamp10(mech ? .9 * t - .5 : { quartz: 9.5, solaire: 9.6, kinetic: 9, springdrive: 9.5 }[mt] || 9);
+    const finish = clamp10(t + ({ titane: .3, bronze: .2, resine: -1, "doré": t >= 8 ? .4 : -.2, "or-rose": t >= 8 ? .4 : -.2 }[w.case] || 0) + ({ saphir: .3, mineral: -.4, hardlex: -.2 }[w.glass] || 0));
+    const strap = clamp10(({ acier: 6, jubile: 6.2, titane: 6.5, milanais: 5, cuir: 5.5, caoutchouc: 6, nato: 4.8 }[w.strap] || 5.5) + (t - 6) * .55);
+    const wt = num(w.water) || 30, depth = wt >= 1000 ? 9.6 : wt >= 500 ? 9 : wt >= 300 ? 8.3 : wt >= 200 ? 7.5 : wt >= 150 ? 6.5 : wt >= 100 ? 6 : wt >= 50 ? 4.5 : 3;
+    const robustness = clamp10(depth + ({ saphir: .4, mineral: -.3, hesalite: -.4 }[w.glass] || 0) + (w.case === "titane" ? .3 : 0) + (/g-shock|pro trek|rangeman|mudmaster/.test(fold(w.model)) ? 2 : 0));
+    const p = valueOf(w, wish), Q = (movement + finish + strap) / 3;
+    const value = p ? clamp10(6.5 + 1.8 * (Q - (1.2 + 1.9 * Math.log10(Math.max(10, p))))) : null;
+    return { movement, accuracy, finish, strap, robustness, value };
+  }
+  function qualityOf(w, wish){
+    const est = estimateQuality(w, wish), rv = reviewOf(w);
+    if (!rv || !rv.scores) return { ...est, net: false };
+    const out = { net: true };
+    QUAL.forEach(([k]) => { const v = num(rv.scores[k]); out[k] = v != null && v >= 0 && v <= 10 ? clamp10(v) : est[k]; });
+    return out;
+  }
+  function radarSVG(qa, qb){
+    const cx = 150, cy = 120, R = 82, n = QUAL.length;
+    const pt = (i, v) => { const ang = -Math.PI / 2 + i * 2 * Math.PI / n; return [cx + Math.cos(ang) * R * v / 10, cy + Math.sin(ang) * R * v / 10]; };
+    const poly = q => QUAL.map(([k], i) => pt(i, q[k] ?? 0).map(x => x.toFixed(1)).join(",")).join(" ");
+    let g = "";
+    [2.5, 5, 7.5, 10].forEach(r => g += `<polygon points="${QUAL.map((_, i) => pt(i, r).map(x => x.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="var(--line)" stroke-width="1"/>`);
+    QUAL.forEach(([, lbl], i) => { const [x, y] = pt(i, 10), [lx, ly] = pt(i, 12.6); g += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--line)"/><text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="${Math.abs(lx - cx) < 5 ? "middle" : lx > cx ? "start" : "end"}">${lbl}</text>`; });
+    return `<svg viewBox="0 0 300 240">${g}<polygon class="pa" points="${poly(qa)}"/><polygon class="pb" points="${poly(qb)}"/></svg>`;
+  }
+  function reviewsPrompt(A, B){
+    const d = r => `${r.w.brand} ${r.w.model}${r.w.colorway ? " (" + r.w.colorway + ")" : ""}`;
+    return `Fais une recherche sur internet des avis d'utilisateurs et des tests (forums horlogers comme Reddit r/Watches ou Forumamontres, sites et vidéos de test, notes des marchands) pour ces deux montres :
+1) ${d(A)}
+2) ${d(B)}
+
+Pour chacune, donne une note sur 10 (décimales autorisées) pour :
+- movement : qualité, finition et fiabilité du mouvement / calibre
+- accuracy : précision réelle constatée
+- finish : finitions du boîtier, du cadran et des aiguilles
+- strap : qualité du bracelet d'origine et de la boucle
+- robustness : solidité, étanchéité, résistance du verre
+- value : rapport qualité / prix au prix public français
+Donne aussi la note moyenne des utilisateurs sur 5 (user_rating), le nombre approximatif d'avis (rating_count, texte court), 3 points forts et 3 points faibles très courts en français, et 1 à 3 sources (noms de sites).
+
+Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordre que ci-dessus :
+{"watches":[{"brand":"","model":"","user_rating":4.4,"rating_count":"environ 2 000 avis","scores":{"movement":7,"accuracy":6.5,"finish":7.5,"strap":5,"robustness":8,"value":9},"pros":["",""],"cons":["",""],"sources":[""]},{...}]}`;
+  }
+  function askReviews(){
+    const [A, B] = cmp; if (!A || !B) return;
+    const p = reviewsPrompt(A, B);
+    copyText(p);
+    window.open("https://claude.ai/new?q=" + encodeURIComponent(p), "_blank", "noopener");
+    $("#c-rev").classList.remove("hidden"); $("#c-rev-text").value = "";
+    $("#c-rev-msg").textContent = "Demande copiée. Dans Claude, colle-la si elle n'y est pas déjà et envoie. Quand il a répondu, copie sa réponse, reviens ici et touche « Coller la réponse ».";
+    $("#c-rev").scrollIntoView({ block: "center" });
+  }
+  function applyReviews(text){
+    const r = lastJSON(text || ""), list = r && (Array.isArray(r.watches) ? r.watches : Array.isArray(r) ? r : null);
+    if (!list || !list.length){ $("#c-rev-msg").textContent = "Je ne trouve pas les avis dans ce texte. Copie toute la réponse de Claude et réessaie."; return false; }
+    const strs = a => Array.isArray(a) ? a.filter(x => typeof x === "string" && x.trim()).slice(0, 4).map(x => x.trim().slice(0, 90)) : [];
+    state.reviews = state.reviews || {};
+    cmp.forEach((c, i) => {
+      const x = list[i]; if (!c || !x || typeof x !== "object") return;
+      const scores = {}; QUAL.forEach(([k]) => { const v = num(x.scores && x.scores[k]); if (v != null && v >= 0 && v <= 10) scores[k] = v; });
+      const rating = num(x.user_rating);
+      state.reviews[revKey(c.w)] = { rating: rating != null && rating > 0 && rating <= 5 ? rating : null, count: String(x.rating_count || "").slice(0, 40), scores, pros: strs(x.pros), cons: strs(x.cons), sources: strs(x.sources), date: new Date().toISOString().slice(0, 10) };
+    });
+    persist();
+    $("#c-rev").classList.add("hidden"); $("#c-rev-text").value = "";
+    renderCompare(); setStatus("Avis internet enregistrés.");
+    return true;
+  }
+  $("#c-rev-paste").addEventListener("click", async () => {
+    try { const t = await navigator.clipboard.readText(); if (applyReviews(t)) return; }
+    catch(e){ $("#c-rev-msg").textContent = "Colle la réponse de Claude dans le cadre ci-dessous (appui long › Coller)."; }
+    $("#c-rev-text").focus();
+  });
+  $("#c-rev-text").addEventListener("input", e => { if (lastJSON(e.target.value)) applyReviews(e.target.value); });
   function renderCompare(){
     const [A, B] = cmp;
     $("#c-pick").classList.add("hidden"); $("#c-main").classList.remove("hidden"); $("#c-title").textContent = "Comparateur";
+    $("#c-rev").classList.add("hidden");
     let h = `<div class="cmp-head">${slotHTML(A, 0)}<span class="c-vs">VS</span>${slotHTML(B, 1)}</div>`;
     if (!A || !B){ $("#c-main").innerHTML = h + `<p class="c-hint">Choisis deux montres de ta collection, de tes envies ou du catalogue pour les comparer en un coup d'œil.</p>`; return; }
     const a = A.w, b = B.w, score = [0, 0], wins = [[], []];
     const tally = (win, what) => { if (win >= 0){ score[win]++; wins[win].push(what); } return win; };
-    // prix
-    const pa = cmpValue(A), pb = cmpValue(B);
-    const wPrice = tally(better(pa, pb, false), "moins chère");
-    // étanchéité
-    const wa = num(a.water), wb = num(b.water);
-    const wWater = tally(better(wa, wb), "plus étanche");
-    // verre
-    const ga = GLASS_RANK[a.glass], gb = GLASS_RANK[b.glass];
-    const wGlass = tally(better(ga, gb), "meilleur verre");
-    // complications
-    const ca = (a.comps || []).length, cb = (b.comps || []).length;
-    const wComps = tally(better(ca, cb), "plus de fonctions");
+    const qa = qualityOf(a, A.kind === "wishlist"), qb = qualityOf(b, B.kind === "wishlist");
+    const ra = reviewOf(a), rb = reviewOf(b);
+    const wRating = tally(better(ra && ra.rating, rb && rb.rating, true, .05), "mieux notée par les utilisateurs");
+    const WHAT = { movement: "meilleur mouvement", accuracy: "plus précise", finish: "meilleures finitions", strap: "meilleur bracelet", robustness: "plus robuste", value: "meilleur rapport qualité/prix" };
+    const wq = {}; QUAL.forEach(([k]) => wq[k] = tally(better(qa[k], qb[k], true, .25), WHAT[k]));
     const name = r => r.w.model.length > 22 ? r.w.brand : r.w.model;
     let verdict;
     if (score[0] === score[1]) verdict = `<div class="sc"><span class="a">${score[0]}</span><i>–</i><span class="b">${score[1]}</span></div><p><strong>Match nul !</strong> Deux belles montres : à toi de choisir avec le cœur.</p>`;
-    else { const k = score[0] > score[1] ? 0 : 1; verdict = `<div class="sc"><span class="a">${score[0]}</span><i>–</i><span class="b">${score[1]}</span></div><p><strong>${esc(name(cmp[k]))}</strong> l'emporte : ${wins[k].join(", ")}.</p>`; }
+    else { const k = score[0] > score[1] ? 0 : 1; verdict = `<div class="sc"><span class="a">${score[0]}</span><i>–</i><span class="b">${score[1]}</span></div><p><strong>${esc(name(cmp[k]))}</strong> l'emporte : ${wins[k].slice(0, 4).join(", ")}${wins[k].length > 4 ? "…" : ""}.</p>`; }
     h += `<div class="c-score">${verdict}</div>`;
+    // radar qualité
+    const tag = q => `<span class="src-tag${q.net ? " net" : ""}">${q.net ? "Avis internet" : "Estimation"}</span>`;
+    h += `<div class="c-radar"><div class="c-sec">Qualité</div>${radarSVG(qa, qb)}<div class="c-legend"><span><i></i>${esc(name(A))} ${tag(qa)}</span><span class="b"><i></i>${esc(name(B))} ${tag(qb)}</span></div></div>`;
+    const rt = r => r && r.rating ? `<span class="stars">${starStr(r.rating)}</span>&nbsp;${fr1(r.rating)}` : "";
+    if ((ra && ra.rating) || (rb && rb.rating)) h += duel("Note des utilisateurs", rt(ra), rt(rb), { na: ra && ra.rating, nb: rb && rb.rating, win: wRating, note: [ra && ra.count, rb && rb.count].filter(Boolean).length ? "sur 5" : "" });
+    QUAL.forEach(([k, lbl]) => { if (qa[k] != null || qb[k] != null) h += duel(lbl, qa[k] != null ? fr1(qa[k]) + "/10" : "", qb[k] != null ? fr1(qb[k]) + "/10" : "", { na: qa[k], nb: qb[k], win: wq[k], same: qa[k] != null && qa[k] === qb[k] }); });
+    const fresh = ra && rb;
+    h += `<div class="c-rev" style="margin-top:6px"><p>${fresh ? "Notes issues des avis internet. Tu peux les actualiser." : "Ces notes sont estimées par l'app. Pour les vrais avis des utilisateurs (note sur 5, points forts et faibles), demande à Claude : c'est gratuit."}</p><button type="button" class="btn small${fresh ? "" : " primary"}" id="c-ask-rev">${fresh ? "Actualiser les avis" : "Récupérer les avis internet"}</button></div>`;
+    if ((ra && (ra.pros.length || ra.cons.length)) || (rb && (rb.pros.length || rb.cons.length))){
+      const pc = (r, cls, w) => `<div class="${cls}"><b>${esc(name(w))}</b>${r ? r.pros.map(x => `<span class="plus">${esc(x)}</span>`).join("") + r.cons.map(x => `<span class="minus">${esc(x)}</span>`).join("") : `<span style="opacity:.6">Pas encore d'avis</span>`}</div>`;
+      h += `<div class="c-sec">Ce qu'en disent les utilisateurs</div><div class="c-pc">${pc(ra, "a", A)}${pc(rb, "b", B)}</div>`;
+      const src = [...new Set([...(ra ? ra.sources : []), ...(rb ? rb.sources : [])])];
+      if (src.length) h += `<p class="c-src">Sources : ${src.map(esc).join(", ")}</p>`;
+    }
     // poignet
     const sa = num(a.size), sb = num(b.size);
     if (sa && sb){
@@ -3464,18 +3607,18 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
       h += `<div class="c-wrist"><div class="c-sec">Au poignet</div><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${R(sa)}" fill="var(--ca)" fill-opacity=".12" stroke="var(--ca)" stroke-width="3"/><circle cx="75" cy="75" r="${R(sb)}" fill="none" stroke="var(--cb)" stroke-width="3" stroke-dasharray="7 5"/></svg>
         <p>${d < .5 ? "Exactement la même taille." : `<strong>${esc(name(sa > sb ? A : B))}</strong> est plus grande de ${String(+d.toFixed(1)).replace(".", ",")} mm.`}</p></div>`;
     }
+    const pa = cmpValue(A), pb = cmpValue(B), wa = num(a.water), wb = num(b.water), ca = (a.comps || []).length, cb = (b.comps || []).length;
     const mm = n => n ? String(n).replace(".", ",") + " mm" : "";
     const wtr = v => v ? (v === "1000" ? "1 000 m+" : v + " m") : "";
     const L = (f, v) => esc(optLabel(f, v));
     const eq = (x, y) => !!x && x === y;
-    h += `<div class="c-sec">Duel</div>`;
-    h += duel("Prix", money(pa), money(pb), { na: pa, nb: pb, win: wPrice, note: "le moins cher gagne", same: pa != null && pa === pb });
-    h += duel("Étanchéité", wtr(a.water), wtr(b.water), { na: wa, nb: wb, win: wWater, same: eq(a.water, b.water) });
-    h += duel("Verre", L("glass", a.glass), L("glass", b.glass), { win: wGlass, same: eq(a.glass, b.glass) });
-    h += duel("Fonctions", ca ? ca + " complication" + (ca > 1 ? "s" : "") : "Heure seule", cb ? cb + " complication" + (cb > 1 ? "s" : "") : "Heure seule", { na: ca, nb: cb, win: wComps, same: ca === cb && ca > 0 });
-    h += `<div class="c-sec">Caractère</div>`;
+    h += `<div class="c-sec">Fiche technique</div>`;
+    h += duel("Prix", money(pa), money(pb), { na: pa, nb: pb, win: better(pa, pb, false), note: "la moins chère", same: pa != null && pa === pb });
+    h += duel("Étanchéité", wtr(a.water), wtr(b.water), { na: wa, nb: wb, win: better(wa, wb), same: eq(a.water, b.water) });
+    h += duel("Verre", L("glass", a.glass), L("glass", b.glass), { win: better(GLASS_RANK[a.glass], GLASS_RANK[b.glass]), same: eq(a.glass, b.glass) });
+    h += duel("Fonctions", ca ? ca + " complication" + (ca > 1 ? "s" : "") : "Heure seule", cb ? cb + " complication" + (cb > 1 ? "s" : "") : "Heure seule", { na: ca, nb: cb, win: better(ca, cb), same: ca === cb && ca > 0 });
     h += duel("Taille", mm(a.size), mm(b.size), { na: sa, nb: sb, same: eq(String(a.size), String(b.size)) });
-    h += duel("Mouvement", esc(MOVE[a.movementType] || ""), esc(MOVE[b.movementType] || ""), { same: eq(a.movementType, b.movementType) });
+    h += duel("Mouvement", esc(MOVE[a.movementType] || "") + (a.movement ? `<br><small>${esc(a.movement)}</small>` : ""), esc(MOVE[b.movementType] || "") + (b.movement ? `<br><small>${esc(b.movement)}</small>` : ""), { same: eq(a.movementType, b.movementType) });
     h += duel("Catégorie", esc(CAT_LABEL[categoryOf(a)] || ""), esc(CAT_LABEL[categoryOf(b)] || ""), { same: categoryOf(a) === categoryOf(b) });
     h += duel("Cadran", `${esc(nearestName(a.dial))}<span class="dial-dot" style="background:${esc(a.dial)}"></span>`, `<span class="dial-dot" style="background:${esc(b.dial)}"></span>${esc(nearestName(b.dial))}`);
     h += duel("Boîtier", L("case", a.case), L("case", b.case), { same: eq(a.case, b.case) });
@@ -3489,9 +3632,14 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
       const chips = l => l.length ? l.map(c => `<span>${esc(COMP_LABEL[c] || c)}</span>`).join("") : `<span style="opacity:.5">—</span>`;
       h += `<div class="c-sec">Complications</div><div class="c-comps"><div class="oa"><b>Seulement elle</b>${chips(onlyA)}</div><div><b>En commun</b>${chips(both)}</div><div class="ob"><b>Seulement elle</b>${chips(onlyB)}</div></div>`;
     }
+    h += `<details class="c-how"><summary>Comment les notes sont calculées</summary>
+      <p><strong>Score du duel :</strong> un point par critère de qualité gagné (écart d'au moins 0,3), plus un point pour la meilleure note des utilisateurs quand les deux montres ont des avis.</p>
+      <p><strong>Estimation de l'app :</strong> d'après le niveau de la marque et de la gamme, le type de mouvement (un quartz est plus précis qu'un automatique d'entrée de gamme), la matière du boîtier, le verre, le type de bracelet, l'étanchéité, puis la qualité comparée au prix pour le rapport qualité/prix.</p>
+      <p><strong>Avis internet :</strong> notes trouvées par Claude dans les avis d'utilisateurs et les tests ; elles remplacent l'estimation pour la montre concernée.</p></details>`;
     $("#c-main").innerHTML = h;
     csheet.classList.remove("go"); requestAnimationFrame(() => requestAnimationFrame(() => csheet.classList.add("go")));
   }
+  $("#c-main").addEventListener("click", e => { if (e.target.closest("#c-ask-rev")) askReviews(); });
   function pickItem(kind, w, idx){
     const ph = kind !== "catalog" && w.photo && photoSrc(w.photo) ? photoSrc(w.photo) : "";
     const v = valueOf(w, kind === "wishlist");
