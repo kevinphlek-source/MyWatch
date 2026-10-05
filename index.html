@@ -69,12 +69,6 @@ details.rules[open] summary::after{content:" −"}
 .rules-grid{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin-top:8px;align-items:center}
 .rules-grid .pill{justify-self:start}
 
-.gauge{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:16px;width:100%;text-align:left;cursor:pointer;font-size:16px}
-.gauge .g-label{font-size:.82rem;font-weight:700;white-space:nowrap}
-.gauge .bar{flex:1;height:8px;border-radius:999px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
-.gauge .fill{height:100%;background:var(--brass);border-radius:999px;transition:width .4s ease}
-.gauge.warn .fill{background:var(--danger)}
-.gauge .g-num{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:12px}
 .tabs button{flex:1;border:0;background:none;padding:10px 4px;border-radius:999px;font-weight:700;font-size:14px;white-space:nowrap;color:var(--muted);cursor:pointer}
@@ -205,27 +199,6 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .suggest li[aria-selected="true"],.suggest li:hover{background:var(--brass-soft)}
 .suggest mark{background:none;color:var(--brass);font-weight:800}
 
-.viewer{max-width:520px;width:calc(100% - 16px);background:radial-gradient(circle at 50% 38%,#2C3644,#0D1117 75%);color:#E7EBEF;padding:16px 14px 18px;overflow:hidden}
-.viewer::backdrop{background:rgba(5,8,12,.85)}
-.v-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.v-brand{display:block;font-size:.8rem;font-weight:700;color:#9AA6B2}
-.v-model{display:block;font-family:var(--serif);font-size:1.35rem;font-weight:700;line-height:1.15}
-.v-close{flex:none;border:0;background:rgba(255,255,255,.12);color:#fff;width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer}
-.v-stage{position:relative;width:100%;aspect-ratio:1/1;perspective:1100px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;margin-top:4px}
-.v-stage:active{cursor:grabbing}
-.v-rot{position:absolute;inset:7%;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;will-change:transform}
-.v-rot>div{position:absolute;inset:0;transform-style:preserve-3d}
-.v-rot .vf{backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.v-rot svg{width:100%;height:100%;display:block;pointer-events:none}
-.v-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.v-stage.is3d .v-floor{display:none}
-.v-stage.loading::after{content:"Préparation de la vue 3D…";position:absolute;inset:0;display:grid;place-items:center;color:#9AA6B2;font-size:.9rem;font-weight:600}
-.v-floor{position:absolute;left:22%;right:22%;bottom:4%;height:7%;background:radial-gradient(ellipse at center,rgba(0,0,0,.6),transparent 70%)}
-.v-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin:8px 10% 0;overflow:hidden}
-.v-bar span{display:block;height:100%;width:0;background:#D4AE62}
-.v-hint{text-align:center;font-size:.85rem;color:#9AA6B2;margin:10px 0 8px}
-.v-actions{display:flex;justify-content:center;gap:8px}
-.v-actions button{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#E7EBEF;border-radius:999px;padding:7px 16px;font-weight:700;font-size:.85rem;cursor:pointer}
 .art{border:0;padding:0;width:100%;cursor:zoom-in;font:inherit;color:inherit}
 .art .v360{position:absolute;right:8px;bottom:8px;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:999px;background:rgba(20,26,35,.6);color:#fff;letter-spacing:.3px}
 .cat-tools{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
@@ -609,6 +582,10 @@ dialog p.help:empty{display:none}
 .of-amt{font-size:.82rem;color:var(--muted);font-weight:700}.of-amt strong{color:var(--ink);font-size:1rem}
 .of-eta{font-size:.78rem;color:var(--muted);font-weight:600}
 .of-card .reserve{height:16px}
+
+.nw-ill{width:100%;height:100%;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#FFFFFF,#EFE8DA)}
+.nw-ill svg{width:118%;height:118%}
+.nw.big .nw-ill svg{width:70%;height:118%}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -808,15 +785,6 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 .pgrid img{width:100%;height:100%;object-fit:cover;display:block}
 .pgrid .none{display:grid;place-items:center;font-weight:800;font-size:.85rem;color:var(--muted);padding:10px;text-align:center}
 .pgrid small{position:absolute;left:0;right:0;bottom:0;background:rgba(30,28,24,.7);color:#fff;font-size:.6rem;padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.viewer{background:var(--studio)!important;color:var(--ink)}
-.viewer::backdrop{background:rgba(40,30,15,.5)}
-.v-brand{color:var(--brass)!important}
-.v-close{background:rgba(30,28,24,.08)!important;color:var(--ink)!important}
-.v-hint{color:var(--muted)!important}
-.v-bar{background:rgba(60,45,20,.1)!important}
-.v-bar span{background:var(--brass)!important}
-.v-actions button{border-color:var(--line)!important;background:#fff!important;color:var(--ink)!important}
-.v-stage.loading::after{color:var(--muted)!important}
 /* écran de lancement */
 #splash{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(80% 60% at 50% 42%,#FFFDF8,#EFE7D8 75%);transition:opacity .6s ease,transform .6s ease}
 #splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
@@ -895,18 +863,13 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <summary>Comment la rareté est calculée</summary>
     <p style="margin:8px 0 0">Chaque montre reçoit sa rareté dès qu'elle est enregistrée, d'après son prix public neuf. S'il manque, c'est le prix payé (ou le prix constaté pour une recherchée) qui compte.</p>
     <div class="rules-grid">
-      <span class="pill">Commune</span><span>moins de 200 €</span>
-      <span class="pill rare">Rare</span><span>de 200 à 399 €</span>
-      <span class="pill epic">Épique</span><span>de 400 à 799 €</span>
-      <span class="pill leg">Légendaire</span><span>800 € et plus</span>
+      <span class="pill">Commune</span><span>moins de 300 €</span>
+      <span class="pill rare">Rare</span><span>de 300 à 999 €</span>
+      <span class="pill epic">Épique</span><span>de 1 000 à 4 999 €</span>
+      <span class="pill leg">Légendaire</span><span>5 000 € et plus</span>
     </div>
   </details>
 
-  <button class="gauge hidden" id="gauge" type="button" aria-label="Utilisation de l'IA ce mois-ci">
-    <span class="g-label">IA ce mois</span>
-    <span class="bar"><span class="fill" id="g-fill" style="width:0%"></span></span>
-    <span class="g-num" id="g-num"></span>
-  </button>
 
   <span hidden id="c-collection"></span><span hidden id="c-wishlist"></span>
 
@@ -955,7 +918,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <label class="size-row"><input type="range" id="m-size" min="45" max="80" step="1"><span id="m-size-v"></span></label>
     <p class="help" id="m-size-msg"></p>
     <h3>Rareté (selon le prix)</h3>
-    <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>200 à 399 €</span><span class="pill epic">Épique</span><span>400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
+    <div class="rules-grid"><span class="pill">Commune</span><span>moins de 300 €</span><span class="pill rare">Rare</span><span>300 à 999 €</span><span class="pill epic">Épique</span><span>1 000 à 4 999 €</span><span class="pill leg">Légendaire</span><span>5 000 € et plus</span></div>
     <h3>Sauvegarde</h3>
     <div class="seg" style="--n:2"><button type="button" class="btn" id="m-export">Exporter</button><button type="button" class="btn" id="m-import">Restaurer</button></div>
     <div class="app-line"><span id="m-version"></span><button type="button" class="linkbtn" id="m-update">Mettre à jour</button></div>
@@ -1097,7 +1060,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <label>Matière du boîtier
         <select name="case">
           <option value="acier">Acier</option><option value="titane">Titane</option><option value="doré">Doré</option>
-          <option value="or-rose">Or rose</option><option value="bronze">Bronze</option><option value="noir">Noir (PVD, céramique)</option><option value="resine">Résine</option>
+          <option value="or-rose">Or rose</option><option value="or-blanc">Or blanc / platine</option><option value="tantale">Tantale</option><option value="bronze">Bronze</option><option value="noir">Noir (PVD, céramique)</option><option value="resine">Résine</option>
         </select>
       </label>
     </div>
@@ -1137,21 +1100,10 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
   </form>
 </dialog>
 
-<dialog id="viewer" class="viewer" aria-label="Vue 360 degrés">
-  <div class="v-head">
-    <div><span class="v-brand" id="v-brand"></span><span class="v-model" id="v-model"></span></div>
-    <button type="button" class="v-close" id="v-close" aria-label="Fermer">✕</button>
-  </div>
-  <div class="v-stage" id="v-stage"><div class="v-floor"></div><div class="v-rot" id="v-rot"></div></div>
-  <div class="v-bar"><span id="v-fill"></span></div>
-  <p class="v-hint">Fais glisser pour tourner · pince ou touche deux fois pour zoomer</p>
-  <div class="v-actions"><button type="button" data-view="0">Face</button><button type="button" data-view="90">Profil</button><button type="button" data-view="180">Dos</button></div>
-</dialog>
-
 <dialog id="fsheet">
   <form id="fform" novalidate>
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
-    <h2>Trier et filtrer</h2>
+    <h2>Filtrer</h2>
     <label>Trier par
       <select name="sort" id="f-sort"></select>
     </label>
@@ -1293,26 +1245,11 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <textarea id="ib-text" class="hidden" rows="3" placeholder="Colle ici la réponse de Claude (appui long › Coller)"></textarea>
   </div>
 </dialog>
-<dialog id="gsheet">
-  <form id="gform" novalidate>
-    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
-    <h2>Utilisation de l'IA</h2>
-    <p class="help" id="g-help"></p>
-    <p class="help">Cette jauge compte les analyses lancées depuis l'application. Elle ne lit pas ton quota Claude réel, que tu retrouves dans les paramètres de ton compte Claude.</p>
-    <label>Limite mensuelle que tu te fixes<input name="limit" type="number" min="1" max="999" inputmode="numeric"></label>
-    <div class="actions">
-      <button type="button" class="btn danger" id="g-reset">Remettre à zéro</button>
-      <span class="spacer"></span>
-      <button type="button" class="btn" id="g-cancel">Fermer</button>
-      <button type="submit" class="btn primary">Enregistrer</button>
-    </div>
-  </form>
-</dialog>
 <script src="colorways.js"></script>
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 34; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 35; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1391,9 +1328,9 @@ Patek Philippe|Nautilus 5811/1G|A|41|120|s|#1E3A6A|c|s|s|l|date|c|a|b|75000
 Patek Philippe|Nautilus Chronographe 5980|A|40.5|120|s|#1E3A6A|c|s|s|l|chrono+date|c|a|b|95000
 Patek Philippe|Aquanaut 5167A|A|40.8|120|s|#15181C|c|s|c|l|date|g|n|b|25000
 Patek Philippe|Calatrava 6119|M|39|30|s|#F2F0EA|r|p|l|l|smallsec|l|a|f|35000
-Patek Philippe|Calendrier annuel 5205|A|40|30|s|#E9E6DE|r|t|l|l|annual+moon|s|a|f|50000
+Patek Philippe|Calendrier annuel 5205|A|40|30|s|#E9E6DE|r|w|l|l|annual+moon|s|a|f|50000
 Patek Philippe|Quantième perpétuel 5327|A|39|30|s|#F2F0EA|r|p|l|l|perpetual+moon|l|r|f|95000
-Patek Philippe|World Time 5230|A|38.5|30|s|#2A3550|r|t|l|l|worldtime|g|a|f|55000
+Patek Philippe|World Time 5230|A|38.5|30|s|#2A3550|r|w|l|l|worldtime|g|a|f|55000
 Patek Philippe|Twenty~4 Automatic|A|36|30|s|#4A4F55|r|s|s|l|date|s|a|b|15000
 Vacheron Constantin|Overseas 4500V|A|41|150|s|#1E3F7A|r|s|s|l|date|s|a|b|27000
 Vacheron Constantin|Overseas Chronographe|A|42.5|150|s|#1E3F7A|r|s|s|l|chrono+date|s|a|b|38000
@@ -1403,11 +1340,11 @@ Vacheron Constantin|Traditionnelle|M|38|30|s|#F2F0EA|r|p|l|l|smallsec|l|r|d|2500
 A. Lange & Söhne|Lange 1|M|38.5|30|s|#E9E6DE|r|p|l|l|bigdate+power+smallsec|l|r|f|42000
 A. Lange & Söhne|Saxonia Thin|M|37|30|s|#F2F0EA|r|p|l|l||l|a|f|20000
 A. Lange & Söhne|Odysseus|A|40|120|s|#2E4F7A|r|s|s|l|daydate|g|a|b|35000
-A. Lange & Söhne|Datograph|M|41|30|s|#15181C|r|t|l|l|chrono+bigdate|l|r|f|85000
-Breguet|Classique 5177|A|38|30|s|#F2F0EA|r|t|l|l|date|g|r|f|22000
+A. Lange & Söhne|Datograph|M|41|30|s|#15181C|r|w|l|l|chrono+bigdate|l|r|f|85000
+Breguet|Classique 5177|A|38|30|s|#F2F0EA|r|w|l|l|date|g|r|f|22000
 Breguet|Type XX 2067|A|42|100|s|#15181C|r|s|l|l|chrono+flyback|l|n|g|18000
 Breguet|Marine 5517|A|40|100|s|#1E3F7A|r|t|c|l|date|g|r|f|22000
-Breguet|Tradition 7097|M|40|30|s|#C9CED4|r|t|l|l|openheart+skeleton|g|r|f|35000
+Breguet|Tradition 7097|M|40|30|s|#C9CED4|r|w|l|l|openheart+skeleton|g|r|f|35000
 Jaeger-LeCoultre|Reverso Tribute Petite Seconde|M|45.6|30|s|#C9CED4|t|s|l|l|smallsec|l|a|d|10000
 Jaeger-LeCoultre|Reverso Classic Monoface|M|45.6|30|s|#F2F3F4|t|s|l|l||l|n|d|7500
 Jaeger-LeCoultre|Master Ultra Thin Moon|A|39|50|s|#F2F0EA|r|s|l|l|moon+date|s|a|d|12000
@@ -1659,7 +1596,7 @@ Ulysse Nardin|Freak X|A|43|50|s|#2A2F36|r|t|l|l|skeleton|l|b|b|26000
 Girard-Perregaux|Laureato 42|A|42|100|s|#1E3F7A|o|s|s|l|date|g|a|b|13000
 H. Moser & Cie|Endeavour Petite Seconde|M|38|30|s|#1F5A3A|r|s|l|l|smallsec|f|b|f|18000
 H. Moser & Cie|Streamliner Centre Seconds|A|40|120|s|#2E4A36|c|s|s|l||f|a|b|25000
-F.P. Journe|Chronomètre Bleu|M|39|30|s|#2C4FA8|r|t|l|l|smallsec|l|n|f|60000
+F.P. Journe|Chronomètre Bleu|M|39|30|s|#2C4FA8|r|k|l|l|smallsec|l|n|f|60000
 Parmigiani Fleurier|Tonda PF Automatique|A|40|100|s|#1E3F7A|r|s|s|f||g|a|d|25000
 Piaget|Polo 42|A|42|100|s|#1E3F7A|c|s|s|l|date|c|a|b|13000
 Piaget|Altiplano Ultimate|A|40|30|s|#F2F3F4|r|g|l|l||l|b|f|25000
@@ -1892,8 +1829,6 @@ TAG Heuer|Formula 1 Chronographe|Q|43|200|s|#15181C|r|s|s|t|chrono+date|l|b|b|17
 TAG Heuer|Formula 1 Solargraph|S|38|100|s|#15181C|r|s|s|d|date|l|b|b|1900
 TAG Heuer|Link Chronographe|A|41|100|s|#1E3F7A|r|s|s|l|chrono+date|c|a|b|6450
 TAG Heuer|Autavia Chronographe Heuer 02|A|42|100|s|#15181C|r|s|l|d|chrono|l|n|b|5300
-TAG Heuer|Connected Calibre E4 45|Q|45|50|s|#101214|r|s|c|l||l|b|b|1800|n
-TAG Heuer|Connected Calibre E4 42|Q|42|50|s|#101214|r|s|c|l||l|b|b|1650|n
 Longines|Spirit 37|A|37|100|s|#E3E3E0|r|s|s|l|date|s|n|g|2350
 Longines|Spirit Chronographe 42|A|42|100|s|#15181C|r|s|s|l|chrono+date|s|n|g|3550
 Longines|Spirit Flyback|A|42|100|s|#15181C|r|s|s|d|flyback|l|n|g|4950
@@ -2162,7 +2097,7 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     T: { A: "automatique", M: "manuel", Q: "quartz", S: "solaire", K: "kinetic", D: "springdrive" },
     G: { s: "saphir", m: "mineral", h: "hardlex", a: "hesalite" },
     Sh: { r: "rond", c: "coussin", q: "carre", t: "rect", o: "octo", n: "tonneau" },
-    C: { s: "acier", t: "titane", g: "doré", p: "or-rose", b: "bronze", n: "noir", r: "resine" },
+    C: { s: "acier", t: "titane", g: "doré", p: "or-rose", w: "or-blanc", k: "tantale", b: "bronze", n: "noir", r: "resine" },
     St: { s: "acier", j: "jubile", m: "milanais", t: "titane", l: "cuir", c: "caoutchouc", n: "nato" },
     B: { l: "lisse", f: "cannelee", d: "plongee", g: "gmt", t: "tachy" },
     Tx: { l: "lisse", s: "soleille", c: "cotes", g: "guilloche", r: "grain", f: "fume" },
@@ -2292,7 +2227,7 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     "hamilton|khaki field mechanical": [["Noir","#1E2226"],["Kaki","#4F5A34"],["Crème","#EDE6D6"],["Bleu","#22314F"]],
     "lip|général de gaulle 35 quartz": [["Argent","#D9D6CF"],["Noir","#15181C"],["Blanc","#F2F3F4"]]
   };
-  const RAR = [ { key: "leg", label: "Légendaire", min: 800 }, { key: "epic", label: "Épique", min: 400 }, { key: "rare", label: "Rare", min: 200 }, { key: "common", label: "Commune", min: 0 } ];
+  const RAR = [ { key: "leg", label: "Légendaire", min: 5000 }, { key: "epic", label: "Épique", min: 1000 }, { key: "rare", label: "Rare", min: 300 }, { key: "common", label: "Commune", min: 0 } ];
 
   const PATCHES = [
     { id: "2026-10-04-rendu-realiste", apply(st){
@@ -2378,6 +2313,8 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     "titane": ["#D6DADE","#AEB4BA","#E9ECEE","#868D94","#5E656C"],
     "doré":   ["#FBEBB5","#E3C06A","#FFF6D6","#B98B2C","#8A6418"],
     "or-rose":["#FBE0D2","#E2AE95","#FFF1EA","#B87C63","#8C5641"],
+    "or-blanc":["#FAFBFC","#D9DDE2","#FFFFFF","#AEB5BD","#80878F"],
+    "tantale":["#B8BDC6","#8A909A","#CDD1D8","#686E78","#484E58"],
     "bronze": ["#ECC18D","#C58E52","#F6D9B4","#94622F","#6A4219"],
     "noir":   ["#6A7078","#3A3F46","#868C93","#24282E","#121418"],
     "resine": ["#4A5058","#2A2F35","#5C636B","#1B1F24","#0E1013"]
@@ -2959,6 +2896,7 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     $("#f-comp").innerHTML = `<option value="">Toutes</option>` + comps.map(c => `<option value="${c}"${v.comp === c ? " selected" : ""}>${esc(COMP_LABEL[c] || c)}</option>`).join("");
     const cats = [...new Set(arr.map(categoryOf))];
     chipSet($("#f-cat"), "cat", Object.keys(CAT_LABEL).filter(k => cats.includes(k)).map(k => [k, CAT_LABEL[k]]), v.cat || []);
+    filterCount();
     $("#fsheet").showModal();
   }
   function readFilters(){
@@ -2970,7 +2908,8 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     v.brand = f.elements.brand.value; v.comp = f.elements.comp.value;
     v.cat = [...f.querySelectorAll('input[name="cat"]:checked')].map(i => i.value);
   }
-  $("#fform").addEventListener("change", () => { readFilters(); render(); });
+  function filterCount(){ const n = tab === "catalog" ? catItems.length : applyView(state[tab], tab === "wishlist").length; $("#f-done").textContent = n ? `Voir ${n} montre${n > 1 ? "s" : ""}` : "Aucune montre"; }
+  $("#fform").addEventListener("change", () => { readFilters(); render(); filterCount(); });
   $("#fform").addEventListener("submit", e => { e.preventDefault(); readFilters(); $("#fsheet").close(); persist(); render(); });
   $("#fsheet").addEventListener("close", () => persist());
   $("#f-reset").addEventListener("click", () => { state.view[tab] = defaultView()[tab]; $("#fsheet").close(); persist(); render(); });
@@ -3017,7 +2956,6 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     listEl.innerHTML = items.length ? items.map(w => card(w, wish)).join("")
       : `<p class="empty">${arr.length ? "Aucune montre ne correspond à ces filtres." : wish ? "Aucune montre recherchée. Ajoute la prochaine que tu vises." : "Ta collection est vide. Ajoute ta première montre."}</p>`;
     observeThumbs();
-    renderGauge();
   }
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
@@ -3030,22 +2968,7 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     listEl.addEventListener("pointerout", e => { const c = e.target.closest(".card"); if (c && !c.contains(e.relatedTarget)){ c.style.removeProperty("--rx"); c.style.removeProperty("--ry"); } });
   }
 
-  // ---------- Jauge IA ----------
-  function aiUsage(){ if (state.ai.month !== thisMonth()){ state.ai.month = thisMonth(); state.ai.count = 0; } return state.ai; }
-  function renderGauge(){
-    const g = $("#gauge"); if (!sampleFn){ g.classList.add("hidden"); return; }
-    const u = aiUsage(), pct = Math.min(100, Math.round(u.count / u.limit * 100));
-    g.classList.remove("hidden"); g.classList.toggle("warn", pct >= 80);
-    $("#g-fill").style.width = pct + "%"; $("#g-num").textContent = `${u.count} / ${u.limit}`;
-  }
-  $("#gauge").addEventListener("click", () => {
-    const u = aiUsage();
-    $("#g-help").textContent = `${u.count} analyse${u.count > 1 ? "s" : ""} lancée${u.count > 1 ? "s" : ""} ce mois-ci, sur ${u.limit} que tu t'autorises.`;
-    $("#gform").elements.limit.value = u.limit; $("#gsheet").showModal();
-  });
-  $("#g-cancel").addEventListener("click", () => $("#gsheet").close());
-  $("#g-reset").addEventListener("click", () => { aiUsage().count = 0; $("#gsheet").close(); persist(); render(); });
-  $("#gform").addEventListener("submit", e => { e.preventDefault(); const v = parseInt($("#gform").elements.limit.value, 10); if (v > 0) state.ai.limit = v; $("#gsheet").close(); persist(); render(); });
+
 
   // ---------- Fiche ----------
   $("#comps-body").innerHTML = COMP_GROUPS.map(([title, items]) => `<div class="cgroup"><h4>${title}</h4><div class="chips">${items.map(([k, l]) => `<label><input type="checkbox" name="comp" value="${k}">${l}</label>`).join("")}</div></div>`).join("");
@@ -3399,7 +3322,7 @@ Valeurs autorisées :
 - glass : saphir, mineral, hardlex, hesalite
 - display : analogique, numerique, anadigi
 - shape : rond, coussin, carre, rect, octo, tonneau
-- case : acier, titane, doré, or-rose, bronze, noir, resine
+- case : acier, titane, doré, or-rose, or-blanc (or blanc ou platine), tantale, bronze, noir, resine
 - strap : acier, jubile, milanais, titane, cuir, caoutchouc, nato
 - bezel : lisse, cannelee, plongee, gmt, tachy
 - dial_texture : lisse, soleille, cotes, guilloche, grain, fume
@@ -3487,108 +3410,6 @@ Ajoute aussi dans le même objet JSON :
   $("#ai-text").addEventListener("input", e => { if (lastJSON(e.target.value) && applyAnswer(e.target.value)) clearPending(); });
   try { localStorage.removeItem("mywatch-claude-key"); } catch(e){}
 
-  // ---------- Vue 360° ----------
-  const viewer = $("#viewer"), vRot = $("#v-rot"), vStage = $("#v-stage");
-  const V = { angle: 0, tilt: -10, vel: 0, drag: null, raf: 0, anim: null, T: 0, n: 0 };
-  let v3d = null, v3dSeq = 0, no3d = false;
-  async function openViewer(w){
-    $("#v-brand").textContent = w.brand || "";
-    $("#v-model").textContent = w.model || "";
-    V.tilt = -12; V.vel = 0; V.angle = 0; V.drag = null; V.pinching = false;
-    if (!no3d && window.WebGLRenderingContext){
-      const seq = ++v3dSeq;
-      vRot.innerHTML = ""; vStage.classList.add("is3d", "loading");
-      viewer.showModal();
-      try {
-        const m = await import("./viewer3d.js");
-        await loadFontCSS();
-        const meta = {}, top = watchSVG(w, { tex3d: true, meta }), back = backSVG(w, { tex3d: true });
-        const h = await m.open(vStage, w, { top, back, meta }, { state: V, cancelDrag(){ V.drag = null; V.vel = 0; } });
-        if (seq !== v3dSeq || !viewer.open){ h.close(); return; }
-        v3d = h; vStage.classList.remove("loading");
-        animateTo(-360, 0, 1700, true);
-        return;
-      } catch(err){ console.warn("3D indisponible", err); no3d = true; vStage.classList.remove("is3d", "loading"); }
-    }
-    openViewerFlat(w);
-  }
-  function openViewerFlat(w){
-    const n = 40; V.n = n;
-    let h = `<div class="vf vfront">${watchSVG(w, { viewer: true })}</div><div class="vf vback">${backSVG(w)}</div>`;
-    for (let i = 0; i < n; i++) h += `<div class="ve">${edgeSVG(w, i > n * .3 && i < n * .7)}</div>`;
-    vRot.innerHTML = h;
-    if (!viewer.open) viewer.showModal();
-    requestAnimationFrame(() => {
-      const px = vRot.clientWidth;
-      const g = GEO[w.shape] || GEO.rond, sc = scaleFor(w);
-      const dia = { rond: 58, coussin: 58, octo: 62, carre: 54, rect: 42, tonneau: 44 }[w.shape || "rond"] || 58;
-      let f = 0.27; if (w.movementType === "quartz" || w.movementType === "solaire") f = 0.21; if (w.bezel === "plongee") f += 0.04; if (w.display !== "analogique" && w.display) f = 0.3;
-      V.T = px * dia * sc * f / 100;
-      const kids = vRot.children;
-      kids[0].style.transform = `translateZ(${V.T/2}px)`;
-      kids[1].style.transform = `rotateY(180deg) translateZ(${V.T/2}px)`;
-      for (let i = 0; i < n; i++) kids[i+2].style.transform = `translateZ(${-V.T/2 + V.T*(i+.5)/n}px)`;
-      V.tilt = -10; V.vel = 0;
-      animateTo(-360, 0, 1700, true);
-    });
-  }
-  function vUpdate(){
-    vRot.style.transform = `rotateX(${V.tilt}deg) rotateY(${V.angle}deg)`;
-    const r = V.angle * Math.PI / 180, c = Math.cos(r), sn = Math.abs(Math.sin(r));
-    const kids = vRot.children;
-    if (kids.length){
-      kids[0].style.filter = `brightness(${(.62 + .38 * Math.max(0, c)).toFixed(3)})`;
-      kids[1].style.filter = `brightness(${(.62 + .38 * Math.max(0, -c)).toFixed(3)})`;
-      const eb = (.5 + .5 * sn).toFixed(3);
-      for (let i = 2; i < kids.length; i++) kids[i].style.filter = `brightness(${eb})`;
-    }
-    const a = ((V.angle % 360) + 360) % 360;
-    $("#v-fill").style.width = (a / 360 * 100).toFixed(1) + "%";
-  }
-  function animateTo(from, to, dur, intro){
-    cancelAnimationFrame(V.raf);
-    const t0 = performance.now();
-    const step = t => {
-      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-      V.angle = from + (to - from) * e;
-      if (intro) V.tilt = -10 + 6 * Math.sin(p * Math.PI);
-      vUpdate();
-      if (p < 1) V.raf = requestAnimationFrame(step);
-    };
-    V.raf = requestAnimationFrame(step);
-  }
-  function inertia(){
-    cancelAnimationFrame(V.raf);
-    const step = () => { V.angle += V.vel; V.vel *= .94; vUpdate(); if (Math.abs(V.vel) > .05) V.raf = requestAnimationFrame(step); };
-    V.raf = requestAnimationFrame(step);
-  }
-  vStage.addEventListener("pointerdown", e => {
-    cancelAnimationFrame(V.raf);
-    V.drag = { x: e.clientX, y: e.clientY, t: performance.now() }; V.vel = 0;
-    vStage.setPointerCapture(e.pointerId);
-  });
-  vStage.addEventListener("pointermove", e => {
-    if (!V.drag || V.pinching) return;
-    const now = performance.now(), dx = e.clientX - V.drag.x, dy = e.clientY - V.drag.y, dt = Math.max(1, now - V.drag.t);
-    V.angle += dx * .6;
-    V.tilt = Math.max(-35, Math.min(25, V.tilt - dy * .3));
-    V.vel = dx * .6 * 16 / dt;
-    V.drag = { x: e.clientX, y: e.clientY, t: now };
-    vUpdate();
-  });
-  const endDrag = () => { if (!V.drag) return; V.drag = null; if (Math.abs(V.vel) > .3) inertia(); };
-  vStage.addEventListener("pointerup", endDrag);
-  vStage.addEventListener("pointercancel", endDrag);
-  document.querySelectorAll(".v-actions button").forEach(b => b.addEventListener("click", () => {
-    const target = +b.dataset.view, cur = V.angle;
-    const base = Math.round((cur - target) / 360) * 360 + target;
-    animateTo(cur, base, 600); V.tilt = -10;
-  }));
-  function closeViewer(){ cancelAnimationFrame(V.raf); viewer.close(); }
-  $("#v-close").addEventListener("click", closeViewer);
-  viewer.addEventListener("close", () => { cancelAnimationFrame(V.raf); vRot.innerHTML = ""; v3dSeq++; if (v3d){ v3d.close(); v3d = null; } vStage.classList.remove("is3d", "loading"); });
-
-
   // ---------- Catalogue ----------
   let catItems = [], catShown = 0, catIO = null, lazyIO = null;
   function ownedState(e){
@@ -3649,7 +3470,6 @@ Ajoute aussi dans le même objet JSON :
     document.querySelectorAll(".layouts button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
     listEl.innerHTML = v.q.trim().length >= 3 ? webCard(v.q.trim(), catItems.length) : (catItems.length ? "" : `<p class="empty">Aucune montre ne correspond à ta recherche.</p>`);
     catShown = 0; moreCatalog();
-    renderGauge();
   }
   function moreCatalog(){
     const chunk = catItems.slice(catShown, catShown + 30);
@@ -4037,7 +3857,7 @@ Ajoute aussi dans le même objet JSON :
     $("#d-web").innerHTML = webLinks(w);
     const priceShown = kind === "collection" ? (w.price || w.retail) : kind === "wishlist" ? (w.current || w.retail) : w.retail;
     const est = kind === "collection" ? marketValue(w) : null;
-    $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${est ? `<small class="d-est">≈ ${eur.format(est.value)} aujourd'hui</small>` : ""}${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
+    $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${est ? `<small class="d-est">${est.quote ? "Cote MyWatch " + eur.format(est.value) : "cote ≈ " + eur.format(est.value)}</small>` : ""}${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
     // versions : cadran, lunette, bracelet
     const vname = versionName(w, opts);
     if (vname) w.colorway = vname;
@@ -4063,7 +3883,7 @@ Ajoute aussi dans le même objet JSON :
       ["Lunette", esc(optLabel("bezel", w.bezel))],
       ["Cadran", `<span class="sw-dot" style="background:${esc(w.dial)}"></span>${esc((opts.dials.find(o => isOn.dial(o)) || {}).name || nearestName(w.dial))}, ${esc(optLabel("dialTexture", w.dialTexture).toLowerCase())}`],
       ["Bracelet", esc(curStrap ? curStrap.name : optLabel("strap", w.strap))],
-      ...(kind === "collection" ? [["Prix payé", money(w.price)], ["Valeur aujourd'hui", (() => { const m = marketValue(w); return m ? `${eur.format(m.value)} <span class="mv ${m.delta >= 0 ? "up" : "down"}">${m.delta >= 0 ? "+" : "−"}${Math.abs(Math.round(m.pct * 100))} %</span> <small class="mv-src">${m.quote ? "cote du " + new Date(m.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "estimation"}</small>` : ""; })()], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
+      ...(kind === "collection" ? [["Prix payé", money(w.price)], [(() => { const m = marketValue(w); return m && m.quote ? "Cote MyWatch" : "Estimation"; })(), (() => { const m = marketValue(w); if (!m) return ""; const d = m.quote ? `<span class="mv ${m.delta >= 0 ? "up" : "down"}">${m.delta >= 0 ? "+" : "−"}${Math.abs(Math.round(m.pct * 100))} %</span>` : ""; return `${coteText(m)} ${d} <small class="mv-src">${m.quote ? (m.min !== m.max ? `${eur.format(m.min)} – ${eur.format(m.max)} · ` : "") + new Date(m.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" }) + (m.trend ? " · " + m.trend : "") : "à confirmer avec la Cote MyWatch"}</small>`; })()], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
       ...(kind === "wishlist" ? [["Prix constaté", money(w.current)], ["Prix cible", money(w.target)], ["Priorité", ({ 1: "Haute", 2: "Moyenne", 3: "Basse" })[w.priority] || ""]] : [])
     ].filter(([, v]) => v);
     $("#d-specs").innerHTML = specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
@@ -4078,7 +3898,7 @@ Ajoute aussi dans le même objet JSON :
     } else if (kind === "wishlist"){
       act = `<button type="button" class="btn buy" data-act="bought">Je l'ai achetée</button><button type="button" class="btn" data-act="edit">Modifier les prix</button>`;
     } else {
-      act = `<button type="button" class="btn" data-act="edit">Modifier le prix</button><button type="button" class="btn" data-act="quote">✦ Cote actuelle</button>`;
+      act = `<button type="button" class="btn" data-act="edit">Modifier le prix</button><button type="button" class="btn${(() => { const m = marketValue(w); return !m || !m.quote || m.stale ? " primary" : ""; })()}" data-act="quote">${(() => { const m = marketValue(w); return m && m.quote ? (m.stale ? "✦ Actualiser la cote" : "✦ Cote MyWatch") : "✦ Obtenir la Cote MyWatch"; })()}</button>`;
     }
     if (kind !== "catalog") act += `<button type="button" class="btn danger${detail.delArmed ? " armed" : ""}" data-act="delete" style="grid-column:1/-1">${detail.delArmed ? "Toucher encore pour confirmer la suppression" : wish ? "Retirer de mes recherchées" : "Retirer de ma collection"}</button>`;
     $("#d-actions").innerHTML = act;
@@ -4274,12 +4094,13 @@ Ajoute aussi dans le même objet JSON :
     const mech = ["automatique", "manuel"].includes(mt);
     const movement = clamp10(t + ({ springdrive: 1, solaire: .2, quartz: -.3 }[mt] || 0) + (comps.some(c => ["tourbillon", "perpetual", "repeater"].includes(c)) ? .5 : comps.some(c => ["chrono", "gmt", "flyback", "annual"].includes(c)) ? .2 : 0));
     const accuracy = clamp10(mech ? .9 * t - .5 : { quartz: 9.5, solaire: 9.6, kinetic: 9, springdrive: 9.5 }[mt] || 9);
-    const finish = clamp10(t + ({ titane: .3, bronze: .2, resine: -1, "doré": t >= 8 ? .4 : -.2, "or-rose": t >= 8 ? .4 : -.2 }[w.case] || 0) + ({ saphir: .3, mineral: -.4, hardlex: -.2 }[w.glass] || 0));
+    const finish = clamp10(t + ({ titane: .3, bronze: .2, resine: -1, "doré": t >= 8 ? .4 : -.2, "or-rose": t >= 8 ? .4 : -.2, "or-blanc": .5, tantale: .5 }[w.case] || 0) + ({ saphir: .3, mineral: -.4, hardlex: -.2 }[w.glass] || 0));
     const strap = clamp10(({ acier: 6, jubile: 6.2, titane: 6.5, milanais: 5, cuir: 5.5, caoutchouc: 6, nato: 4.8 }[w.strap] || 5.5) + (t - 6) * .55);
     const wt = num(w.water) || 30, depth = wt >= 1000 ? 9.6 : wt >= 500 ? 9 : wt >= 300 ? 8.3 : wt >= 200 ? 7.5 : wt >= 150 ? 6.5 : wt >= 100 ? 6 : wt >= 50 ? 4.5 : 3;
-    const robustness = clamp10(depth + ({ saphir: .4, mineral: -.3, hesalite: -.4 }[w.glass] || 0) + (w.case === "titane" ? .3 : 0) + (/g-shock|pro trek|rangeman|mudmaster/.test(fold(w.model)) ? 2 : 0));
+    const robustness = Math.max(3, clamp10(depth + ({ saphir: .4, mineral: -.3, hesalite: -.4 }[w.glass] || 0) + (w.case === "titane" ? .3 : 0) + (/g-shock|pro trek|rangeman|mudmaster/.test(fold(w.model)) ? 2 : 0) + (t - 6) * .3));
     const p = valueOf(w, wish), Q = (movement + finish + strap) / 3;
-    const value = p ? clamp10(6.5 + 1.8 * (Q - (1.2 + 1.9 * Math.log10(Math.max(10, p))))) : null;
+    // qualité attendue pour ce prix (plafonnée : la haute horlogerie n'est pas pénalisée pour son prix)
+    const value = p ? clamp10(6.5 + 1.5 * (Q - Math.min(9.3, 1.6 + 1.7 * Math.log10(Math.max(10, p))))) : null;
     return { movement, accuracy, finish, strap, robustness, value };
   }
   function qualityOf(w, wish){
@@ -4583,7 +4404,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   function clearPending(){ pending = null; savePending(); if (isheet.open) isheet.close(); }
   function offerImport(){
     if (!pending || isheet.open || document.visibilityState !== "visible") return;
-    $("#ib-sub").textContent = { sheet: "Copie sa réponse (bouton « Copier » sous son message) : la fiche, la photo et les avis se remplissent d'un coup.", reviews: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les avis au comparateur.", photos: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les photos.", quote: "Copie sa réponse (bouton « Copier » sous son message) pour mettre à jour les cotes." }[pending.type] || "";
+    $("#ib-sub").textContent = { sheet: "Copie sa réponse (bouton « Copier » sous son message) : la fiche, la photo et les avis se remplissent d'un coup.", reviews: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les avis au comparateur.", photos: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les photos.", quote: "Copie sa réponse (bouton « Copier » sous son message) pour obtenir la Cote MyWatch." }[pending.type] || "";
     $("#ib-text").classList.add("hidden"); $("#ib-text").value = ""; $("#ib-go").disabled = false;
     isheet.showModal();
   }
@@ -4733,17 +4554,23 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     if (/casio|timex|swatch/.test(b)) return "tool";
     return "entry";
   }
+  // Cote MyWatch : prix du marché de l'occasion trouvé par Claude ; à défaut, une fourchette indicative
   function marketValue(w){
-    if (w.quote && num(w.quote.value)){ const base = num(w.price) ?? num(w.retail); const v = num(w.quote.value); return { value: v, delta: base ? v - base : 0, pct: base ? (v - base) / base : 0, quote: true, date: w.quote.date, trend: w.quote.trend, base }; }
-    const base = num(w.price) ?? num(w.retail); if (!base) return null;
+    const base = num(w.price) ?? num(w.retail);
+    if (w.quote && num(w.quote.value)){
+      const v = num(w.quote.value), age = (Date.now() - Date.parse(w.quote.date || 0)) / 864e5;
+      return { value: v, min: num(w.quote.min) || v, max: num(w.quote.max) || v, delta: base ? v - base : 0, pct: base ? (v - base) / base : 0, quote: true, date: w.quote.date, trend: w.quote.trend, stale: age > 90, base };
+    }
+    if (!base) return null;
     const p = VALUE_PROFILES[valueProfile(w)];
-    // sans date d'achat : on considère une montre récente (6 mois)
     const t = w.date && !isNaN(Date.parse(w.date)) ? Date.parse(w.date) : Date.now() - 182 * 864e5;
     const years = Math.max(0, (Date.now() - t) / (365.25 * 864e5));
-    // la décote « sortie de boutique » arrive pour moitié tout de suite, le reste sur la première année
-    const v = Math.max(base * .2, Math.round(base * (1 - p.d0 * (.5 + .5 * Math.min(1, years))) * Math.pow(1 + p.r, years)));
-    return { value: v, delta: v - base, pct: (v - base) / base, quote: false, base };
+    // une montre perd surtout à l'achat puis se stabilise : pas de décote annuelle façon voiture
+    const v = Math.round(base * (1 - p.d0 * (.5 + .5 * Math.min(1, years))) * Math.pow(1 + Math.max(0, p.r), years));
+    const r10 = x => Math.round(x / 10) * 10;
+    return { value: v, min: r10(v * .88), max: r10(v * 1.1), delta: v - base, pct: (v - base) / base, quote: false, base };
   }
+  function coteText(m){ return m.quote ? eur.format(m.value) : `≈ ${eur.format(m.min)} – ${eur.format(m.max)}`; }
   function collectionValue(arr){
     let value = 0, paid = 0, n = 0, quotes = 0;
     arr.forEach(w => { const m = marketValue(w); if (!m) return; n++; value += m.value; paid += m.base; if (m.quote) quotes++; });
@@ -4774,7 +4601,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     });
     if (!n) return false;
     persist(); render(); if (dsheet.open && detail) renderDetail();
-    setStatus(`${n} cote${n > 1 ? "s" : ""} mise${n > 1 ? "s" : ""} à jour.`);
+    setStatus(`Cote MyWatch mise à jour (${n} montre${n > 1 ? "s" : ""}).`);
     return true;
   }
 
@@ -4908,7 +4735,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
       <div class="h-hello"><span>${esc(date)}</span><h2>${hello}</h2></div>
       ${pick ? `<button type="button" class="h-day" data-open="${esc(pick.id)}"><span class="h-day-img">${thumbOf("collection", pick)}</span><span><small>Montre du jour</small><b>${esc(pick.brand)}</b><strong>${esc(pick.model)}</strong><em>Et si tu la portais aujourd'hui ?</em></span></button>` : ""}
       <div class="h-kpis">
-        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(collectionValue(col).paid) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""}${col.length ? ` · ≈ ${eur.format(collectionValue(col).value)}` : ""}</span></button>
+        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(collectionValue(col).paid) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""}</span>${col.length ? `<span>cote ≈ ${eur.format(collectionValue(col).value)}</span>` : ""}</button>
         <button type="button" class="h-kpi" data-go="wishlist"><b>${wl.length}</b><span>envie${wl.length > 1 ? "s" : ""}${budget ? " · " + eur.format(budget) : ""}</span></button>
         <button type="button" class="h-kpi" data-go="catalog"><b>${CAT_LIST.length}</b><span>modèles</span></button>
       </div>
@@ -4974,8 +4801,17 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const box = $("#news"); if (!box) return;
     if (!items || !items.length){ box.innerHTML = `<p class="news-msg">${note || "Actualités indisponibles pour le moment."} <a href="https://news.google.com/search?q=montres%20horlogerie&hl=fr&gl=FR&ceid=FR:fr" target="_blank" rel="noopener">Ouvrir Google Actualités</a></p>`; return; }
     const list = items.slice(0, 10), hi = list.findIndex(n => n.img); if (hi > 0) list.unshift(list.splice(hi, 1)[0]);
+    const brandsByLen = Object.keys(CATALOG).sort((a, b) => b.length - a.length);
+    const illus = n => {
+      const t = " " + fold(n.title).replace(/[^a-z0-9& ]/g, " ") + " ";
+      const br = brandsByLen.find(b => t.includes(" " + fold(b) + " "));
+      let e = null;
+      if (br){ const k = ICONS.find(x => x.startsWith(br + "|")); e = k ? CAT_MAP[fold(br) + "|" + fold(k.split("|")[1])] : CAT_LIST.find(x => x.brand === br); }
+      if (!e){ let h = 0; for (const c of n.title) h = (h * 31 + c.charCodeAt(0)) >>> 0; e = CAT_LIST[h % CAT_LIST.length]; }
+      try { return `<span class="nw-ill">${sugThumb(e.brand, e.model).html}</span>`; } catch(err){ return ""; }
+    };
     const mono = s => `<span class="nw-mono">${esc(String(s || "?").replace(/^(les|le|la|l')\s+/i, "").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join("").toUpperCase())}</span>`;
-    box.innerHTML = list.map((n, i) => `<a class="nw${i === 0 && n.img ? " big" : ""}" href="${esc(n.link)}" target="_blank" rel="noopener"><span class="nw-img">${n.img ? `<img src="${esc(n.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : mono(n.source)}</span><span class="nw-tx"><small>${esc(n.source)}${n.date ? " · " + ago(n.date) : ""}</small><b>${esc(n.title)}</b></span></a>`).join("");
+    box.innerHTML = list.map((n, i) => `<a class="nw${i === 0 && n.img ? " big" : ""}" href="${esc(n.link)}" target="_blank" rel="noopener"><span class="nw-img">${n.img ? `<img src="${esc(n.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : (illus(n) || mono(n.source))}</span><span class="nw-tx"><small>${esc(n.source)}${n.date ? " · " + ago(n.date) : ""}</small><b>${esc(n.title)}</b></span></a>`).join("");
   }
   let newsBusy = false;
   async function loadNews(force){
@@ -5027,11 +4863,11 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const brands = {}; col.forEach(w => brands[w.brand || "?"] = (brands[w.brand || "?"] || 0) + 1);
     const both = [];
     h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(mvAll.paid)}</b><span>Payé pour ta collection</span></div>
-      <div class="st-kpi"><b>${eur.format(mvAll.value)}</b><span>Valeur estimée${mvAll.quotes ? ` (dont ${mvAll.quotes} cote${mvAll.quotes > 1 ? "s" : ""} Claude)` : ""}</span></div>
+      <div class="st-kpi"><b>${eur.format(mvAll.value)}</b><span>${mvAll.quotes === col.length ? "Cote MyWatch" : mvAll.quotes ? `Cote MyWatch (${mvAll.quotes}/${col.length}) et estimations` : "Valeur estimée, à confirmer"}</span></div>
       <div class="st-kpi"><b class="mv ${gain >= 0 ? "up" : "down"}" style="background:none;padding:0">${gain >= 0 ? "+" : "−"}${eur.format(Math.abs(gain))}</b><span>${gain >= 0 ? "Plus-value" : "Moins-value"} estimée${mvAll.paid ? ` (${gain >= 0 ? "+" : "−"}${Math.abs(Math.round(gain / mvAll.paid * 100))} %)` : ""}</span></div>
       <div class="st-kpi"><b>${col.length}</b><span>Montre${col.length > 1 ? "s" : ""}</span></div>
       <div class="st-kpi"><b>${Object.keys(brands).length}</b><span>Marque${Object.keys(brands).length > 1 ? "s" : ""}</span></div></div>
-      <div style="text-align:center;margin-top:-6px"><button type="button" class="linkbtn" id="st-quotes">✦ Actualiser les cotes avec Claude</button></div>`;
+      <div style="text-align:center;margin-top:-6px"><button type="button" class="linkbtn" id="st-quotes">✦ Cote MyWatch de toute la collection</button></div>`;
     // évolution
     const dated = col.filter(w => w.date && !isNaN(Date.parse(w.date))).map(w => ({ t: Date.parse(w.date), w })).sort((a, b) => a.t - b.t);
     if (dated.length >= 2){ let acc = 0; const pts = dated.map(x => ({ t: x.t, v: (acc += (num(x.w.price) ?? valueOf(x.w, false) ?? 0)), label: `${x.w.brand} ${x.w.model} · ${new Date(x.t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}` })); h += card("Évolution de la collection", lineChart(pts), "Montant cumulé de tes achats. Touche le graphique pour le détail."); }
@@ -5168,7 +5004,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
       const mv = collectionValue(arr);
       hero.innerHTML = `<span class="eyebrow">Ma collection</span>
         <div class="big">${eur.format(total)}</div>
-        ${mv.n ? `<div class="sub est">payé · valeur estimée ${eur.format(mv.value)} <span class="mv ${mv.value >= mv.paid ? "up" : "down"}">${mv.value >= mv.paid ? "+" : "−"}${Math.abs(Math.round((mv.value - mv.paid) / (mv.paid || 1) * 100))} %</span></div>` : ""}
+        ${mv.n ? `<div class="sub est">payé · ${mv.quotes === arr.length ? "Cote MyWatch" : "cote ≈"} ${eur.format(mv.value)} <span class="mv ${mv.value >= mv.paid ? "up" : "down"}">${mv.value >= mv.paid ? "+" : "−"}${Math.abs(Math.round((mv.value - mv.paid) / (mv.paid || 1) * 100))} %</span></div>` : ""}
         <div class="sub"><strong>${arr.length}</strong> montre${arr.length > 1 ? "s" : ""} · <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}</div>
         ${rarityBar(arr, false)}
         <div class="tiles"><div class="tile"><b>${arr.length ? auto + " / " + arr.length : "–"}</b><small>Mécaniques</small></div><div class="tile"><b>${avg ? String(avg).replace(".", ",") + " mm" : "–"}</b><small>Diamètre moyen</small></div><div class="tile"><b>${top ? esc(top.brand) : "–"}</b><small>Pièce maîtresse</small></div></div>`;
@@ -5385,7 +5221,8 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
   const toDataURL = b => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(b); });
   $("#bk-export").addEventListener("click", async () => {
     const photos = {};
-    for (const w of [...state.collection, ...state.wishlist, ...Object.values(state.refPick || {}).filter(p => p && p.own).map(p => ({ photo: p.own }))]){
+    const ids = [...state.collection, ...state.wishlist].flatMap(w => [w.photo, w.photoOrig]).concat(Object.values(state.refPick || {}).flatMap(p => p ? [p.own, p.orig] : [])).filter(Boolean);
+    for (const w of ids.map(id => ({ photo: id }))){
       if (!w.photo || photos[w.photo]) continue;
       try { const b = await tx("readonly", s => s.get(w.photo)); if (b) photos[w.photo] = await toDataURL(b); } catch(e){}
     }
@@ -5420,7 +5257,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
   const splashT0 = performance.now();
   function hideSplash(){
     const sp = $("#splash"); if (!sp) return;
-    const wait = Math.max(0, 2300 - (performance.now() - splashT0));
+    const wait = Math.max(0, 1100 - (performance.now() - splashT0));
     setTimeout(() => { sp.classList.add("out"); setTimeout(() => sp.remove(), 650); }, wait);
   }
   async function init(){
@@ -5432,7 +5269,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     await loadPhotos();
     render();
     hideSplash();
-    if (pending) setTimeout(offerImport, 2600);
+    if (pending) setTimeout(offerImport, 1500);
     setTimeout(() => restandardize(), 2600);
     checkUpdate();
     if (needSave) persist();
