@@ -397,6 +397,8 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .app-line{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:.85rem;margin-top:4px}
 .linkbtn{border:0;background:none;color:var(--brass);font-weight:800;font-size:.85rem;padding:6px 0;cursor:pointer}
 #sheet .actions #save{flex:1}
+html.locked,html.locked body{overflow:hidden;overscroll-behavior:none}
+dialog{overscroll-behavior:contain}
 .d-pbtns{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:2px}
 .d-pbtns::-webkit-scrollbar{display:none}
 .d-pbtn{white-space:nowrap;flex:none}
@@ -1079,7 +1081,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 25; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 26; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -3981,6 +3983,26 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   $("#ib-cancel").addEventListener("click", () => clearPending());
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden"){ if (pending) leftForClaude = true; } else if (leftForClaude){ leftForClaude = false; setTimeout(offerImport, 350); } });
   window.addEventListener("pageshow", e => { if (e.persisted && pending) setTimeout(offerImport, 350); });
+
+  // ---------- Page figée derrière les fenêtres (iPhone : sinon le défilement passe à la page du dessous) ----------
+  let lockY = null;
+  function syncScrollLock(){
+    const open = [...document.querySelectorAll("dialog")].some(d => d.open);
+    const b = document.body;
+    if (open && lockY === null){
+      lockY = window.scrollY;
+      b.style.position = "fixed"; b.style.top = -lockY + "px"; b.style.left = "0"; b.style.right = "0"; b.style.width = "100%";
+      document.documentElement.classList.add("locked");
+    } else if (!open && lockY !== null){
+      const y = lockY; lockY = null;
+      b.style.position = b.style.top = b.style.left = b.style.right = b.style.width = "";
+      document.documentElement.classList.remove("locked");
+      window.scrollTo(0, y);
+    }
+  }
+  document.querySelectorAll("dialog").forEach(d => new MutationObserver(syncScrollLock).observe(d, { attributes: true, attributeFilter: ["open"] }));
+  // le doigt posé sur le fond grisé ne doit rien faire défiler non plus
+  document.addEventListener("touchmove", e => { if (lockY !== null && e.target.tagName === "DIALOG" && e.target.scrollHeight <= e.target.clientHeight) e.preventDefault(); }, { passive: false });
 
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
   document.addEventListener("click", closeFrom, true);
