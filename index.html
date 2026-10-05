@@ -1312,7 +1312,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 33; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 34; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1820,7 +1820,344 @@ Timex|Navi XL Automatic|A|41|200|s|#15181C|r|s|n|d|date|l|n|b|330
 Timex|Giorgio Galli S2|A|38|50|s|#15181C|r|s|s|l|date|l|b|b|500
 Timex|Standard|Q|41|50|m|#15181C|r|r|c|l|date|l|n|b|70
 Timex|T80|Q|34|30|a|#9FB08F|t|s|s|l|alarm|l|b|b|90|n
-Timex|Weekender Chronographe|Q|40|30|m|#15181C|r|s|n|l|chrono|l|n|b|90`;
+Timex|Weekender Chronographe|Q|40|30|m|#15181C|r|s|n|l|chrono|l|n|b|90
+Rolex|Oyster Perpetual 28|A|28|100|s|#2E6BC6|r|s|s|l||s|b|b|6100
+Rolex|Oyster Perpetual 31|A|31|100|s|#C9CBCC|r|s|s|l||s|b|b|6300
+Rolex|Oyster Perpetual 34|A|34|100|s|#C9CBCC|r|s|s|l||s|b|b|6400
+Rolex|Oyster Perpetual 36|A|36|100|s|#2E6BC6|r|s|s|l||s|b|b|6900
+Rolex|Explorer 36|A|36|100|s|#141517|r|s|s|l||l|e|m|8000
+Rolex|Datejust 31|A|31|100|s|#C8C9CB|r|s|j|f|date|s|b|b|11300
+Rolex|Lady-Datejust 28|A|28|100|s|#C8C9CB|r|s|j|f|date|s|b|b|10300
+Rolex|Day-Date 36|A|36|100|s|#C9A95C|r|g|s|f|daydate|s|b|b|42000
+Rolex|Yacht-Master 37|A|37|100|s|#4A4E54|r|s|s|d|date|s|p|m|13500
+Rolex|Yacht-Master 42|A|42|100|s|#121314|r|s|c|d|date|l|p|m|34000
+Rolex|Yacht-Master 42 RLX Titane|A|42|100|s|#18191B|r|t|t|d|date|l|p|m|15500
+Rolex|Deepsea Challenge|A|50|1000|s|#121314|r|t|t|d|date|l|p|m|28000
+Rolex|Milgauss|A|40|100|s|#121212|r|s|s|l||l|b|b|9000
+Rolex|Land-Dweller 40|A|40|100|s|#F2F0EA|r|s|j|f|date|g|n|b|15800
+Rolex|Land-Dweller 36|A|36|100|s|#F2F0EA|r|s|j|f|date|g|n|b|14900
+Tudor|Black Bay 58 925|A|39|200|s|#8B7D6B|r|s|l|d||s|p|g|4900
+Tudor|Black Bay 58 18K|A|39|200|s|#3E5B3A|r|g|l|d||s|p|g|16500
+Tudor|Black Bay 58 GMT|A|39|200|s|#141517|r|s|s|g|gmt+date|l|p|g|4750
+Tudor|Black Bay Ceramic|A|41|200|s|#151515|r|n|c|d||l|p|g|5300
+Tudor|Black Bay Bronze|A|43|200|s|#5A4635|r|b|l|d||s|p|g|4600
+Tudor|Black Bay S&G|A|41|200|s|#C9A56A|r|s|s|d||s|p|g|5900
+Tudor|Black Bay GMT S&G|A|41|200|s|#141414|r|s|s|g|gmt+date|l|p|g|6100
+Tudor|Black Bay Monochrome|A|41|200|s|#151617|r|s|s|d||l|p|g|4450
+Tudor|Pelagos FXD|A|42|200|s|#1E2A44|r|t|n|d||l|p|g|4100
+Tudor|1926 36|A|36|100|s|#ECE9E1|r|s|s|l|date|g|n|f|2200
+Tudor|1926 39|A|39|100|s|#141414|r|s|s|l|date|g|n|f|2300
+Tudor|1926 41|A|41|100|s|#141414|r|s|s|l|date|g|n|f|2400
+Omega|Speedmaster Racing|A|44.25|50|s|#141414|r|s|s|t|chrono+date|l|b|b|8100
+Omega|Speedmaster 38 Chronographe|A|38|100|s|#141414|r|s|s|t|chrono+date|l|b|b|6300
+Omega|Speedmaster Chronoscope 43|M|43|50|s|#E8E6E0|r|s|l|t|chrono+smallsec|l|n|f|9700
+Omega|Speedmaster Moonphase|A|44.25|50|s|#1C2A4A|r|s|l|t|chrono+moon+date|s|b|b|11500
+Omega|Speedmaster Moonwatch Calibre 321|M|39.7|50|s|#141414|r|s|s|t|chrono|l|b|b|16900
+Omega|Seamaster Diver 300M Chronographe|A|44|300|s|#1F3A6B|r|s|s|d|chrono+date|g|p|g|8500
+Omega|Seamaster Diver 300M 007 Edition|A|42|300|s|#4E4031|r|t|t|d||l|p|g|11000
+Omega|Seamaster Planet Ocean 600M GMT|A|43.5|500|s|#141414|r|s|s|g|gmt+date|l|p|g|9600
+Omega|Seamaster Planet Ocean Ultra Deep|A|45.5|1000|s|#1D2D4A|r|t|t|d||l|p|g|13500
+Omega|Seamaster Aqua Terra Shades 38|A|38|150|s|#7FB7C9|r|s|s|l|date|c|a|b|6300
+Omega|Seamaster Aqua Terra Worldtimer|A|43|150|s|#1E3F6E|r|s|s|l|worldtime|l|a|b|10900
+Omega|Constellation 39|A|39|50|s|#D9DADC|r|s|s|l|date|s|b|b|7200
+Omega|Constellation 28 Quartz|Q|28|30|s|#E9E9EC|r|s|s|l|date|l|b|b|4300
+Cartier|Ballon Bleu 28|Q|28|30|s|#E6E3DC|r|s|s|l||g|r|g|4600
+Cartier|Ballon Bleu 33|Q|33|30|s|#E6E3DC|r|s|s|l|date|g|r|g|5500
+Cartier|Ballon Bleu 36|A|36.6|30|s|#E6E3DC|r|s|s|l|date|g|r|g|6600
+Cartier|Santos de Cartier Moyen Modèle|A|35.1|100|s|#E2DFD8|q|s|s|l|date|s|r|g|7600
+Cartier|Santos de Cartier Chronographe|A|43.3|100|s|#DCDAD3|q|s|s|l|chrono|s|r|g|9600
+Cartier|Santos de Cartier Squelette|M|39.8|100|s|#4A4D52|q|s|s|l|skeleton|l|r|g|27500
+Cartier|Tank Américaine Moyen Modèle|A|22.6|30|s|#E6E3DC|t|s|s|l||l|r|g|6650
+Cartier|Tank Must SolarBeat|S|25.5|30|s|#F2F0EA|t|s|l|l||l|r|g|3150
+Cartier|Pasha de Cartier 35|A|35|100|s|#E6E3DC|r|s|s|l||g|n|g|6600
+Cartier|Pasha de Cartier Chronographe|A|41|100|s|#E6E3DC|r|s|s|l|chrono|g|n|g|9900
+Cartier|Ronde Must de Cartier 36|Q|36|30|s|#E6E3DC|r|s|l|l||g|r|g|3350
+Grand Seiko|Heritage Quartz 9F 37|Q|37|100|s|#141414|r|s|s|l|date|l|a|d|3000
+Grand Seiko|Heritage Quartz GMT 9F86|Q|39|100|s|#F1EFE8|r|s|s|l|gmt+date|l|a|d|3900
+Grand Seiko|Lake Suwa SLGA009|D|40|100|s|#1C2E52|r|s|s|l|date|g|a|d|9400
+Grand Seiko|Tentagraph SLGC001|A|43.2|100|s|#1E2C4A|r|t|t|t|chrono|g|a|d|15300
+Grand Seiko|Omiwatari SBGY007|D|38.5|30|s|#EEF0F2|r|s|l|l||g|a|d|8300
+Grand Seiko|Sport Spring Drive GMT|D|44|200|s|#141414|r|s|s|g|gmt+date+power|l|a|g|7600
+Grand Seiko|Sport Spring Drive Diver 200M|D|44.2|200|s|#141414|r|t|t|d|date+power|l|a|g|8100
+Grand Seiko|Hi-Beat 36000 GMT|A|40|100|s|#141414|r|s|s|l|gmt+date|s|a|d|7400
+Grand Seiko|Elegance 9S63 Petite Seconde|A|39|30|s|#24365A|r|s|l|l|smallsec+power|s|a|d|6400
+TAG Heuer|Carrera Day-Date 41|A|41|100|s|#1E3F7A|r|s|s|l|daydate|s|a|b|3350
+TAG Heuer|Carrera Chronographe Tourbillon|A|42|100|s|#15181C|r|s|c|t|chrono+tourbillon|l|a|b|23500
+TAG Heuer|Carrera Chronographe Porsche|A|44|100|s|#15181C|r|s|s|t|chrono+date|r|b|b|6850
+TAG Heuer|Aquaracer Professional 200 Date|A|40|200|s|#1E3F7A|r|s|s|d|date|c|a|b|2800
+TAG Heuer|Aquaracer Professional 200 Solargraph|S|40|200|s|#15181C|r|s|s|d|date|c|a|b|2450
+TAG Heuer|Aquaracer Professional 300 GMT|A|42|300|s|#15181C|r|s|s|g|gmt+date|c|a|b|4150
+TAG Heuer|Aquaracer Professional 1000 Superdiver|A|45|1000|s|#15181C|r|t|c|d|date|c|a|b|4950
+TAG Heuer|Formula 1 Chronographe|Q|43|200|s|#15181C|r|s|s|t|chrono+date|l|b|b|1700
+TAG Heuer|Formula 1 Solargraph|S|38|100|s|#15181C|r|s|s|d|date|l|b|b|1900
+TAG Heuer|Link Chronographe|A|41|100|s|#1E3F7A|r|s|s|l|chrono+date|c|a|b|6450
+TAG Heuer|Autavia Chronographe Heuer 02|A|42|100|s|#15181C|r|s|l|d|chrono|l|n|b|5300
+TAG Heuer|Connected Calibre E4 45|Q|45|50|s|#101214|r|s|c|l||l|b|b|1800|n
+TAG Heuer|Connected Calibre E4 42|Q|42|50|s|#101214|r|s|c|l||l|b|b|1650|n
+Longines|Spirit 37|A|37|100|s|#E3E3E0|r|s|s|l|date|s|n|g|2350
+Longines|Spirit Chronographe 42|A|42|100|s|#15181C|r|s|s|l|chrono+date|s|n|g|3550
+Longines|Spirit Flyback|A|42|100|s|#15181C|r|s|s|d|flyback|l|n|g|4950
+Longines|Spirit Zulu Time 39|A|39|100|s|#15181C|r|s|s|g|gmt+date|s|n|g|3400
+Longines|HydroConquest 39|A|39|300|s|#1E3F7A|r|s|s|d|date|s|a|b|1850
+Longines|HydroConquest 43|A|43|300|s|#15181C|r|s|s|d|date|s|a|b|1900
+Longines|HydroConquest GMT 41|A|41|300|s|#1E3F7A|r|s|s|g|gmt+date|s|a|b|2400
+Longines|HydroConquest Chronographe 43|A|43|300|s|#15181C|r|s|s|d|chrono+date|s|a|b|2850
+Longines|Conquest 34|A|34|100|s|#E9E6DF|r|s|s|l|date|s|a|b|1850
+Longines|Conquest 38|A|38|100|s|#1E3F7A|r|s|s|l|date|s|a|b|1950
+Longines|Conquest Chronographe 42|A|42|100|s|#15181C|r|s|s|l|chrono+date|s|a|b|3350
+Longines|Master Collection 40|A|40|30|s|#C9CCCF|r|s|l|l|date|g|n|f|2000
+Longines|Master Collection Calendrier annuel|A|40|30|s|#C9CCCF|r|s|l|l|annual|g|n|f|2650
+Longines|Avigation BigEye|A|41|30|s|#15181C|r|t|l|l|chrono|l|n|g|4400
+Longines|Ultra-Chron|A|43|300|s|#15181C|c|s|s|d||l|b|b|3650
+Longines|Elegant Collection 39|A|39|30|s|#F2F0EA|r|s|s|l|date|l|b|d|1750
+Breitling|Navitimer B01 Chronographe 41|A|41|30|s|#15181C|r|s|l|f|chrono+date|s|b|b|8650
+Breitling|Navitimer B01 Chronographe 46|A|46|30|s|#15181C|r|s|l|f|chrono+date|s|b|b|9200
+Breitling|Navitimer Automatic 38|A|38|30|s|#1E3F7A|r|s|s|f|date|s|b|b|5250
+Breitling|Chronomat 36|Q|36|100|s|#E9E6DF|r|s|s|l|date|l|b|b|4400
+Breitling|Chronomat Automatic 40|A|40|200|s|#1E3F7A|r|s|s|d|date|s|b|b|5450
+Breitling|Chronomat Automatic GMT 40|A|40|200|s|#15181C|r|s|s|g|gmt+date|s|b|b|6300
+Breitling|Chronomat B01 44|A|44|200|s|#15181C|r|s|s|d|chrono+date|s|b|b|8700
+Breitling|Superocean Automatic 36|A|36|300|s|#F2F2EE|r|s|s|d||l|a|b|4200
+Breitling|Superocean Automatic 44|A|44|300|s|#15181C|r|s|c|d||l|a|b|4850
+Breitling|Superocean Automatic 46|A|46|300|s|#15181C|r|s|c|d||l|a|b|5100
+Breitling|Superocean Heritage B01 Chronographe 44|A|44|200|s|#15181C|r|s|m|d|chrono+date|l|b|g|8000
+Breitling|Avenger B01 Chronographe 44|A|44|300|s|#15181C|r|s|s|d|chrono+date|l|n|g|8150
+Breitling|Avenger Automatic GMT 44|A|44|300|s|#15181C|r|s|s|d|gmt+date|l|n|g|5600
+Breitling|Endurance Pro 44|Q|44|100|s|#15181C|r|r|c|t|chrono+date|l|n|b|3600
+IWC|Portugieser Automatic 40|A|40.4|50|s|#E9E6DF|r|s|l|l|date+smallsec|l|n|f|9200
+IWC|Portugieser Calendrier perpétuel 44|A|44.2|30|s|#F2F0EA|r|p|l|l|perpetual+moon|l|n|f|41000
+IWC|Pilot's Watch Automatic 36|A|36|100|s|#15181C|r|s|l|l|date|l|n|g|5000
+IWC|Pilot's Watch Automatic Spitfire 39|A|39|50|s|#15181C|r|s|l|l|date|l|n|g|5300
+IWC|Pilot's Watch Mark XVIII|A|40|50|s|#15181C|r|s|l|l|date|l|n|g|4800
+IWC|Pilot's Watch Chronograph 43|A|43|100|s|#15181C|r|s|s|l|chrono+date|l|n|g|8450
+IWC|Pilot's Watch Chronographe Top Gun|A|41|100|s|#15181C|r|n|n|l|chrono+date|l|n|g|11000
+IWC|Big Pilot's Watch 46|A|46.2|50|s|#15181C|r|s|l|l|date+power|l|n|g|15000
+IWC|Portofino Automatic 37|A|37|30|s|#C9CCCF|r|s|l|l|date|s|r|f|5100
+IWC|Portofino Automatic 34|A|34|30|s|#C9CCCF|r|s|l|l|date|s|r|f|4850
+IWC|Portofino Chronographe|A|42|30|s|#C9CCCF|r|s|l|l|chrono+date|s|r|f|5650
+IWC|Aquatimer Chronographe|A|44|300|s|#15181C|r|s|c|d|chrono+date|l|a|g|7600
+Jaeger-LeCoultre|Reverso Tribute Duoface|M|27.4|30|s|#15181C|t|s|l|l|gmt+smallsec|l|a|d|13300
+Jaeger-LeCoultre|Reverso Classic Duoface Petite Seconde|M|28.3|30|s|#C9CCCF|t|s|l|l|gmt+smallsec|g|n|d|11600
+Jaeger-LeCoultre|Reverso Tribute Chronographe|M|29.9|30|s|#F2F0EA|t|s|l|l|chrono|l|a|d|21000
+Jaeger-LeCoultre|Master Ultra Thin Date|A|39|50|s|#C9CCCF|r|s|l|l|date|s|b|d|8300
+Jaeger-LeCoultre|Master Ultra Thin Quantième Perpétuel|A|39|50|s|#C9CCCF|r|s|l|l|perpetual+moon|s|b|d|25500
+Jaeger-LeCoultre|Master Control Chronographe Calendrier|A|40|50|s|#E9E1D0|r|s|l|l|chrono+fullcal+moon|s|n|d|15500
+Jaeger-LeCoultre|Master Control Geographic|A|40|50|s|#E9E1D0|r|s|l|l|gmt+daynight+date+power|s|n|d|13800
+Jaeger-LeCoultre|Polaris Automatic|A|41|100|s|#1E3F7A|r|s|s|l||f|n|g|7900
+Jaeger-LeCoultre|Polaris Chronographe|A|42|100|s|#1E3F7A|r|s|c|l|chrono|f|n|g|11800
+Jaeger-LeCoultre|Polaris Chronographe World Time|A|44|100|s|#1E3F7A|r|s|l|l|chrono+worldtime|f|n|g|16000
+Jaeger-LeCoultre|Rendez-Vous Night & Day|A|34|30|s|#F2F0EA|r|s|l|l|daynight|g|n|f|11000
+Panerai|Luminor GMT|A|44|300|s|#15181C|c|s|l|l|gmt+date+smallsec|l|n|g|8200
+Panerai|Luminor Quaranta|A|40|100|s|#15181C|c|s|l|l|date+smallsec|l|n|g|6600
+Panerai|Luminor Quaranta BiTempo|A|40|100|s|#1E3F7A|c|s|l|l|gmt+date+smallsec|l|n|g|7500
+Panerai|Submersible QuarantaQuattro|A|44|300|s|#1E3F7A|c|s|c|d|date|l|p|g|10500
+Panerai|Luminor Marina Carbotech|A|44|300|s|#15181C|c|n|c|l|date+smallsec|l|n|g|18600
+Panerai|Luminor 1950 3 Days 47|M|47|100|s|#15181C|c|s|l|l||l|n|g|8200
+Tissot|PRX Digital|Q|40|100|s|#9FB08F|r|s|s|l||l|b|b|425|n
+Tissot|Seastar 2000 Professional Powermatic 80|A|46|500|s|#101418|r|s|c|d|date|l|p|g|1150
+Tissot|Seastar 1000 Powermatic 80 40 mm|A|40|300|s|#1B2A55|r|s|s|d|date|s|p|g|775
+Tissot|Seastar 1000 quartz 40 mm|Q|40|300|s|#111418|r|s|s|d|date|s|p|g|395
+Tissot|Chemin des Tourelles Powermatic 80|A|42|50|s|#D9D7D0|r|s|l|l|date|l|n|d|795
+Tissot|Chrono XL Classic|Q|45|100|s|#15181C|r|s|l|t|chrono+date|l|n|b|395
+Tissot|Couturier Powermatic 80|A|39|100|s|#1E2F55|r|s|s|l|date|s|a|b|725
+Tissot|Couturier Chronographe quartz|Q|43|100|s|#15181C|r|s|l|l|chrono+date|l|a|b|475
+Tissot|Lovely Square|Q|20|30|s|#F2F0EC|q|s|s|l||l|b|b|325
+Tissot|Carson Premium quartz|Q|40|50|s|#F2F0EC|r|s|l|l|date|l|a|d|375
+Tissot|Gentleman Powermatic 80 Open Heart|A|40|100|s|#1E3F7A|r|s|s|l|openheart|s|a|b|995
+Tissot|PR516 Chronographe mécanique|M|41|100|s|#F2F0EC|r|s|s|t|chrono|l|b|b|1795
+Hamilton|Khaki Field Expedition|A|41|100|s|#15181C|r|s|l|d|date|l|n|g|945
+Hamilton|Khaki Field Auto Chrono|A|44|100|s|#15181C|r|s|l|l|chrono+daydate|l|n|g|1995
+Hamilton|Khaki Field King Auto|A|40|100|s|#15181C|r|s|s|l|daydate|l|n|g|765
+Hamilton|Khaki Field Murph 38|A|38|100|s|#15181C|r|s|l|l|date|l|n|g|945
+Hamilton|Khaki Aviation Pilot Pioneer Mechanical|M|36|100|s|#15181C|c|s|l|l||l|n|g|895
+Hamilton|Jazzmaster Open Heart Auto|A|40|50|s|#1E2F55|r|s|s|l|openheart|l|a|b|945
+Hamilton|Jazzmaster Performer Auto Chrono|A|42|100|s|#E8E6E0|r|s|s|l|chrono+date|l|a|b|1995
+Hamilton|American Classic PSR Digital Quartz|Q|40.8|100|s|#9FB08F|c|s|s|l||l|b|b|795|n
+Hamilton|American Classic Pan Europ Auto Chrono|A|42|100|s|#1E2F55|r|s|s|t|chrono+date|l|b|b|2195
+Mido|Ocean Star Tribute|A|40.5|200|s|#1B2A55|r|s|s|d|date|l|p|b|1050
+Mido|Ocean Star 39|A|39|200|s|#1B3A6B|r|s|s|d|date|s|a|b|990
+Mido|Ocean Star 600 Chronometer|A|43.5|500|s|#111418|r|s|c|d|date|l|p|b|1390
+Mido|Baroncelli Heritage|A|39|30|s|#F2F0EC|r|s|l|l|date|l|r|f|790
+Mido|Baroncelli Smiling Moon|A|40|30|s|#F2F0EC|r|s|l|l|moon+date|l|r|f|1190
+Certina|DS Super PH500M|A|43|500|s|#111418|r|s|s|d|date|l|p|g|1050
+Oris|Aquis Date Calibre 400|A|41.5|300|s|#1B3A6B|r|s|s|d|date|l|a|b|3300
+Oris|Aquis Date 36.5|A|36.5|300|s|#1B3A6B|r|s|s|d|date|l|a|b|2100
+Oris|Aquis Date 43.5|A|43.5|300|s|#111418|r|s|s|d|date|l|a|b|2300
+Oris|Aquis GMT Date|A|43.5|300|s|#1B3A6B|r|s|s|d|gmt+date|l|a|b|2800
+Oris|Big Crown ProPilot Big Date|A|41|100|s|#15181C|r|s|l|l|bigdate|l|n|g|1950
+Rado|Captain Cook High-Tech Ceramic|A|43|300|s|#15181C|r|n|n|d|date|l|a|g|3450
+Swatch|New Gent|Q|41|30|a|#15171A|r|r|c|l||l|b|b|85
+Swatch|Skin Classic|Q|34|30|a|#F2F2F0|r|r|c|l||l|b|b|105
+Swatch|Skin Irony|Q|42|30|a|#1B1E22|r|s|l|l||l|b|b|150
+Swatch|New Irony|Q|42|30|a|#1E2A44|r|s|s|l|date|l|b|b|130
+Swatch|New Chrono|Q|42|30|a|#111111|r|r|c|l|chrono+date|l|b|b|130
+Swatch|Big Bold Chrono|Q|47|30|a|#111111|r|r|c|l|chrono+date|l|b|b|155
+Swatch|Big Bold Irony|Q|47|30|a|#1B1E22|r|s|s|l||l|b|b|150
+Swatch|Lady|Q|25|30|a|#FFFFFF|r|r|c|l||l|b|b|65
+Swatch|What If?|Q|33|30|a|#111111|q|r|c|l||l|b|b|110
+Casio|G-Shock DW-5900|Q|46|200|m|#9FB08F|r|r|c|l|alarm+chrono|l|b|b|99|n
+Casio|G-Shock GMA-S2100|Q|43|200|m|#F2F2F0|o|r|c|l|worldtime+alarm|l|b|b|109|x
+Casio|G-Shock MTG-B3000|S|50.9|200|s|#111111|r|s|c|l|worldtime+date|l|a|b|950
+Casio|G-Shock G-Steel GST-B500|S|49.6|200|m|#111111|r|s|s|l|date|l|a|b|300
+Casio|Edifice EFV-100|Q|42|100|m|#111111|r|s|s|l|date|s|b|b|89
+Casio|Edifice EFV-540|Q|43.8|100|m|#111111|r|s|s|t|chrono+date|l|b|b|119
+Casio|Pro Trek PRG-340|S|51|100|m|#9FB08F|r|r|c|l|alarm+worldtime|l|b|b|229|n
+Casio|Vintage A100|Q|40|30|a|#9FB08F|q|s|s|l|alarm+chrono|l|b|b|69|n
+Casio|Vintage A171|Q|38|30|a|#9FB08F|q|r|s|l|alarm+chrono|l|b|b|55|n
+Casio|Vintage LA670|Q|25|30|a|#9FB08F|q|r|s|l|alarm+chrono|l|b|b|39|n
+Casio|AE-1000W|Q|43.7|100|a|#9FB08F|r|r|c|l|worldtime+alarm+chrono|l|b|b|35|n
+Casio|MQ-24|Q|35|30|a|#FFFFFF|r|r|c|l||l|n|b|25
+Casio|W-218H|Q|43|50|a|#9FB08F|q|r|c|l|alarm+chrono|l|b|b|25|n
+Festina|Chrono Sport|Q|44|100|m|#111418|r|s|s|t|chrono+date|l|a|b|149
+Festina|Solar Energy|S|41|50|m|#1C2F55|r|s|s|l|date|l|b|b|129
+Festina|Titanium Chronographe|Q|44|100|m|#2A2E33|r|t|t|l|chrono+date|l|b|b|199
+Festina|Automatique Squelette|A|42|50|m|#C8CCD0|r|s|l|l|skeleton|l|b|b|229
+Festina|Boyfriend|Q|36|50|m|#F2F2F0|r|s|s|l||l|b|b|99
+Festina|Mademoiselle|Q|30|30|m|#F7E7E0|r|s|s|l||l|b|b|99
+Festina|Swiss Made Chronographe|Q|44|100|s|#111111|r|s|s|t|chrono+date|l|a|b|349
+Lotus|Chrono|Q|44|100|m|#111111|r|s|s|t|chrono+date|l|a|b|129
+Lotus|Excellent|Q|43|50|m|#1C2F55|r|s|s|l|chrono+date|l|a|b|149
+Lotus|Freedom|Q|43|50|m|#111111|r|s|c|l|date|l|b|b|99
+Lotus|Bliss|Q|32|30|m|#F2F2F0|r|s|s|l||l|b|b|79
+Lotus|Trendy|Q|36|30|m|#FFFFFF|r|s|m|l||l|b|b|79
+Lotus|Minimalist|Q|40|50|m|#111111|r|s|m|l||l|b|b|89
+Fossil|Neutra Chronographe|Q|44|50|m|#1C2F55|r|s|l|l|chrono+date|l|b|b|159
+Fossil|Minimalist|Q|44|50|m|#111111|r|s|l|l||l|b|b|119
+Fossil|Everett Chronographe|Q|42|50|m|#111111|r|s|s|l|chrono+date|l|b|b|159
+Fossil|Bannon Multifonction|Q|45|50|m|#1C2F55|r|s|l|l|daydate|l|n|b|169
+Fossil|Fenmore Multifonction|Q|44|50|m|#1C2F55|r|s|s|l|daydate|l|b|b|139
+Fossil|Copeland|Q|42|50|m|#111111|r|s|l|l|date|l|b|b|139
+Fossil|Heritage Automatique|A|43|50|m|#F2EDE0|r|s|l|l|date|l|a|b|299
+Fossil|Fossil Blue|Q|42|100|m|#1C2F55|r|s|s|l|date|l|b|b|79
+Fossil|Carlie|Q|28|50|m|#F7F2EA|r|p|s|l||l|b|b|129
+Fossil|Jacqueline|Q|36|30|m|#FFFFFF|r|p|l|l|date|l|b|b|119
+Fossil|Raquel|Q|26|50|m|#F7E7D8|t|g|s|l||l|b|b|149
+Fossil|Scarlette|Q|32|50|m|#F2F2F0|r|g|s|l||l|b|b|129
+Daniel Wellington|Petite 32|Q|32|30|m|#FFFFFF|r|p|m|l||l|b|b|159
+Daniel Wellington|Petite 28|Q|28|30|m|#FFFFFF|r|p|m|l||l|b|b|149
+Daniel Wellington|Quadro|Q|20|30|m|#FFFFFF|t|p|m|l||l|b|b|159
+Daniel Wellington|Iconic Chronograph|Q|42|100|m|#111111|r|s|s|l|chrono+date|l|b|b|269
+Lip|Dauphine 38|Q|38|30|m|#F2EFE8|r|s|l|l||l|b|b|199
+Lip|Dauphine 29|Q|29|30|m|#F2EFE8|r|s|m|l||l|b|b|199
+Lip|Henriette|Q|18.5|30|m|#F2EFE8|r|s|m|l||l|n|b|189
+Lip|Grande Nautic-Ski Automatique|A|41|200|s|#15181C|r|s|c|d|date|l|b|b|749
+Lip|Rallye 39 Méca-Quartz|Q|39|50|m|#F2EFE8|r|s|l|l|chrono|l|b|b|299
+Lip|Rallye Chronographe Automatique 42|A|42|100|s|#15181C|r|s|l|t|chrono+date|l|b|b|1590
+Lip|Churchill C18|Q|21.2|30|m|#F2EFE8|t|s|l|l||l|n|b|199
+Lip|Type 14 Automatique|A|41|100|s|#15181C|r|s|l|l||l|n|g|990
+Lip|Annapurna Automatique 39|A|39|50|s|#E8E4DA|r|s|l|l||s|b|d|890
+Yema|Superman Swiss Edition|A|39|300|s|#15181C|r|s|s|d|date|l|p|g|1190
+Yema|Diver|A|39.5|200|s|#15181C|r|s|c|d||l|p|g|890
+Yema|Urban Traveller|A|39|100|s|#1E3F7A|r|s|s|l|date|l|b|b|990
+Yema|Flygraf|A|39|100|s|#15181C|r|s|l|d||l|n|g|890
+Yema|Yachtingraf Méca-Quartz|Q|39|100|s|#F2EFE8|r|s|l|d|chrono|l|b|b|590
+Yema|Granvelle CMM.20|A|39|50|s|#F2EFE8|r|s|l|l||s|b|d|1990
+Michel Herbelin|Cap Camarat Automatique|A|40.5|100|s|#1E3F7A|r|s|s|l|date|c|a|b|900
+Michel Herbelin|Cap Camarat Quartz|Q|40.5|100|s|#1E3F7A|r|s|s|l|date|c|a|b|600
+Michel Herbelin|Newport Heritage Automatique|A|42|100|s|#1E3F7A|r|s|s|l|date|l|a|b|1290
+Michel Herbelin|Newport Heritage Bicompax|A|42|100|s|#F2EFE8|r|s|l|t|chrono|l|b|b|2900
+Michel Herbelin|Newport Chronographe|Q|43|100|s|#15181C|r|s|s|l|chrono+date|l|a|b|650
+Michel Herbelin|Inspiration Automatique|A|38|30|s|#E3E3E0|r|s|l|l|date|s|a|b|900
+Michel Herbelin|Inspiration Phase de Lune|A|38|30|s|#E8E4DA|r|s|l|l|moon+date|s|a|b|1190
+Michel Herbelin|Antarès|Q|20|30|s|#F2EFE8|t|s|l|l||l|n|b|490
+Michel Herbelin|Equinoxe|Q|28|30|s|#F2EFE8|r|s|s|l||l|r|b|330
+Pierre Lannier|Echo|Q|40|30|m|#1E3F7A|r|s|m|l||l|b|b|139
+Pierre Lannier|Elegance Style|Q|39|30|m|#1E3F7A|r|s|l|l||l|b|b|109
+Pierre Lannier|Capital Chronographe|Q|42|50|m|#15181C|r|n|l|l|chrono|l|b|b|159
+Pierre Lannier|Paddock|Q|43|50|m|#15181C|r|s|l|t|chrono|l|n|b|289
+Pierre Lannier|Australe Automatique|A|35|30|m|#1E3F7A|r|s|s|l||l|b|b|269
+Pierre Lannier|Ligne Pure|Q|33|30|m|#E8E4DA|r|s|m|l||l|b|b|119
+Pierre Lannier|Elegance Seduction|Q|24|30|m|#FFFFFF|r|s|s|l||l|b|b|99
+Baume & Mercier|Riviera Automatique 42|A|42|100|s|#1E3F7A|o|s|s|l|date|g|b|b|2990
+Baume & Mercier|Riviera Baumatic 42|A|42|100|s|#1E3F7A|o|s|s|l|date|g|b|b|3950
+Baume & Mercier|Riviera Automatique 36|A|36|100|s|#F2EFE8|o|s|s|l|date|g|b|b|2750
+Baume & Mercier|Riviera Quartz 33|Q|33|100|s|#1E3F7A|o|s|s|l|date|l|b|b|1650
+Baume & Mercier|Riviera Chronographe 41|A|41|100|s|#F2EFE8|o|s|c|l|chrono+date|g|b|b|4200
+Baume & Mercier|Clifton Baumatic|A|40|50|s|#E3E3E0|r|s|l|l|date|l|a|d|3550
+Baume & Mercier|Classima Automatique 40|A|40|50|s|#F2EFE8|r|s|l|l|date|l|r|b|2150
+Baume & Mercier|Classima Quartz 42|Q|42|50|s|#F2EFE8|r|s|l|l|date|l|r|b|1350
+Baume & Mercier|Hampton Quartz|Q|22.2|30|s|#E8E4DA|t|s|l|l||l|r|b|1550
+Baume & Mercier|Promesse Quartz 30|Q|30|50|s|#F2EFE8|r|s|s|l||l|r|b|2050
+Raymond Weil|Millésime Petite Seconde 39.5|A|39.5|50|s|#E8E4DA|r|s|l|l|smallsec|l|n|b|2195
+Raymond Weil|Millésime Petite Seconde 35|A|35|50|s|#E8E4DA|r|s|l|l|smallsec|l|n|b|2050
+Raymond Weil|Millésime Automatique Seconde Centrale|A|39.5|50|s|#F2EFE8|r|s|l|l||l|n|b|1795
+Raymond Weil|Freelancer Calibre RW1212|A|40|100|s|#1E3F7A|r|s|s|l|openheart|l|a|b|2650
+Raymond Weil|Freelancer Calibre RW1212 Squelette|A|40|100|s|#3A3D42|r|s|s|l|skeleton|l|a|b|3550
+Raymond Weil|Freelancer Diver|A|42.5|300|s|#15181C|r|s|s|d|date|f|a|b|2750
+Raymond Weil|Freelancer GMT Worldtimer|A|41|100|s|#15181C|r|s|l|l|gmt+worldtime|l|a|b|3095
+Raymond Weil|Tango Classic 41|Q|41|100|s|#1E3F7A|r|s|s|l|date|l|b|b|1195
+Raymond Weil|Maestro Phase de Lune|A|39.5|50|s|#F2EFE8|r|s|l|l|moon+date|l|r|b|2100
+Raymond Weil|Noemia|Q|32|50|s|#F4F1EC|r|s|s|l||l|b|b|1450
+Frederique Constant|Classics Premiere|A|38.5|30|s|#1E3F7A|r|s|s|l||g|n|b|2095
+Frederique Constant|Classics Carrée Automatique|A|30.4|30|s|#F2EFE8|t|s|l|l|date|l|b|d|1195
+Frederique Constant|Classics Carrée Moonphase|A|30.4|30|s|#1E3F7A|t|s|l|l|moon|l|b|d|1695
+Frederique Constant|Classic Perpetual Calendar Manufacture|A|40|50|s|#F2EFE8|r|s|l|l|perpetual+moon|l|b|d|9995
+Frederique Constant|Classic Worldtimer Manufacture|A|42|50|s|#1E3F7A|r|s|l|l|worldtime+date|l|b|b|4995
+Frederique Constant|Highlife Worldtimer Manufacture|A|41|100|s|#1E3F7A|r|s|s|l|worldtime+date|g|b|b|4795
+Frederique Constant|Highlife Chronograph Automatic|A|41|100|s|#1E3F7A|r|s|s|l|chrono+date|g|b|b|3595
+Frederique Constant|Flyback Chronograph Manufacture|A|42|30|s|#F2EFE8|r|s|l|l|flyback+chrono+date|l|b|d|3695
+Frederique Constant|Slimline Power Reserve Manufacture|A|40|30|s|#F2EFE8|r|s|l|l|power+date|l|b|d|3295
+Frederique Constant|Classics Heart Beat Manufacture|A|40|30|s|#F2EFE8|r|s|l|l|openheart|g|r|b|3695
+Frederique Constant|Slimline Gents Quartz|Q|40|30|s|#F2EFE8|r|s|l|l|date|l|b|b|695
+Frederique Constant|Highlife Ladies Automatic Sparkling|A|34|50|s|#1E3F7A|r|s|s|l|date|r|b|b|3595
+Maurice Lacroix|Aikon Automatic Chronograph 44|A|44|100|s|#1E3F7A|r|s|s|l|chrono+date|g|b|b|3350
+Maurice Lacroix|Aikon Automatic Skeleton|A|39|100|s|#3A3D42|r|s|s|l|skeleton|l|b|b|3600
+Maurice Lacroix|Aikon Venturer 43|A|43|300|s|#15181C|r|s|c|d|date|g|b|b|1850
+Maurice Lacroix|Aikon Venturer GMT|A|43|300|s|#15181C|r|s|s|g|gmt+date|g|b|b|2390
+Maurice Lacroix|Aikon #tide|Q|40|100|s|#1E3F7A|r|r|c|l|date|g|b|b|690
+Maurice Lacroix|Pontos S Diver|A|42|300|s|#15181C|r|s|c|d|date|l|b|b|2100
+Maurice Lacroix|Pontos Chronographe 43|A|43|100|s|#F2EFE8|r|s|l|l|chrono+date|l|b|b|2950
+Maurice Lacroix|Masterpiece Moonphase Retrograde|A|43|50|s|#F2EFE8|r|s|l|l|moon+date|l|r|b|4900
+Zenith|Defy Skyline Chronographe|A|42|100|s|#1E3A6E|o|s|s|l|chrono+date|g|a|b|13900
+Zenith|Defy Skyline 36|A|36|100|s|#1E3A6E|o|s|s|l|smallsec+date|g|a|b|8600
+Zenith|Defy Skyline Squelette|A|41|100|s|#1C1C20|o|s|s|l|skeleton+smallsec|l|a|b|11500
+Zenith|Defy Extreme|A|45|200|s|#1A1A1D|o|t|t|l|chrono|l|a|b|21500
+Zenith|Defy Extreme Diver|A|42.5|500|s|#1B3B5A|o|t|c|d|date|l|a|b|13900
+Zenith|Defy Revival A3642|A|37|500|s|#8C8F93|o|s|s|l|date|s|a|b|7800
+Zenith|Chronomaster Revival A385|A|37|50|s|#5A3A28|n|s|s|l|chrono+date|f|a|b|9300
+Zenith|Chronomaster Open|A|39.5|50|s|#F2F1EC|r|s|l|l|chrono+openheart|l|a|b|10600
+Zenith|Chronomaster Original Triple Calendrier|A|38|50|s|#F2F1EC|r|s|l|l|chrono+fullcal+moon|l|a|b|12500
+Zenith|Pilot Big Date Flyback|A|42.5|100|s|#141414|r|n|c|l|flyback+bigdate|l|n|g|13100
+Hublot|Classic Fusion Chronographe|A|42|50|s|#1F2F55|r|t|c|l|chrono+date|s|a|b|11200
+Hublot|Classic Fusion Aerofusion Chronographe|A|42|50|s|#2A2A2D|r|t|c|l|chrono+skeleton|l|a|b|17800
+Hublot|Big Bang Integrated|A|42|100|s|#2A2A2D|r|t|t|l|chrono+date+skeleton|l|a|b|23500
+Hublot|Big Bang Integrated Time Only|A|40|100|s|#2A2A2D|r|t|t|l||l|a|b|15900
+Hublot|Square Bang Unico|A|42|100|s|#2A2A2D|q|t|c|l|chrono+date+skeleton|l|a|b|24000
+Bell & Ross|BR 05 Chrono|A|42|100|s|#121212|q|s|s|l|chrono+date|s|a|b|6900
+Bell & Ross|BR 05 GMT|A|41|100|s|#121212|q|s|s|g|gmt+date|s|a|b|5300
+Bell & Ross|BR 05 Skeleton|A|40|100|s|#3A3D42|q|s|s|l|skeleton|l|a|b|7200
+Bell & Ross|BR 03 Diver|A|42|300|s|#111111|q|n|c|d|date|l|p|b|4500
+Bell & Ross|BR 03-93 GMT|A|42|100|s|#111111|q|s|l|g|gmt+date|l|n|b|4300
+Bell & Ross|BR V2-93 GMT|A|41|100|s|#111111|r|s|s|g|gmt+date|l|n|b|4500
+Bell & Ross|BR V2-94|A|41|100|s|#111111|r|s|s|t|chrono+date|l|n|b|5200
+Bell & Ross|BR-X5|A|41|100|s|#1A1A1A|q|t|c|l|date+power|l|a|b|13900
+Montblanc|1858 Chronographe Automatique|A|42|100|s|#121416|r|s|l|l|chrono|l|n|f|5800
+Montblanc|1858 Iced Sea Automatique Date|A|41|300|s|#1B3A5C|r|s|s|d|date|r|p|b|3800
+Montblanc|Heritage Automatique|A|39|30|s|#E8D5C0|r|s|l|l|date|s|a|d|2600
+Montblanc|Star Legacy Phase de Lune|A|42|30|s|#F2EFE8|r|s|l|l|date+moon|g|n|f|4800
+Montblanc|TimeWalker Chronographe Manufacture|A|43|100|s|#141414|r|s|s|t|chrono+date|r|a|b|7600
+Nomos|Tangente 38 Date|M|37.5|30|s|#F2F0EA|r|s|l|l|date+smallsec|l|n|b|2800
+Nomos|Tangente 33|M|32.8|30|s|#F2F0EA|r|s|l|l|smallsec|l|n|b|1900
+Nomos|Ludwig 38|M|37.5|30|s|#F2F0EA|r|s|l|l|smallsec|l|r|f|2300
+Nomos|Tetra|M|29.5|30|s|#F2F0EA|q|s|l|l|smallsec|l|n|b|1900
+Nomos|Club Sport Neomatik Worldtimer|A|40|100|s|#1F3C66|r|s|s|l|worldtime|l|n|b|5200
+Nomos|Zürich Weltzeit|A|39.9|30|s|#F0EEE8|r|s|l|l|worldtime|l|b|b|5800
+Nomos|Ahoi Neomatik 38 Date|A|38.5|200|s|#F2F0EA|r|s|n|l|date+smallsec|l|n|b|3800
+Nomos|Autobahn|A|41|100|s|#D9DADB|r|s|n|l|date|s|n|b|4300
+Junghans|Form A|A|39.3|30|s|#F2F2F0|r|s|l|l|date|l|b|b|1150
+Junghans|Form C|Q|40|30|s|#F2F2F0|r|s|l|l|chrono+date|l|n|b|595
+Junghans|Meister Chronoscope|A|40.7|30|s|#E6E3DA|r|s|l|l|chrono+daydate|l|n|f|2500
+Junghans|Meister Handaufzug|M|37.7|30|a|#E6E3DA|r|s|l|l|smallsec|l|n|f|1600
+Junghans|Meister Pilot|A|43.3|100|s|#141414|r|s|l|d|chrono+date|l|n|b|2400
+Junghans|Meister Kalender|A|40.4|30|s|#E6E3DA|r|s|l|l|fullcal+moon|l|n|f|2600
+Bulova|Computron|Q|31|30|m|#111111|t|s|s|l||l|b|b|300|n
+Bulova|Marine Star Chronographe|Q|43|100|m|#111111|r|s|s|d|chrono+date|l|a|b|350
+Bulova|Mil-Ships|A|41|200|s|#141414|r|s|n|d||l|n|b|800
+Victorinox|Alliance|Q|40|100|s|#1C2B4A|r|s|s|l|date|s|a|b|450
+Victorinox|Alliance Mechanical|A|40|100|s|#1C2B4A|r|s|s|l|date|s|a|b|850
+Victorinox|Airboss Mechanical|A|42|100|s|#141414|r|s|l|l|date|l|n|b|1100
+Victorinox|Dive Pro|Q|43|300|s|#141414|r|s|c|d|date|l|p|b|650
+Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
   const CODE = {
     T: { A: "automatique", M: "manuel", Q: "quartz", S: "solaire", K: "kinetic", D: "springdrive" },
     G: { s: "saphir", m: "mineral", h: "hardlex", a: "hesalite" },
