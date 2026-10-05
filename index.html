@@ -923,6 +923,38 @@ button.care-row{cursor:pointer}
 .idle b{font-size:.72rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.idle span{font-size:.64rem;color:var(--muted);font-weight:700}
 .up-list{display:flex;flex-direction:column;gap:12px}
 @media (prefers-reduced-motion: reduce){.h-wear.just *,.h-wear.just .hw-img::after{animation:none!important}}
+/* ---------- Scan express ---------- */
+.scan{border:1px solid rgba(168,130,58,.35);background:linear-gradient(150deg,#FFFDF8,#F6EEDD);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;transition:border-color .3s,background .3s}
+.scan-h{display:flex;gap:12px;align-items:flex-start}
+.scan-ic{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;background:#1E1C18;color:#C9A35A}
+.scan-ic svg{width:24px;height:24px}
+.scan-h b{display:block;font-size:.98rem}.scan-h span span{display:block;font-size:.8rem;color:var(--muted);line-height:1.35;margin-top:2px}
+.scan-btns{display:flex;gap:8px;flex-wrap:wrap}
+.scan-btns .btn{flex:1 1 0}
+.scan.done+.scan-or{display:none}
+.scan-btns .btn{padding:9px 14px;font-size:.86rem;min-height:0;white-space:nowrap}
+.scan-btns .btn.primary{flex:1 1 100%;padding:12px 14px;font-size:.92rem}
+.scan-btns .btn.ghost{background:none;border-color:transparent;color:var(--brass);font-weight:800;padding-left:6px;padding-right:6px}
+.scan-prog{height:5px;border-radius:99px;background:rgba(60,45,20,.08);overflow:hidden}
+.scan-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#C9A35A,#8E6A26);border-radius:inherit;transition:width .3s}
+.scan-msg{margin:0;font-size:.82rem;color:var(--muted);line-height:1.45}.scan-msg:empty{display:none}
+.scan-msg small{font-size:.74rem;opacity:.8}
+.scan-msg.ok{color:var(--ink)}.scan-msg.ok b{display:block;font-size:.95rem}
+.scan-msg.err{color:var(--danger)}
+.scan-chips{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}
+.scan-chips i{font-style:normal;font-size:.72rem;font-weight:700;background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:2px 9px}
+.scan.busy .scan-btns{opacity:.45;pointer-events:none}
+.scan.done{border-color:rgba(46,138,94,.45);background:linear-gradient(150deg,#FFFDF8,#EEF6F0)}
+.scan.await{animation:scanPulse 1.6s ease-in-out 3}
+@keyframes scanPulse{0%,100%{box-shadow:0 0 0 0 rgba(168,130,58,0)}50%{box-shadow:0 0 0 6px rgba(168,130,58,.28)}}
+.scan-or{display:flex;align-items:center;gap:10px;margin:0;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.scan-or::before,.scan-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.d-pbtn.pulse{animation:scanPulse 1.6s ease-in-out 3}
+/* message bref (remplace la ligne d'état en bas de page) */
+.status{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);max-width:calc(100% - 40px);width:max-content;margin:0;min-height:0;background:rgba(30,28,24,.92);color:#FFFDF8;border-radius:999px;padding:10px 18px;font-size:.84rem;font-weight:700;line-height:1.35;text-align:center;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:30;box-shadow:0 8px 24px rgba(30,20,5,.25)}
+.status.show{opacity:1;transform:translate(-50%,0)}
+.status:empty{display:none}
+.ai-btn{background:none!important;color:var(--brass)!important;border:1px solid rgba(168,130,58,.4)!important;font-weight:700}
 </style>
 </head>
 <body>
@@ -1052,6 +1084,14 @@ button.care-row{cursor:pointer}
   <form id="form" novalidate autocomplete="off">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
     <h2 id="sheet-title">Ajouter une montre</h2>
+    <div class="scan" id="scan">
+      <div class="scan-h"><span class="scan-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><circle cx="12" cy="12" r="3.8"/><path d="M12 10.3V12l1.1.9"/></svg></span><span><b>Scan express</b><span>Une capture d'écran de la page de la montre suffit (ou deux, si les détails sont plus bas) : je récupère la photo et la fiche.</span></span></div>
+      <div class="scan-btns"><button type="button" class="btn primary" id="scan-pick">Choisir la capture</button><button type="button" class="btn" id="scan-paste">Coller</button><button type="button" class="btn ghost" id="scan-web">Chercher</button></div>
+      <div class="scan-prog hidden" id="scan-prog"><i></i></div>
+      <p class="scan-msg" id="scan-msg" aria-live="polite"></p>
+      <input type="file" id="scan-input" accept="image/*" multiple class="hidden">
+    </div>
+    <p class="scan-or" id="scan-or">ou choisis dans le catalogue</p>
     <div class="photo-zone" id="photo-zone">
       <button type="button" class="photo-preview" id="photo-preview" aria-label="Aperçu de la montre"></button>
       <div class="photo-actions">
@@ -1068,7 +1108,7 @@ button.care-row{cursor:pointer}
     </div>
     <div class="web-links f-web" id="f-web"></div>
     <div class="ai hidden" id="ai">
-      <button type="button" class="ai-btn" id="ai-btn">✦ Remplir avec Claude</button>
+      <button type="button" class="ai-btn" id="ai-btn">✦ Compléter avec Claude</button>
       <span class="msg" id="ai-msg" aria-live="polite"></span>
     </div>
     <div class="ai-paste hidden" id="ai-paste">
@@ -1410,8 +1450,8 @@ button.care-row{cursor:pointer}
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 37; // à augmenter avec version.json à chaque mise à jour (numéro technique)
-  const APP_LABEL = "1.0"; // version affichée
+  const APP_VERSION = 38; // à augmenter avec version.json à chaque mise à jour (numéro technique)
+  const APP_LABEL = "1.1"; // version affichée
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -3224,6 +3264,7 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     renderSwatches();
     $("#comps").open = false;
     $("#ai-msg").textContent = ""; $("#ai-btn").disabled = false; $("#ai-paste").classList.add("hidden"); $("#ai-text").value = "";
+    $("#scan").classList.toggle("hidden", !!w); $("#scan-or").classList.toggle("hidden", !!w); $("#scan").classList.remove("busy", "done", "await"); $("#scan-msg").textContent = ""; $("#scan-prog").classList.add("hidden");
     refreshPreview(); syncCaps();
     $("#fs-tech").open = $("#fs-look").open = false; updateFormSums();
     form.elements.model.inputMode = form.elements.brand.value.trim() ? "none" : "text";
@@ -3245,7 +3286,6 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     if (!pendingPhoto && !photoCleared) return oldId || "";
     let newId = oldId || "";
     if (pendingPhoto && assetsNs){
-      setStatus("Envoi de la photo…");
       try { newId = (await assetsNs.upload(pendingPhoto, { type: "image/jpeg" })).id; }
       catch(err){ setStatus("La photo n'a pas pu être enregistrée. Réessaie avec une autre image."); return oldId || ""; }
     } else if (photoCleared) newId = "";
@@ -3269,7 +3309,6 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
     const joyWish = !joy && !w && editing.list === "wishlist";
     save.disabled = false; closeSheet(); persist(); render();
     const r = rarity(valueOf(saved, tab === "wishlist"));
-    setStatus(r ? `Enregistré. Rareté : ${r.label}.` : "Enregistré. Ajoute un prix pour obtenir sa rareté.");
     if (joy) celebrate(saved, "collection");
     else if (joyWish) celebrate(saved, "wishlist", "wish");
   });
@@ -3438,6 +3477,207 @@ Victorinox|Maverick|Q|43|100|s|#1C2B4A|r|s|s|d|date|s|a|b|450`;
       } else if (e.key === "Enter" && sugIdx >= 0){ e.preventDefault(); pick(sugIdx); }
       else if (e.key === "Escape"){ e.preventDefault(); closeSuggest(); }
     });
+  });
+
+  // ---------- Scan express : lecture d'une capture d'écran (texte lu sur le téléphone, sans Claude) ----------
+  const SCAN_ALIAS = { "bulgari": "Bvlgari", "jaeger lecoultre": "Jaeger-LeCoultre", "lange sohne": "A. Lange & Söhne", "a lange": "A. Lange & Söhne", "audemars": "Audemars Piguet", "patek": "Patek Philippe", "vacheron": "Vacheron Constantin", "moser cie": "H. Moser & Cie", "f p journe": "F.P. Journe", "fp journe": "F.P. Journe", "glashutte": "Glashütte Original", "tag heuer": "TAG Heuer", "ball watch": "Ball", "seagull": "Sea-Gull", "underd0g": "Studio Underd0g", "underdog": "Studio Underd0g", "herbelin": "Michel Herbelin", "lannier": "Pierre Lannier", "orient star": "Orient", "christopher ward": "Christopher Ward" };
+  const SCAN_COLORS = [
+    [/bleu glacier|ice blue|glacier/, "#A9C6DA", "bleu glacier"], [/turquoise|tiffany|aqua/, "#3FB5B0", "turquoise"], [/bleu|blue|marine|navy/, "#1F3F73", "bleu"],
+    [/noir|black|onyx/, "#15181C", "noir"], [/blanc|white|laque/, "#EDEBE6", "blanc"], [/argente|argent|silver/, "#C9CCD0", "argenté"], [/anthracite|gris|grey|gray|ardoise|slate/, "#5A6068", "gris"],
+    [/vert|green|olive|kaki|khaki/, "#2F5A44", "vert"], [/champagne/, "#D8C7A0", "champagne"], [/creme|cream|ivoire|ivory|opalin/, "#EFE6D2", "crème"],
+    [/chocolat|marron|brun|brown|bronze|cuivre|copper/, "#6A4429", "brun"], [/bordeaux|burgundy|rouge|red/, "#7A1F24", "rouge"], [/saumon|salmon|rose|pink/, "#E7B7A6", "saumon"],
+    [/jaune|yellow/, "#E3B72C", "jaune"], [/orange/, "#E06A1E", "orange"], [/violet|purple|aubergine/, "#5B3A7A", "violet"], [/nacre|mother of pearl/, "#EDE7E3", "nacre"], [/dore|gold/, "#C9A35A", "doré"]
+  ];
+  const scanWords = s => fold(s).replace(/[^a-z0-9]+/g, " ").trim();
+  function scanPrice(s){
+    let x = s.replace(/[\s  '’]/g, "");
+    if (/[.,]\d{2}$/.test(x)) x = x.slice(0, -3).replace(/[.,]/g, "") + "." + x.slice(-2); else x = x.replace(/[.,]/g, "");
+    const n = parseFloat(x); return isFinite(n) ? Math.round(n) : null;
+  }
+  function readScan(lines){
+    // lines : [{ t, h, y }] ; h = hauteur du texte (les titres sont plus grands)
+    const all = lines.map(l => l.t).join("\n"), W = " " + scanWords(all) + " ", out = { found: [] };
+    const big = [...lines].sort((a, b) => b.h - a.h).slice(0, 4).map(l => " " + scanWords(l.t) + " ").join(" ");
+    // marque : la plus présente, bonus si elle figure dans les grands titres
+    const brands = [...new Set([...CAT_LIST.map(e => e.brand), ...Object.keys(CATALOG)])];
+    const keys = [...brands.map(b => [scanWords(b), b]), ...Object.entries(SCAN_ALIAS)].filter(([k]) => k.length >= 3).sort((a, b) => b[0].length - a[0].length);
+    const score = {}; let rest = W, restBig = big;
+    keys.forEach(([k, b]) => { const re = new RegExp(" " + k.replace(/ /g, " ") + " ", "g"); const n = (rest.match(re) || []).length, nb = (restBig.match(re) || []).length; if (n || nb){ score[b] = (score[b] || 0) + n + 3 * nb; rest = rest.replace(re, " "); restBig = restBig.replace(re, " "); } });
+    const brand = Object.entries(score).sort((a, b) => b[1] - a[1])[0];
+    if (brand) out.brand = brand[0];
+    // modèle : d'abord le catalogue (références comprises), sinon le grand titre
+    const toks = new Set(W.trim().split(" "));
+    const has = t => toks.has(t) || (t.length >= 4 && [...toks].some(x => x.startsWith(t) && /\d/.test(x)));
+    if (out.brand){
+      const bw = new Set(scanWords(out.brand).split(" "));
+      let best = null;
+      CAT_LIST.filter(e => e.brand === out.brand).forEach(e => {
+        const mt = scanWords(e.model).split(" ").filter(t => t && !bw.has(t) && (t.length > 1 || /\d/.test(t)));
+        if (!mt.length) return;
+        const hit = mt.filter(has), sc = hit.reduce((s, t) => s + (/\d/.test(t) ? 3 : t.length >= 3 ? 1 : .5), 0);
+        if (hit.length / mt.length >= .75 && sc >= 1.5 && (!best || sc > best.sc || (sc === best.sc && e.model.length > best.e.model.length))) best = { e, sc };
+      });
+      if (best){ out.entry = best.e; out.model = best.e.model; }
+      else {
+        const bre = new RegExp("\\b" + out.brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+        const cand = lines.filter(l => scanWords(l.t).includes(scanWords(out.brand)) && !/[€$]|\d+[.,]\d{2}\b/.test(l.t)).sort((a, b) => b.h - a.h)[0];
+        let m = cand ? cand.t.replace(bre, "").replace(/\b(montre|watch|homme|femme|men'?s|women'?s|automatique|automatic|quartz)\b/gi, "").replace(/^[\s\-–—|:·,]+|[\s\-–—|:·,]+$/g, "").replace(/\s{2,}/g, " ") : "";
+        if (m.length < 2 && cand){ const nx = lines.filter(l => l.y > cand.y && l.h >= cand.h * .7).sort((a, b) => a.y - b.y)[0]; if (nx && !/[€$]/.test(nx.t)) m = nx.t; }
+        if (m) out.model = m.split(" ").slice(0, 7).join(" ").slice(0, 48);
+      }
+    }
+    // caractéristiques
+    const ctx = (re, i, n = 40) => W.slice(Math.max(0, i - n), i);
+    let size = null;
+    for (const m of W.matchAll(/ (\d{2}(?: \d{1,2})?) ?mm /g)){ const v = parseFloat(m[1].replace(" ", ".")), c = ctx(null, m.index); if (v < 26 || v > 50 || /epaiss|thick|hauteur|height|corne|lug|bracelet|strap|largeur du/.test(c)) continue; if (!size || /diam|case|boitier|taille/.test(c)) size = v; if (/diam|case|boitier|taille/.test(c)) break; }
+    if (size){ out.size = String(size); out.found.push(String(size).replace(".", ",") + " mm"); }
+    let water = null;
+    for (const m of W.matchAll(/ (\d{1,4}) ?(m|metres|meters|bar|bars|atm) /g)){ let v = +m[1]; if (/bar|atm/.test(m[2])) v *= 10; const c = ctx(null, m.index, 50); if (v >= 30 && v <= 4000 && (/etanch|water|resist|wr|plong|div/.test(c) || /bar|atm/.test(m[2]))){ water = v; break; } }
+    { const wr = / wr ?(\d{2,4}) /.exec(W); if (!water && wr) water = +wr[1]; }
+    if (water){ const opts = [30, 50, 100, 150, 200, 300, 500, 1000]; out.water = String(water >= 1000 ? 1000 : opts.filter(o => o <= water).pop() || 30); out.found.push(out.water === "1000" ? "1 000 m+" : out.water + " m"); }
+    const cnt = re => (W.match(re) || []).length;
+    const mv = [["springdrive", / spring drive /g], ["kinetic", / kinetic /g], ["solaire", / (eco drive|solaire|solar|energie lumineuse) /g], ["manuel", / (remontage manuel|manual winding|hand wound|a remontage manuel|manuel) /g], ["automatique", / (automatique|automatic|self winding|remontage automatique) /g], ["quartz", / quartz /g]].map(([k, re]) => [k, cnt(re)]).filter(x => x[1]);
+    if (mv.length){ const top = mv.find(x => ["springdrive", "kinetic", "solaire"].includes(x[0])) || mv.sort((a, b) => b[1] - a[1])[0]; out.movementType = top[0]; out.found.push(MOVE[top[0]].toLowerCase()); }
+    { const m = /\b(?:calibre|caliber|cal\.)\s*:?\s*([A-Z0-9][\w.\-]*(?:\s[A-Z0-9][\w.\-]*)?)/i.exec(all) || /\b(ETA|Sellita|Miyota|Valjoux|Ronda|Soprod|Powermatic|SW|NH|4R|6R|8L|9S|9R)[\s\-]?(\d[\w.\-]*)/i.exec(all);
+      if (m) out.movement = (m[2] ? m[1] + " " + m[2] : m[1]).trim().slice(0, 24); }
+    const gl = / (saphir|sapphire) /.test(W) ? "saphir" : / hardlex /.test(W) ? "hardlex" : / (hesalite|acrylique|acrylic|plexi|plexiglas) /.test(W) ? "hesalite" : / (mineral|verre mineral) /.test(W) ? "mineral" : "";
+    if (gl){ out.glass = gl; }
+    const near = (re, k) => { const i = W.search(k); return i >= 0 && re.test(W.slice(i, i + 70)); };
+    const caseK = / (boitier|case|carrure) /;
+    const CASES = [["or-blanc", /or blanc|white gold|platine|platinum/], ["or-rose", /or rose|rose gold|everose|sedna|king gold|or rouge|red gold/], ["doré", /or jaune|yellow gold|plaque or|gold plated|dore|or 18/], ["tantale", /tantale|tantalum/], ["titane", /titane|titanium/], ["bronze", /bronze/], ["noir", /ceramique|ceramic|pvd noir|black pvd|dlc/], ["resine", /resine|resin|plastique|bioceramic|bioceramique/], ["acier", /acier|steel|inox|stainless/]];
+    { const c = CASES.find(([, re]) => near(re, caseK)) || CASES.find(([, re]) => re.test(W)); if (c) out.case = c[0]; }
+    const strapK = / (bracelet|strap|band) /;
+    const STRAPS = [["milanais", /milanais|milanese|mesh/], ["jubile", /jubile|jubilee/], ["nato", /nato|tissu|fabric|textile|toile|canvas/], ["caoutchouc", /caoutchouc|rubber|silicone|fkm|oysterflex/], ["cuir", /cuir|leather|alligator|crocodile|veau|calf/], ["titane", /titane|titanium/], ["acier", /acier|steel|maillons|links|oyster/]];
+    { const s = STRAPS.find(([, re]) => near(re, strapK)) || STRAPS.slice(0, 5).find(([, re]) => re.test(W)); if (s) out.strap = s[0]; }
+    const comps = [];
+    if (/ (chronographe|chronograph|chrono) /.test(W)) comps.push("chrono");
+    if (/ gmt | (second|2e|deuxieme) fuseau | dual time /.test(W)) comps.push("gmt");
+    if (/ (phase de lune|phases de lune|moon ?phase|moonphase) /.test(W)) comps.push("moon");
+    if (/ (petite seconde|small seconds?) /.test(W)) comps.push("smallsec");
+    if (/ (jour et date|day ?date|jour date|date et jour) /.test(W)) comps.push("daydate"); else if (/ (date|dateur|guichet date|quantieme) /.test(W)) comps.push("date");
+    if (/ (indicateur de reserve|power reserve indicator|indication de la reserve) /.test(W)) comps.push("power");
+    if (/ tourbillon /.test(W)) comps.push("tourbillon");
+    if (comps.length) out.comps = comps;
+    // cadran : « cadran bleu », « blue dial »
+    { const m = /cadran ([a-z ]{3,24})|([a-z ]{3,24}) dial /.exec(W);
+      const zone = m ? (m[1] || m[2]) : "";
+      const c = zone && SCAN_COLORS.find(([re]) => re.test(zone)); if (c){ out.dial = c[1]; out.found.push("cadran " + c[2]); }
+      if (/ (soleille|sunburst|sunray|rayons de soleil) /.test(W)) out.dialTexture = "soleille"; else if (/ (guilloche|clous de paris|tapisserie) /.test(W)) out.dialTexture = "guilloche"; else if (/ (fume|smoked|degrade|gradient) /.test(W)) out.dialTexture = "fume"; }
+    // prix : celui du plus grand texte (prix de vente mis en avant)
+    { const P = [];
+      lines.forEach(l => { if (/mois|month|livraison|shipping|economis|save|cashback|frais|x ?\d+ ?fois|des \d/i.test(fold(l.t))) return;
+        for (const m of l.t.matchAll(/(\d{1,3}(?:[\s  .,'’]\d{3})*(?:[.,]\d{2})?)\s?(?:€|EUR\b)|€\s?(\d{1,3}(?:[\s  .,'’]\d{3})*(?:[.,]\d{2})?)/gi)){ const v = scanPrice(m[1] || m[2]); if (v && v >= 20 && v <= 3e6) P.push({ v, h: l.h }); } });
+      if (P.length){ P.sort((a, b) => b.h - a.h || a.v - b.v); out.price = String(P[0].v); out.found.push(eur.format(P[0].v)); } }
+    if (out.glass) out.found.push("verre " + optLabel("glass", out.glass).toLowerCase());
+    if (out.case && out.case !== "acier") out.found.push(optLabel("case", out.case).toLowerCase());
+    if (out.strap) out.found.push(optLabel("strap", out.strap).toLowerCase());
+    (out.comps || []).forEach(c => out.found.push(COMP_LABEL[c].toLowerCase()));
+    return out;
+  }
+  const OCR_V = "5.1.1";
+  let ocrP = null, ocrLog = null;
+  const loadScript = src => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => { s.remove(); rej(new Error("script")); }; document.head.appendChild(s); });
+  function ocrWorker(){
+    if (!ocrP) ocrP = (async () => {
+      if (!window.Tesseract) await loadScript(`https://cdn.jsdelivr.net/npm/tesseract.js@${OCR_V}/dist/tesseract.min.js`);
+      return await Tesseract.createWorker(["fra", "eng"], 1, { logger: m => ocrLog && ocrLog(m) });
+    })().catch(e => { ocrP = null; throw e; });
+    return ocrP;
+  }
+  async function blobCanvas(blob, maxW){
+    const url = URL.createObjectURL(blob);
+    try {
+      const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+      const s = Math.min(1, maxW / img.naturalWidth), c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); return c;
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function ocrLines(blob){
+    const c = await blobCanvas(blob, 1100), w = await ocrWorker();
+    const { data } = await w.recognize(c);
+    const lines = data.lines || (data.blocks || []).flatMap(b => (b.paragraphs || []).flatMap(p => p.lines || []));
+    return lines.map(l => ({ t: String(l.text || "").replace(/\s+/g, " ").trim(), h: l.bbox.y1 - l.bbox.y0, y: l.bbox.y0, conf: l.confidence })).filter(l => l.t.length > 1 && l.conf > 35);
+  }
+  // couleur du cadran lue sur la photo détourée (couronne autour du centre, hors aiguilles)
+  async function dialFromPhoto(blob){
+    const c = await blobCanvas(blob, 240), x = c.getContext("2d"), W = c.width, H = c.height, d = x.getImageData(0, 0, W, H).data, R = [], G = [], B = [];
+    for (let j = 0; j < H; j += 2) for (let i = 0; i < W; i += 2){ const r = Math.hypot(i - W / 2, j - H / 2) / W; if (r < .06 || r > .15) continue; const k = (j * W + i) * 4; R.push(d[k]); G.push(d[k + 1]); B.push(d[k + 2]); }
+    if (!R.length) return "";
+    const med = a => a.sort((p, q) => p - q)[a.length >> 1];
+    return "#" + [med(R), med(G), med(B)].map(v => v.toString(16).padStart(2, "0")).join("");
+  }
+  const scanMsg = (t, cls) => { const m = $("#scan-msg"); m.innerHTML = t; m.className = "scan-msg" + (cls ? " " + cls : ""); };
+  const scanProg = p => { const b = $("#scan-prog"); b.classList.toggle("hidden", p == null); if (p != null) b.firstElementChild.style.width = Math.round(p * 100) + "%"; };
+  let scanBusy = false, ocrStep = [0, 1];
+  async function scanShot(input){
+    const blobs = (Array.isArray(input) ? input : [input]).filter(Boolean).slice(0, 4);
+    if (scanBusy || !blobs.length) return; scanBusy = true;
+    const card = $("#scan"); card.classList.remove("await", "done"); card.classList.add("busy");
+    scanMsg("Détourage de la montre…"); scanProg(.05);
+    ocrLog = m => {
+      if (/load|initializ/.test(m.status)){ scanMsg("Préparation de la lecture… <small>(première fois uniquement)</small>"); scanProg(.05 + .25 * (m.progress || 0)); }
+      else if (m.status === "recognizing text"){ const [i, n] = ocrStep; scanMsg(n > 1 ? `Lecture des captures… ${i + 1}/${n}` : "Lecture de la capture…"); scanProg(.3 + .7 * ((i + (m.progress || 0)) / n)); }
+    };
+    // la photo d'abord : elle s'affiche pendant la lecture du texte
+    // la photo : la première capture où une montre se détache
+    let cutOk = false, shot = null;
+    for (const blob of blobs){
+      try {
+        const a = { ...DEF_ADJ }, P = processPhoto(await srcCanvas(blob), a);
+        if (shot && !P.cutOk) continue;
+        shot = { blob, P, a }; if (P.cutOk){ cutOk = true; break; }
+      } catch(e){}
+    }
+    if (!shot){ scanMsg("Cette image n'est pas lisible. Essaie une capture en PNG ou JPEG.", "err"); scanProg(null); card.classList.remove("busy"); scanBusy = false; return; }
+    { const cv = document.createElement("canvas"); cv.width = cv.height = OUT; drawPhoto(cv.getContext("2d"), shot.P, shot.a);
+      pendingPhoto = await new Promise(r => cv.toBlob(r, "image/jpeg", .9)); pendingOrig = shot.blob; pendingAdj = shot.a; photoCleared = false;
+      if (previewUrl) URL.revokeObjectURL(previewUrl); previewUrl = URL.createObjectURL(pendingPhoto); refreshPreview(); }
+    let res = null;
+    try { const L = []; for (let i = 0; i < blobs.length; i++){ ocrStep = [i, blobs.length]; (await ocrLines(blobs[i])).forEach(l => L.push({ ...l, y: l.y + i * 1e5 })); } res = readScan(L); }
+    catch(e){ scanMsg("Photo ajoutée. La lecture du texte demande une connexion internet : complète la marque et le modèle.", "err"); }
+    scanProg(null); card.classList.remove("busy"); scanBusy = false;
+    if (!res) return;
+    const f = form.elements, set = (n, v) => { if (v === undefined || v === null || v === "") return; f[n].value = v; flash(f[n]); };
+    if (res.brand){ set("brand", res.brand); }
+    if (res.model){ set("model", res.model); }
+    if (res.entry){ presetFor = fold(res.brand) + "|" + fold(res.model); fillFromEntry(res.entry); }
+    else {
+      ["movementType", "movement", "size", "water", "glass", "case", "strap", "dialTexture"].forEach(n => set(n, res[n]));
+      if (res.comps) setComps(res.comps);
+      if (res.strap) strapColor = STRAP_DEFAULT[res.strap] || strapColor;
+      if (!res.dial && cutOk){ try { const c = await dialFromPhoto(pendingPhoto); if (c) res.dial = c; } catch(e){} }
+    }
+    if (res.dial){ setColor("dial", res.dial); }
+    if (res.price){ retailEl().value = res.price; if (isWishForm()) set("current", res.price); else if (!f.price.value) set("price", res.price); }
+    renderSwatches(); updateFormSums(); updateFormWeb();
+    form.elements.model.inputMode = "none";
+    const name = [res.brand, res.model].filter(Boolean).join(" ");
+    const chips = (res.entry ? ["fiche du catalogue"] : []).concat(res.found).slice(0, 8);
+    card.classList.add("done");
+    if (name) scanMsg(`<b>${esc(name)}</b>${chips.length ? `<span class="scan-chips">${chips.map(c => `<i>${esc(c)}</i>`).join("")}</span>` : ""}Vérifie, complète si besoin, puis enregistre.`, "ok");
+    else scanMsg(`Photo ajoutée${chips.length ? ` et ${chips.length} détail${chips.length > 1 ? "s" : ""} trouvé${chips.length > 1 ? "s" : ""}` : ""}, mais je n'ai pas reconnu la marque : choisis-la ci-dessous.`, "err");
+  }
+  $("#scan-pick").addEventListener("click", () => $("#scan-input").click());
+  $("#scan-input").addEventListener("change", e => { const f = [...(e.target.files || [])]; e.target.value = ""; if (f.length) scanShot(f); });
+  $("#scan-paste").addEventListener("click", async () => {
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.read) throw new Error("x");
+      for (const it of await navigator.clipboard.read()){ const t = it.types.find(x => x.startsWith("image/")); if (t) return scanShot(await it.getType(t)); }
+      scanMsg("Rien à coller : après ta capture, touche sa vignette puis « Copier et supprimer ».", "err");
+    } catch(e){ scanMsg("Collage impossible ici : utilise « Choisir la capture ».", "err"); }
+  });
+  // recherche sur internet : au retour dans l'app, la carte invite à choisir la capture
+  let scanAwait = 0;
+  $("#scan-web").addEventListener("click", () => {
+    const q = [form.elements.brand.value, form.elements.model.value].join(" ").trim();
+    scanAwait = Date.now();
+    window.open("https://www.google.com/search?q=" + encodeURIComponent((q || "montre") + (q ? " montre" : "")), "_blank", "noopener");
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible" || !scanAwait || Date.now() - scanAwait > 15 * 6e4 || !sheet.open) return;
+    scanAwait = 0; $("#scan").classList.add("await");
+    scanMsg("Bon retour ! Choisis ta capture (la plus récente de ta photothèque) ou colle-la.");
   });
 
   // ---------- Photos ----------
@@ -3995,7 +4235,7 @@ Ajoute aussi dans le même objet JSON :
     hero.innerHTML = ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w);
     const q = encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""}`);
     credit.innerHTML = `<div class="own-photo">
-      <span class="d-pbtns">${ph ? "" : `<button type="button" class="d-pbtn gold" data-photo="auto">✦ Photo officielle</button>`}<button type="button" class="d-pbtn" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="file">Galerie</button><button type="button" class="d-pbtn" data-photo="camera">Caméra</button>${ph ? `<button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button><button type="button" class="d-pbtn" data-photo="auto">✦ Officielle</button>` : ""}</span>
+      <span class="d-pbtns">${ph && !ph.model ? `<button type="button" class="d-pbtn" data-photo="file">Changer</button><button type="button" class="d-pbtn" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button>` : `<button type="button" class="d-pbtn gold" data-photo="file">${ph ? "Ma photo" : "Ajouter une photo"}</button><button type="button" class="d-pbtn" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="search">Chercher</button>${ph ? `<button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button>` : `<button type="button" class="d-pbtn" data-photo="auto">✦ Via Claude</button>`}`}</span>
       <span class="own-msg" id="own-msg" aria-live="polite"></span></div>`;
   }
   function versionName(w, opts){
@@ -4128,6 +4368,7 @@ Ajoute aussi dans le même objet JSON :
       catch(err){ msg("La photo n'a pas pu être enregistrée."); }
     };
     if (a === "auto"){ openPhotoFinder([target]); return; }
+    if (a === "search"){ photoAwait = Date.now(); window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""} montre`), "_blank", "noopener"); msg("Fais une capture de la photo qui te plaît, puis reviens ici."); return; }
     if (a === "paste"){
       (async () => {
         try {
@@ -4136,8 +4377,8 @@ Ajoute aussi dans le même objet JSON :
           msg("Aucune image copiée : appuie longuement sur une photo puis « Copier ».");
         } catch(err){ msg("Collage impossible ici : enregistre l'image puis utilise « Mes photos »."); }
       })();
-    } else if (a === "file" || a === "camera"){
-      const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; if (a === "camera") inp.capture = "environment";
+    } else if (a === "file"){
+      const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*";
       inp.onchange = () => { if (inp.files[0]) edit(inp.files[0]); }; inp.click();
     } else if (a === "retouch"){
       const it = detail.kind === "catalog" ? (state.refPick[modelKey(w)] || {}) : (state[detail.kind].find(x => x.id === detail.id) || {});
@@ -4151,6 +4392,13 @@ Ajoute aussi dans le même objet JSON :
   });
 
   dsheet.addEventListener("click", ev => { if (ev.target === dsheet) dsheet.close(); });
+  let photoAwait = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible" || !photoAwait || Date.now() - photoAwait > 15 * 6e4 || !dsheet.open) return;
+    photoAwait = 0; const b = $('#d-credit [data-photo="file"]'), m = $("#own-msg");
+    if (m) m.textContent = "Bon retour ! Touche « " + (b ? b.textContent : "Ajouter une photo") + " » et choisis ta capture : elle sera détourée toute seule.";
+    if (b){ b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse"); }
+  });
 
   let catTimer = null;
   $("#cat-q").addEventListener("input", () => { clearTimeout(catTimer); catTimer = setTimeout(() => { state.view.catalog.q = $("#cat-q").value; renderCatalog(); }, 200); });
@@ -5334,8 +5582,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     // envies
     if (wl.length){
       const bud = wl.reduce((s, w) => s + (num(w.current) || num(w.retail) || num(w.target) || 0), 0);
-      const rows = wl.filter(w => (num(w.current) || num(w.retail)) && num(w.target)).map(w => { const c = num(w.current) || num(w.retail), t = num(w.target); return [esc(w.model), Math.min(100, Math.round(t / c * 100)), c <= t ? "au prix visé" : `−${eur.format(c - t)}`]; });
-      h += card("Envies", `<div class="st-kpis"><div class="st-kpi"><b>${eur.format(bud)}</b><span>Pour tout acquérir</span></div><div class="st-kpi"><b>${wl.length}</b><span>Montre${wl.length > 1 ? "s" : ""} visée${wl.length > 1 ? "s" : ""}</span></div></div>${rows.length ? `<p class="sub" style="margin:0">Prix cible atteint (en % du prix constaté)</p>` + hbars(rows, v => v + " %") : ""}`);
+      h += card("Envies", `<div class="st-kpis"><div class="st-kpi"><b>${eur.format(bud)}</b><span>Pour tout acquérir</span></div><div class="st-kpi"><b>${wl.length}</b><span>Montre${wl.length > 1 ? "s" : ""} visée${wl.length > 1 ? "s" : ""}</span></div></div>`);
     }
     page.innerHTML = h;
   }
@@ -5361,7 +5608,8 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
   });
 
   // ---------- Sauvegarde ----------
-  function setStatus(t){ $("#status").textContent = t; }
+  let statusTimer = 0;
+  function setStatus(t, ms){ const s = $("#status"); s.textContent = t || ""; s.classList.toggle("show", !!t); clearTimeout(statusTimer); if (t) statusTimer = setTimeout(() => s.classList.remove("show"), ms || Math.max(2600, Math.min(6000, String(t).length * 60))); }
   function persist(){
     try { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
     catch(e){ setStatus("Mémoire du téléphone pleine : exporte une sauvegarde."); }
