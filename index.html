@@ -405,6 +405,41 @@ dialog{overscroll-behavior:contain}
 .d-saved:empty{display:none}
 dialog p.help:empty{display:none}
 .d-cw .d-opt.hidden+.d-opt.hidden{display:none}
+
+/* ---------- Miniatures dans les suggestions ---------- */
+.suggest{max-height:320px}
+.suggest li.sg{display:flex;align-items:center;gap:10px;padding:6px 8px}
+.sg-th{width:46px;height:46px;border-radius:10px;flex:none;overflow:hidden;background:radial-gradient(circle at 50% 40%,#FFFFFF,#EFE8DA);display:grid;place-items:center}
+.sg-th img{width:100%;height:100%;object-fit:cover}
+.sg-th svg{width:120%;height:120%;margin:-10%}
+.sg-tx{display:flex;flex-direction:column;min-width:0;flex:1}
+.sg-tx span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.suggest li .sg-tx small{margin:0;font-size:.74rem}
+.sg-pr{font-size:.78rem;color:var(--muted);font-weight:700;white-space:nowrap}
+/* ---------- Célébration d'une nouvelle montre ---------- */
+.joy{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,#FFFAEC,#F5ECD6 45%,#E2CFA6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:joyIn .35s ease-out both;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.joy canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.joy-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:0 24px}
+.joy-w{position:relative;width:min(62vw,260px);aspect-ratio:1;display:grid;place-items:center;animation:joyPop .9s cubic-bezier(.2,1.4,.4,1) .15s both}
+.joy-w img,.joy-w svg{width:100%;height:100%;object-fit:contain;border-radius:50%;filter:drop-shadow(0 18px 30px rgba(90,60,10,.35))}
+.joy-ring{position:absolute;inset:-6%;border-radius:50%;border:3px solid #C9A35A;opacity:0;animation:joyRing 1.4s ease-out .35s both}
+.joy-ring.r2{animation-delay:.6s;border-color:#E8D3A0}
+.joy-shine{position:absolute;inset:-30%;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20deg,rgba(255,236,180,.55) 30deg,transparent 40deg 110deg,rgba(255,236,180,.45) 120deg,transparent 130deg 200deg,rgba(255,236,180,.5) 210deg,transparent 220deg 290deg,rgba(255,236,180,.4) 300deg,transparent 310deg);animation:joySpin 6s linear infinite,joyFade .8s ease-out .2s both;z-index:-1}
+.joy-k{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:#A8823A;font-weight:800;animation:joyUp .6s ease-out .55s both}
+.joy-t{font-family:var(--serif);font-size:2rem;font-weight:700;color:#1E1C18;line-height:1.1;animation:joyUp .6s ease-out .7s both}
+.joy-m{font-size:1rem;color:#5E5648;font-weight:600;animation:joyUp .6s ease-out .85s both}
+.joy .pill{animation:joyUp .6s ease-out 1s both}
+.joy.out{animation:joyOut .5s ease-in both}
+@keyframes joyIn{from{opacity:0}to{opacity:1}}
+@keyframes joyOut{to{opacity:0}}
+@keyframes joyPop{0%{transform:scale(.2) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes joyRing{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.45);opacity:0}}
+@keyframes joySpin{to{transform:rotate(360deg)}}
+@keyframes joyFade{from{opacity:0}to{opacity:1}}
+@keyframes joyUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.tabbar .count.bump{animation:bump .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.joy *,.joy{animation-duration:.01s!important;animation-delay:0s!important}.joy-shine{display:none}}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -1081,7 +1116,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 26; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 27; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -2566,9 +2601,11 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     let saved;
     if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); if (Array.isArray(state.showcase.collection)) state.showcase.collection.push(saved.id); tab = "collection"; }
     else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); if (Array.isArray(state.showcase[editing.list])) state.showcase[editing.list].push(saved.id); }
+    const joy = editing.mode === "buy" || (!w && editing.list === "collection");
     save.disabled = false; closeSheet(); persist(); render();
     const r = rarity(valueOf(saved, tab === "wishlist"));
     setStatus(r ? `Enregistré. Rareté : ${r.label}.` : "Enregistré. Ajoute un prix pour obtenir sa rareté.");
+    if (joy) celebrate(saved, "collection");
   });
   $("#cancel").addEventListener("click", closeSheet);
   $("#del").addEventListener("click", () => {
@@ -2614,7 +2651,22 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     if (brand){ const same = pairs.filter(p => fold(p[0]) === fold(brand)); if (same.length) pool = same; }
     if (!q.trim() && !brand) return [];
     return pool.map(p => ({ p, r: rank(p[1], q) })).filter(x => x.r >= 0).sort((a, b) => a.r - b.r || a.p[1].localeCompare(b.p[1])).slice(0, 8)
-      .map(x => ({ label: hl(x.p[1], q) + (fold(x.p[0]) !== fold(brand) ? `<small>${esc(x.p[0])}</small>` : ""), brand: x.p[0], model: x.p[1] }));
+      .map(x => { const t = sugThumb(x.p[0], x.p[1]); return { thumb: t.html, label: `<span class="sg-tx"><span>${hl(x.p[1], q)}</span>${fold(x.p[0]) !== fold(brand) ? `<small>${esc(x.p[0])}</small>` : ""}</span>${t.price ? `<span class="sg-pr">${t.price}</span>` : ""}`, brand: x.p[0], model: x.p[1] }; });
+  }
+  // miniature d'un modèle : ta photo si tu en as une, sinon le dessin de l'app
+  const sugCache = {};
+  function sugThumb(brand, model){
+    const key = fold(brand) + "|" + fold(model);
+    const own = [...state.collection, ...state.wishlist].find(w => fold(w.brand) + "|" + fold(w.model) === key);
+    if (own && own.photo && photoSrc(own.photo)) return { html: `<img src="${esc(photoSrc(own.photo))}" alt="">`, price: money(valueOf(own, false)) };
+    const e = CAT_MAP[key];
+    if (e){ const ref = refChoice(e); if (ref) return { html: `<img src="${esc(ref.thumb)}" alt="">`, price: money(e.retail) }; }
+    if (!sugCache[key]){
+      let w = e || own; if (!w) return { html: "", price: "" };
+      if (e){ const first = colorwaysFor(e)[0]; if (first && first.dial.toLowerCase() === String(e.dial).toLowerCase()) w = applyColorway(e, first); }
+      try { sugCache[key] = watchSVG(w); } catch(err){ sugCache[key] = ""; }
+    }
+    return { html: sugCache[key], price: e ? money(e.retail) : (own ? money(valueOf(own, false)) : "") };
   }
   function closeSuggest(){ if (sugBox){ sugBox.remove(); sugBox = null; } sugItems = []; sugIdx = -1; if (sugInput) sugInput.removeAttribute("aria-activedescendant"); }
   function showSuggest(input){
@@ -2622,8 +2674,9 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     sugItems = computeSuggestions(input.dataset.suggest, input.value);
     if (!sugItems.length) return;
     sugBox = document.createElement("ul"); sugBox.className = "suggest"; sugBox.setAttribute("role", "listbox");
-    sugBox.innerHTML = sugItems.map((s, i) => `<li role="option" id="sg-${i}" data-i="${i}">${s.label}</li>`).join("");
-    input.parentElement.appendChild(sugBox);
+    sugBox.innerHTML = sugItems.map((s, i) => s.thumb !== undefined ? `<li role="option" class="sg" id="sg-${i}" data-i="${i}"><span class="sg-th">${s.thumb}</span>${s.label}</li>` : `<li role="option" id="sg-${i}" data-i="${i}">${s.label}</li>`).join("");
+    const host = input.closest(".row") || input.parentElement; host.style.position = "relative";
+    host.appendChild(sugBox);
     sugBox.addEventListener("pointerdown", e => { sugTouching = true; if (e.pointerType === "mouse") e.preventDefault(); });
     sugBox.addEventListener("click", e => { const li = e.target.closest("li"); sugTouching = false; if (!li) return; e.preventDefault(); pick(+li.dataset.i); });
     sugBox.addEventListener("pointercancel", () => { sugTouching = false; });
@@ -3463,7 +3516,7 @@ Ajoute aussi dans le même objet JSON :
     if (act === "compare"){ const ref = cmpRef(detail.kind, w); dsheet.close(); openCompare(ref); return; }
     if (act === "wish" || act === "own"){
       const nw = entryToWatch(w);
-      if (act === "own"){ delete nw.current; delete nw.target; delete nw.priority; nw.price = w.retail; nw.date = ""; state.collection.push(nw); }
+      if (act === "own"){ delete nw.current; delete nw.target; delete nw.priority; nw.price = w.retail; nw.date = ""; state.collection.push(nw); setTimeout(() => celebrate(nw, "catalog"), 60); }
       else state.wishlist.push(nw);
       persist(); dsheet.close();
       $("#c-wishlist").textContent = state.wishlist.length; $("#c-collection").textContent = state.collection.length;
@@ -4003,6 +4056,48 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   document.querySelectorAll("dialog").forEach(d => new MutationObserver(syncScrollLock).observe(d, { attributes: true, attributeFilter: ["open"] }));
   // le doigt posé sur le fond grisé ne doit rien faire défiler non plus
   document.addEventListener("touchmove", e => { if (lockY !== null && e.target.tagName === "DIALOG" && e.target.scrollHeight <= e.target.clientHeight) e.preventDefault(); }, { passive: false });
+
+  // ---------- Célébration : une nouvelle montre rejoint la collection ----------
+  function celebrate(w, kind){
+    if (!w) return;
+    document.querySelectorAll(".joy").forEach(x => x.remove());
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ph = photoOf(kind === "catalog" ? "catalog" : "collection", w) || (w.photo && photoSrc(w.photo) ? { src: photoSrc(w.photo) } : null);
+    const r = rarity(valueOf(w, false));
+    const el = document.createElement("div"); el.className = "joy"; el.setAttribute("role", "status");
+    el.innerHTML = `<canvas></canvas><div class="joy-c"><div class="joy-w"><span class="joy-shine"></span>${ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w)}<span class="joy-ring"></span><span class="joy-ring r2"></span></div>
+      <div class="joy-k">Nouvelle pièce</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${esc(w.brand)} rejoint ta collection</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
+    document.body.appendChild(el);
+    // confettis dorés
+    const cv = el.querySelector("canvas"), g = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = cv.width = innerWidth * dpr, H = cv.height = innerHeight * dpr;
+    const COLORS = ["#C9A35A", "#E8D3A0", "#A8823A", "#FFFDF8", "#B8BEC6", "#F1D98C"];
+    const parts = reduce ? [] : Array.from({ length: 140 }, (_, i) => { const a = -Math.PI / 2 + (Math.random() - .5) * 2.2, v = (8 + Math.random() * 12) * dpr; return { x: W / 2, y: H * .42, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4 * dpr, s: (4 + Math.random() * 6) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: COLORS[i % COLORS.length], d: Math.random() * 12 }; });
+    let raf = 0, t0 = performance.now();
+    const tick = t => {
+      const dt = Math.max(0, Math.min(2, (t - t0) / 16.7)); t0 = t; g.clearRect(0, 0, W, H); let alive = 0;
+      for (const p of parts){ if (p.d > 0){ p.d -= dt; alive++; continue; } p.vy += .35 * dpr * dt; p.vx *= .985; p.vy *= .985; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.vr * dt; if (p.y < H + 40){ alive++; g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2.2); g.restore(); } }
+      if (alive) raf = requestAnimationFrame(tick);
+    };
+    if (parts.length) raf = requestAnimationFrame(tick);
+    let done = false;
+    const finish = () => {
+      if (done) return; done = true; clearTimeout(timer);
+      const tabBtn = document.querySelector('.tabbar button[data-tab="collection"]'), wEl = el.querySelector(".joy-w");
+      const bump = () => { const c = $("#t-collection"); if (c){ c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); } };
+      if (!reduce && tabBtn && wEl.animate){
+        const a = wEl.getBoundingClientRect(), b = tabBtn.getBoundingClientRect();
+        const dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+        wEl.style.animation = "none";
+        wEl.animate([{ transform: "translate(0,0) scale(1)", opacity: 1 }, { transform: `translate(${dx}px,${dy}px) scale(.12)`, opacity: .6 }], { duration: 650, easing: "cubic-bezier(.5,0,.75,0)", fill: "forwards" });
+        el.querySelectorAll(".joy-k,.joy-t,.joy-m,.joy .pill").forEach(x => x.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }));
+        setTimeout(() => { bump(); el.classList.add("out"); }, 600);
+        setTimeout(() => { cancelAnimationFrame(raf); el.remove(); }, 1100);
+      } else { el.classList.add("out"); bump(); setTimeout(() => { cancelAnimationFrame(raf); el.remove(); }, 500); }
+    };
+    const timer = setTimeout(finish, reduce ? 1600 : 2900);
+    el.addEventListener("click", finish);
+  }
 
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
   document.addEventListener("click", closeFrom, true);
