@@ -374,6 +374,35 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 #isheet p{margin:0;color:var(--muted);font-size:.88rem}
 #isheet .ib-row{display:flex;gap:8px;justify-content:center}
 #isheet textarea{font-size:16px;min-height:70px}
+
+/* ---------- Refonte : plus sobre ---------- */
+#menu-btn{display:none!important}
+.photos-btn{padding:8px 11px!important}
+.photos-btn svg{width:18px;height:18px}
+.shown:empty{display:none}
+.own-photo{border:0!important;background:none!important;padding:2px 0 0!important;gap:4px!important}
+.d-pbtns{gap:6px!important}
+.d-pbtn{padding:6px 11px!important}
+.d-version:empty{display:none}
+.fsec{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.fsec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;font-weight:800;font-size:.95rem}
+.fsec>summary::-webkit-details-marker{display:none}
+.fsec>summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;flex:none}
+.fsec[open]>summary::after{transform:rotate(-135deg)}
+.fs-sum{font-weight:600;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1;text-align:right}
+.fsec[open] .fs-sum{visibility:hidden}
+.fsec>.fs-body{display:flex;flex-direction:column;gap:14px;padding:2px 14px 16px}
+.seg{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
+.seg .btn{padding:10px 8px;font-size:.88rem;justify-content:center;text-align:center}
+.app-line{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:.85rem;margin-top:4px}
+.linkbtn{border:0;background:none;color:var(--brass);font-weight:800;font-size:.85rem;padding:6px 0;cursor:pointer}
+#sheet .actions #save{flex:1}
+.d-pbtns{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:2px}
+.d-pbtns::-webkit-scrollbar{display:none}
+.d-pbtn{white-space:nowrap;flex:none}
+.d-saved:empty{display:none}
+dialog p.help:empty{display:none}
+.d-cw .d-opt.hidden+.d-opt.hidden{display:none}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -681,9 +710,9 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     </div>
     <button class="filter-btn" id="filter-btn" type="button">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M4.5 8h7M7 12h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
-      Trier et filtrer<span class="n hidden" id="filter-n"></span>
+      Filtrer<span class="n hidden" id="filter-n"></span>
     </button>
-    <button class="filter-btn photos-btn" id="photos-btn" type="button" aria-label="Ajouter les photos officielles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Photos</button>
+    <button class="filter-btn photos-btn" id="photos-btn" type="button" aria-label="Ajouter les photos officielles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
   </div>
 
   <div class="cat-tools hidden" id="cat-tools">
@@ -711,24 +740,16 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
   <form method="dialog" style="gap:12px">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
     <h2>Réglages</h2>
-    <div class="menu-list">
-      <button type="button" class="btn" id="m-export">Exporter une sauvegarde</button>
-      <button type="button" class="btn" id="m-import">Restaurer une sauvegarde</button>
-    </div>
-    <h3>Photos automatiques</h3>
-    <p class="help">Trouve la photo officielle de tes montres (de face, sur fond blanc), gratuitement avec Claude, puis la détoure et l'harmonise.</p>
-    <div class="menu-list"><button type="button" class="btn" id="m-photos-w">Photos de mes envies</button><button type="button" class="btn" id="m-photos-c">Photos de ma collection</button><button type="button" class="btn" id="m-photos">Photos de toutes mes montres</button></div>
-    <h3>Taille des montres sur tes photos</h3>
-    <p class="help">Largeur du boîtier dans l'image, identique pour toutes les photos.</p>
+    <h3>Photos officielles</h3>
+    <div class="seg"><button type="button" class="btn" id="m-photos-w">Envies</button><button type="button" class="btn" id="m-photos-c">Collection</button><button type="button" class="btn" id="m-photos">Tout</button></div>
+    <h3>Taille des montres sur les photos</h3>
     <label class="size-row"><input type="range" id="m-size" min="45" max="80" step="1"><span id="m-size-v"></span></label>
     <p class="help" id="m-size-msg"></p>
-    <h3>Application</h3>
-    <p class="help" id="m-version"></p>
-    <div class="menu-list"><button type="button" class="btn" id="m-update">Mettre à jour maintenant</button></div>
-    <h3>Comment la rareté est calculée</h3>
-    <p class="help">D'après le prix public neuf de chaque montre (à défaut, le prix payé ou constaté).</p>
-    <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>de 200 à 399 €</span><span class="pill epic">Épique</span><span>de 400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
-    <div class="actions"><span class="spacer"></span><button class="btn primary" value="close">Fermer</button></div>
+    <h3>Rareté (prix public neuf)</h3>
+    <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>200 à 399 €</span><span class="pill epic">Épique</span><span>400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
+    <h3>Sauvegarde</h3>
+    <div class="seg" style="--n:2"><button type="button" class="btn" id="m-export">Exporter</button><button type="button" class="btn" id="m-import">Restaurer</button></div>
+    <div class="app-line"><span id="m-version"></span><button type="button" class="linkbtn" id="m-update">Mettre à jour</button></div>
   </form>
 </dialog>
 
@@ -739,7 +760,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <div class="photo-zone" id="photo-zone">
       <button type="button" class="photo-preview" id="photo-preview" aria-label="Aperçu de la montre"></button>
       <div class="photo-actions">
-        <span class="hint" id="photo-hint">Le dessin suit tes choix ci-dessous.</span>
+        <span class="hint" id="photo-hint"></span>
         <button type="button" class="btn small" id="photo-pick">Ajouter une photo</button>
         <button type="button" class="btn small danger hidden" id="photo-remove">Retirer la photo</button>
       </div>
@@ -752,7 +773,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     </div>
     <div class="web-links f-web" id="f-web"></div>
     <div class="ai hidden" id="ai">
-      <button type="button" class="ai-btn" id="ai-btn">Rechercher avec Claude</button>
+      <button type="button" class="ai-btn" id="ai-btn">✦ Remplir avec Claude</button>
       <span class="msg" id="ai-msg" aria-live="polite"></span>
     </div>
     <div class="ai-paste hidden" id="ai-paste">
@@ -760,7 +781,25 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <textarea id="ai-text" rows="3" placeholder="…ou colle sa réponse ici"></textarea>
     </div>
 
-    <h3>Mécanique</h3>
+    <div class="row only-collection">
+      <label>Prix payé (€)<input name="price" inputmode="decimal" autocomplete="off"></label>
+      <label>Prix public (€)<input name="retail" inputmode="decimal" autocomplete="off"></label>
+    </div>
+    <div class="only-collection">
+      <label>Date d'achat<input name="date" type="date"></label>
+    </div>
+    <div class="row only-wishlist">
+      <label>Prix constaté (€)<input name="current" inputmode="decimal" autocomplete="off"></label>
+      <label>Prix cible (€)<input name="target" inputmode="decimal" autocomplete="off"></label>
+    </div>
+    <div class="row only-wishlist">
+      <label>Prix public (€)<input name="retail2" inputmode="decimal" autocomplete="off"></label>
+      <label>Priorité
+        <select name="priority"><option value="1">Haute</option><option value="2" selected>Moyenne</option><option value="3">Basse</option></select>
+      </label>
+    </div>
+
+    <details class="fsec" id="fs-tech"><summary>Caractéristiques<span class="fs-sum" id="fs-tech-sum"></span></summary><div class="fs-body">
     <div class="row">
       <label>Type de mouvement
         <select name="movementType">
@@ -804,7 +843,8 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       </label>
     </div>
 
-    <h3>Apparence</h3>
+    </div></details>
+    <details class="fsec" id="fs-look"><summary>Apparence<span class="fs-sum" id="fs-look-sum"></span></summary><div class="fs-body">
     <div class="colorfield">
       <span class="cf-label">Couleur du cadran <small id="dial-src"></small></span>
       <div class="swatches" id="dial-swatches"></div>
@@ -878,30 +918,13 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <div id="comps-body"></div>
     </details>
 
-    <h3>Prix</h3>
-    <div class="row only-collection">
-      <label>Prix payé (€)<input name="price" inputmode="decimal" autocomplete="off"></label>
-      <label>Prix public (€)<input name="retail" inputmode="decimal" autocomplete="off"></label>
-    </div>
-    <div class="only-collection">
-      <label>Date d'achat<input name="date" type="date"></label>
-    </div>
-    <div class="row only-wishlist">
-      <label>Prix constaté (€)<input name="current" inputmode="decimal" autocomplete="off"></label>
-      <label>Prix cible (€)<input name="target" inputmode="decimal" autocomplete="off"></label>
-    </div>
-    <div class="row only-wishlist">
-      <label>Prix public (€)<input name="retail2" inputmode="decimal" autocomplete="off"></label>
-      <label>Priorité
-        <select name="priority"><option value="1">Haute</option><option value="2" selected>Moyenne</option><option value="3">Basse</option></select>
-      </label>
-    </div>
+    </div></details>
 
     <div class="actions">
       <button type="button" class="btn danger hidden" id="del">Supprimer</button>
       <span class="spacer"></span>
       <button type="button" class="btn buy hidden" id="buy">Je l'ai achetée</button>
-      <button type="button" class="btn" id="cancel">Annuler</button>
+      <button type="button" class="btn hidden" id="cancel">Annuler</button>
       <button type="submit" class="btn primary" id="save">Enregistrer</button>
     </div>
   </form>
@@ -965,7 +988,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <div class="d-comps" id="d-comps"></div>
     <div class="d-scores" id="d-scores"></div>
     <div class="d-actions" id="d-actions"></div>
-    <a class="d-link" id="d-photos" target="_blank" rel="noopener">Voir de vraies photos sur Google Images ↗</a>
+    <a class="d-link hidden" id="d-photos" target="_blank" rel="noopener"></a>
   </div>
 </dialog>
 
@@ -1011,10 +1034,9 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <p class="help" id="ps-help"></p>
     <label class="st-check hidden" id="ps-all-l"><input type="checkbox" id="ps-all"> Remplacer aussi les photos existantes</label>
     <ul class="ps-list" id="ps-list"></ul>
-    <div class="ps-step" id="ps-ask"><button type="button" class="btn primary" id="ps-ask-btn">1. Demander les photos à Claude</button></div>
+    <div class="ps-step" id="ps-ask"><button type="button" class="btn primary" id="ps-ask-btn">✦ Demander à Claude</button></div>
     <div class="ps-step hidden" id="ps-paste">
-      <p class="help">Envoie la demande dans Claude. Quand il a répondu, copie sa réponse et reviens ici.</p>
-      <button type="button" class="btn primary" id="ps-paste-btn">2. Coller la réponse de Claude</button>
+      <button type="button" class="btn primary" id="ps-paste-btn">Importer la réponse</button>
       <textarea id="ps-text" rows="3" placeholder="…ou colle sa réponse ici"></textarea>
     </div>
     <p class="help" id="ps-msg" aria-live="polite"></p>
@@ -1032,7 +1054,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <dialog id="isheet" aria-label="Importer la réponse de Claude">
   <div class="ib">
     <b>Claude a répondu&nbsp;?</b>
-    <p id="ib-sub">Copie sa réponse (bouton « Copier » sous son message), puis touche Importer.</p>
+    <p id="ib-sub"></p>
     <button type="button" class="btn primary" id="ib-go">Importer la réponse</button>
     <div class="ib-row"><button type="button" class="btn small" id="ib-later">Plus tard</button><button type="button" class="btn small" id="ib-cancel">Annuler la demande</button></div>
     <textarea id="ib-text" class="hidden" rows="3" placeholder="Colle ici la réponse de Claude (appui long › Coller)"></textarea>
@@ -1057,7 +1079,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 24; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 25; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -2376,7 +2398,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     document.querySelectorAll(".layouts button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
     $("#filter-n").textContent = nf; $("#filter-n").classList.toggle("hidden", !nf);
     const sortLabel = (SORTS[tab].find(s => s[0] === view().sort) || SORTS[tab][0])[1];
-    $("#shown").textContent = nf ? `${items.length} sur ${arr.length}, ${sortLabel.toLowerCase()}` : sortLabel;
+    $("#shown").textContent = nf ? `${items.length} sur ${arr.length} · ${sortLabel.toLowerCase()}` : "";
     listEl.innerHTML = items.length ? items.map(w => card(w, wish)).join("")
       : `<p class="empty">${arr.length ? "Aucune montre ne correspond à ces filtres." : wish ? "Aucune montre recherchée. Ajoute la prochaine que tu vises." : "Ta collection est vide. Ajoute ta première montre."}</p>`;
     observeThumbs();
@@ -2429,6 +2451,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     return h;
   }
   function renderSwatches(){
+    setTimeout(updateFormSums);
     const dialVal = form.elements.dial.value;
     $("#dial-swatches").innerHTML = swatchHTML(dialOpts || DIAL_PALETTE, dialVal, "dial");
     $("#dial-src").textContent = dialOpts ? "existantes pour ce modèle" : "";
@@ -2457,7 +2480,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     p.style.background = src ? "var(--bg)" : artBg(form.elements.dial.value);
     $("#photo-remove").classList.toggle("hidden", !src || !assetsNs);
     $("#photo-pick").textContent = src ? "Changer la photo" : "Ajouter une photo";
-    $("#photo-hint").textContent = src ? "Ta photo remplace le dessin sur la carte." : "Le dessin suit tes choix ci-dessous.";
+    $("#photo-hint").textContent = "";
   }
   form.addEventListener("input", e => {
     if (e.target.name === "comp") updateCompsCount();
@@ -2468,8 +2491,18 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
   function syncCaps(){
     $("#ai").classList.remove("hidden");
     $("#photo-pick").classList.toggle("hidden", !assetsNs);
-    if (!$("#ai-msg").textContent) $("#ai-msg").textContent = "Gratuit : Claude cherche la fiche sur internet";
+
   }
+  function updateFormSums(){
+    const f = form.elements, L = (n) => { const el = f[n]; if (!el || !el.value) return ""; const o = el.tagName === "SELECT" ? [...el.options].find(x => x.value === el.value) : null; return o ? o.textContent.trim() : el.value; };
+    const tech = [L("movementType"), f.size.value ? f.size.value + " mm" : "", f.water.value ? f.water.value + " m" : "", L("glass")].filter(Boolean);
+    const nc = getComps().length;
+    const look = [nearestName(f.dial.value), L("case"), L("strap"), nc ? nc + " complication" + (nc > 1 ? "s" : "") : ""].filter(Boolean);
+    $("#fs-tech-sum").textContent = tech.length ? tech.join(" · ") : "À compléter";
+    $("#fs-look-sum").textContent = look.join(" · ");
+  }
+  form.addEventListener("input", () => setTimeout(updateFormSums));
+  form.addEventListener("change", () => setTimeout(updateFormSums));
   function openSheet(list, id){
     editing = { list, id, mode: id ? "edit" : "new" }; presetFor = ""; aiFor = "";
     pendingPhoto = null; pendingOrig = null; pendingAdj = null; photoCleared = false; delArmed = false;
@@ -2492,6 +2525,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     $("#comps").open = false;
     $("#ai-msg").textContent = ""; $("#ai-btn").disabled = false; $("#ai-paste").classList.add("hidden"); $("#ai-text").value = "";
     refreshPreview(); syncCaps();
+    $("#fs-tech").open = $("#fs-look").open = false; updateFormSums();
     sheet.showModal();
   }
   function closeSheet(){ if (aiCtl) aiCtl.abort(); closeSuggest(); sheet.close(); if (previewUrl){ URL.revokeObjectURL(previewUrl); previewUrl = null; } }
@@ -2622,8 +2656,8 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     if (w && fold(w.brand) + "|" + fold(w.model) === key) return; // modèle inchangé en modification
     if (key === presetFor || key === aiFor) return;
     dialOpts = variantsFor(brand, model); dialOptsFromAI = false; renderSwatches();
-    if (applyPreset(brand, model)){ presetFor = key; $("#ai-msg").textContent = sampleFn ? "Apparence pré-remplie. « Rechercher avec Claude » peut compléter calibre et prix." : "Apparence pré-remplie."; return; }
-    $("#ai-msg").textContent = "Modèle inconnu de l'app : touche « Rechercher avec Claude » pour remplir la fiche gratuitement.";
+    if (applyPreset(brand, model)){ presetFor = key; $("#ai-msg").textContent = sampleFn ? "Modèle reconnu : fiche pré-remplie." : "Apparence pré-remplie."; return; }
+    $("#ai-msg").textContent = "Modèle inconnu : Claude peut remplir la fiche.";
   }
   form.elements.model.addEventListener("change", autoDesign);
   form.elements.brand.addEventListener("change", () => { if (form.elements.model.value.trim()) autoDesign(); });
@@ -2753,7 +2787,7 @@ Ajoute aussi dans le même objet JSON :
     if (!brand && !model){ msg("Tape au moins la marque ou le modèle."); form.elements.brand.focus(); return; }
     sendToClaude(claudePrompt(brand, model), { type: "sheet", list: editing ? editing.list : "collection", id: editing && editing.id || null, brand, model });
     $("#ai-paste").classList.remove("hidden");
-    msg("Claude s'ouvre : envoie la demande (fiche, photo et avis en une fois), copie sa réponse puis reviens ici.");
+    msg("Envoie la demande dans Claude, copie sa réponse, reviens ici.");
   }
   function applyAnswer(text){
     const msg = t => $("#ai-msg").textContent = t;
@@ -2965,7 +2999,7 @@ Ajoute aussi dans le même objet JSON :
     $("#summary").innerHTML = `<strong>${catItems.length}</strong> modèle${catItems.length > 1 ? "s" : ""} de <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}`;
     $("#filter-n").textContent = nf; $("#filter-n").classList.toggle("hidden", !nf);
     const sortLabel = (SORTS.catalog.find(x => x[0] === v.sort) || SORTS.catalog[0])[1];
-    $("#shown").textContent = (nf ? `${catItems.length} sur ${CAT_LIST.length}, ` + sortLabel.toLowerCase() : sortLabel) + ". Prix publics indicatifs.";
+    $("#shown").textContent = nf ? `${catItems.length} sur ${CAT_LIST.length} · ` + sortLabel.toLowerCase() : "";
     const layout = state.view.layout || "grid";
     listEl.className = "grid layout-" + layout;
     document.querySelectorAll(".layouts button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
@@ -3008,9 +3042,9 @@ Ajoute aussi dans le même objet JSON :
   function webCard(q, n){
     const { brand, model } = splitQuery(q);
     return `<div class="web-card"><b>${n ? "Pas la bonne ?" : "Pas encore dans le catalogue"}</b>
-      <p>Crée sa fiche : Claude cherche « ${esc(q)} » sur internet (gratuit), tu copies sa réponse, et diamètre, mouvement, étanchéité, couleurs et prix se remplissent tout seuls.</p>
+      <p>Claude peut créer sa fiche, avec photo et avis.</p>
       <div class="web-links"><a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Images</a></div>
-      <div class="btns"><button type="button" class="btn small primary" data-newwatch="collection">Je l'ai : créer la fiche</button><button type="button" class="btn small" data-newwatch="wishlist">Ajouter à mes envies</button></div></div>`;
+      <div class="btns"><button type="button" class="btn small primary" data-newwatch="collection">Je l'ai</button><button type="button" class="btn small" data-newwatch="wishlist">Je la veux</button></div></div>`;
   }
   listEl.addEventListener("click", e => {
     const b = e.target.closest("[data-newwatch]"); if (!b) return;
@@ -3334,9 +3368,8 @@ Ajoute aussi dans le même objet JSON :
     const hero = $("#d-hero"), credit = $("#d-credit"), ph = photoOf(detail.kind, w);
     hero.innerHTML = ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w);
     const q = encodeURIComponent(`${w.brand} ${w.model}${w.colorway ? " " + w.colorway.replace(/[«»()]/g, "") : ""}`);
-    credit.innerHTML = `<div class="own-photo"><b>${ph ? "Ta photo" : "Ajouter ta photo de cette montre"}</b>
-      ${ph ? "" : `<span class="tip">Sur <a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">Google Images</a>, appuie longuement sur une photo puis « Copier », reviens et touche « Coller ». L'app détoure, recentre et harmonise la photo.</span>`}
-      <span class="d-pbtns"><button type="button" class="d-pbtn gold" data-photo="auto">Photo officielle auto</button><button type="button" class="d-pbtn" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="file">Mes photos</button><button type="button" class="d-pbtn" data-photo="camera">Appareil photo</button>${ph ? `<button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button>` : ""}</span>
+    credit.innerHTML = `<div class="own-photo">
+      <span class="d-pbtns">${ph ? "" : `<button type="button" class="d-pbtn gold" data-photo="auto">✦ Photo officielle</button>`}<button type="button" class="d-pbtn" data-photo="paste">Coller</button><button type="button" class="d-pbtn" data-photo="file">Galerie</button><button type="button" class="d-pbtn" data-photo="camera">Caméra</button>${ph ? `<button type="button" class="d-pbtn" data-photo="retouch">Retoucher</button><button type="button" class="d-pbtn" data-photo="remove">Retirer</button><button type="button" class="d-pbtn" data-photo="auto">✦ Officielle</button>` : ""}</span>
       <span class="own-msg" id="own-msg" aria-live="polite"></span></div>`;
   }
   function versionName(w, opts){
@@ -3364,7 +3397,7 @@ Ajoute aussi dans le même objet JSON :
     const vname = versionName(w, opts);
     if (vname) w.colorway = vname;
     const curStrap = opts.straps.find(o => sameStrap(w, o));
-    $("#d-version").innerHTML = (vname || w.colorway) ? `Version : <strong>${esc(vname || w.colorway)}</strong>${vname ? "" : " (hors liste)"}${curStrap ? ` · ${esc(curStrap.name)}` : ""}` : "";
+    $("#d-version").innerHTML = "";
     const rows = { dial: opts.dials, bezel: opts.bezels, strap: opts.straps };
     const isOn = { dial: o => o.dial.toLowerCase() === String(w.dial).toLowerCase(), bezel: o => o.key === bezelOf(w), strap: o => o === curStrap };
     let any = false;
@@ -3516,13 +3549,13 @@ Ajoute aussi dans le même objet JSON :
   $("#m-update").addEventListener("click", () => { $("#m-update").textContent = "Mise à jour…"; hardUpdate(); });
   function updateFormWeb(){
     const q = `${form.elements.brand.value} ${form.elements.model.value}`.trim();
-    $("#f-web").innerHTML = q.length < 2 ? `<span class="hint">Tape la marque et le modèle : les liens Google apparaîtront ici.</span>`
+    $("#f-web").innerHTML = q.length < 2 ? ""
       : `<a href="https://www.google.com/search?q=${encodeURIComponent(q + " montre")}" target="_blank" rel="noopener">${G_ICON}Google</a><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}" target="_blank" rel="noopener">${G_ICON}Images</a><a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(q)}" target="_blank" rel="noopener">${G_ICON}Prix</a>`;
   }
   ["input", "change"].forEach(ev => { form.elements.brand.addEventListener(ev, updateFormWeb); form.elements.model.addEventListener(ev, updateFormWeb); });
   new MutationObserver(() => { if (sheet.open) updateFormWeb(); }).observe(sheet, { attributes: true, attributeFilter: ["open"] });
   $("#menu-btn").addEventListener("click", () => {
-    $("#m-version").textContent = `Version ${APP_VERSION}. L'app se met à jour toute seule quand une nouvelle version est publiée.`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
+    $("#m-version").textContent = `MyWatch · version ${APP_VERSION}`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
   $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
   $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
   // ---------- Comparateur ----------
@@ -3640,7 +3673,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     const [A, B] = cmp; if (!A || !B) return;
     sendToClaude(reviewsPrompt(A, B), { type: "reviews" });
     $("#c-rev").classList.remove("hidden"); $("#c-rev-text").value = "";
-    $("#c-rev-msg").textContent = "Claude s'ouvre : envoie la demande, copie sa réponse puis reviens ici.";
+    $("#c-rev-msg").textContent = "Envoie la demande dans Claude, copie sa réponse, reviens ici.";
     $("#c-rev").scrollIntoView({ block: "center" });
   }
   function normReview(x){
@@ -3670,7 +3703,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     $("#c-pick").classList.add("hidden"); $("#c-main").classList.remove("hidden"); $("#c-title").textContent = "Comparateur";
     $("#c-rev").classList.add("hidden");
     let h = `<div class="cmp-head">${slotHTML(A, 0)}<span class="c-vs">VS</span>${slotHTML(B, 1)}</div>`;
-    if (!A || !B){ $("#c-main").innerHTML = h + `<p class="c-hint">Choisis deux montres de ta collection, de tes envies ou du catalogue pour les comparer en un coup d'œil.</p>`; return; }
+    if (!A || !B){ $("#c-main").innerHTML = h + `<p class="c-hint">Choisis deux montres.</p>`; return; }
     const a = A.w, b = B.w, score = [0, 0], wins = [[], []];
     const tally = (win, what) => { if (win >= 0){ score[win]++; wins[win].push(what); } return win; };
     const qa = qualityOf(a, A.kind === "wishlist"), qb = qualityOf(b, B.kind === "wishlist");
@@ -3690,7 +3723,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     if ((ra && ra.rating) || (rb && rb.rating)) h += duel("Note des utilisateurs", rt(ra), rt(rb), { na: ra && ra.rating, nb: rb && rb.rating, win: wRating, note: [ra && ra.count, rb && rb.count].filter(Boolean).length ? "sur 5" : "" });
     QUAL.forEach(([k, lbl]) => { if (qa[k] != null || qb[k] != null) h += duel(lbl, qa[k] != null ? fr1(qa[k]) + "/10" : "", qb[k] != null ? fr1(qb[k]) + "/10" : "", { na: qa[k], nb: qb[k], win: wq[k], same: qa[k] != null && qa[k] === qb[k] }); });
     const fresh = ra && rb;
-    h += `<div class="c-rev" style="margin-top:6px"><p>${fresh ? "Notes issues des avis internet. Tu peux les actualiser." : "Ces notes sont estimées par l'app. Pour les vrais avis des utilisateurs (note sur 5, points forts et faibles), demande à Claude : c'est gratuit."}</p><button type="button" class="btn small${fresh ? "" : " primary"}" id="c-ask-rev">${fresh ? "Actualiser les avis" : "Récupérer les avis internet"}</button></div>`;
+    h += `<div class="c-rev" style="margin-top:6px"><button type="button" class="btn small${fresh ? "" : " primary"}" id="c-ask-rev">${fresh ? "Actualiser les avis" : "✦ Avis des utilisateurs avec Claude"}</button></div>`;
     if ((ra && (ra.pros.length || ra.cons.length)) || (rb && (rb.pros.length || rb.cons.length))){
       const pc = (r, cls, w) => `<div class="${cls}"><b>${esc(name(w))}</b>${r ? r.pros.map(x => `<span class="plus">${esc(x)}</span>`).join("") + r.cons.map(x => `<span class="minus">${esc(x)}</span>`).join("") : `<span style="opacity:.6">Pas encore d'avis</span>`}</div>`;
       h += `<div class="c-sec">Ce qu'en disent les utilisateurs</div><div class="c-pc">${pc(ra, "a", A)}${pc(rb, "b", B)}</div>`;
@@ -3787,9 +3820,9 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     PS.items = batch.map(t => ({ target: t, status: "En attente", cls: "" }));
     const n = batch.length, rest = PS.queue.length;
     $("#ps-help").textContent = !n ? (PS.scope ? `Toutes les montres de ${SCOPE_NAME[PS.scope]} ont déjà une photo. Coche la case ci-dessus pour les remplacer.` : "Cette montre a déjà une photo.")
-      : n === 1 && !PS.scope ? "L'app demande à Claude la photo officielle de cette montre (de face, sur fond blanc), la télécharge, puis la détoure et l'harmonise comme tes autres photos."
-      : `${n} montre${n > 1 ? "s" : ""}${rest ? ` (puis ${rest} autre${rest > 1 ? "s" : ""} ensuite)` : ""}. L'app demande à Claude leurs photos officielles de face sur fond blanc, garde la plus propre de chaque montre, puis la détoure et l'harmonise.`;
-    $("#ps-ask").classList.toggle("hidden", !n); $("#ps-ask-btn").textContent = "1. Demander les photos à Claude";
+      : n === 1 && !PS.scope ? "Photo produit officielle, de face sur fond blanc."
+      : `${n} montre${n > 1 ? "s" : ""}${rest ? ` (puis ${rest} autre${rest > 1 ? "s" : ""})` : ""} · photos produit de face sur fond blanc.`;
+    $("#ps-ask").classList.toggle("hidden", !n); $("#ps-ask-btn").textContent = "✦ Demander à Claude";
     $("#ps-paste").classList.add("hidden"); $("#ps-text").value = ""; $("#ps-msg").textContent = "";
     renderPS();
   }
@@ -3812,7 +3845,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     if (!PS.items.length) return; const p = photosPrompt(PS.items);
     sendToClaude(p, { type: "photos", scope: PS.scope, batch: PS.items.map(it => ({ kind: it.target.kind, id: it.target.id, key: it.target.kind === "catalog" ? modelKey(it.target.w) : "" })), queue: PS.queue.map(t => ({ kind: t.kind, id: t.id })) });
     $("#ps-paste").classList.remove("hidden");
-    $("#ps-msg").textContent = "Claude s'ouvre : envoie la demande, copie sa réponse puis reviens ici.";
+    $("#ps-msg").textContent = "Envoie la demande dans Claude, copie sa réponse, reviens ici.";
   });
   async function fetchImage(url){
     const tries = [url, "https://wsrv.nl/?url=" + encodeURIComponent(url.replace(/^https?:\/\//, "")) + "&w=1600&output=jpg"];
