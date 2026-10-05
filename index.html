@@ -368,6 +368,12 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .d-sc .bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
 .d-sc .bar i{display:block;height:100%;border-radius:999px;background:var(--brass)}
 .d-sc b{text-align:right}
+#isheet{margin:auto auto calc(env(safe-area-inset-bottom,0px) + 96px)!important;max-width:420px}
+#isheet .ib{padding:18px;display:flex;flex-direction:column;gap:10px;text-align:center}
+#isheet b{font-family:var(--serif);font-size:1.3rem}
+#isheet p{margin:0;color:var(--muted);font-size:.88rem}
+#isheet .ib-row{display:flex;gap:8px;justify-content:center}
+#isheet textarea{font-size:16px;min-height:70px}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -1023,6 +1029,15 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <div class="actions"><button type="button" class="btn" id="v-auto">Ordre automatique</button><span class="spacer"></span><button type="button" class="btn primary" id="v-save">Enregistrer</button></div>
   </form>
 </dialog>
+<dialog id="isheet" aria-label="Importer la réponse de Claude">
+  <div class="ib">
+    <b>Claude a répondu&nbsp;?</b>
+    <p id="ib-sub">Copie sa réponse (bouton « Copier » sous son message), puis touche Importer.</p>
+    <button type="button" class="btn primary" id="ib-go">Importer la réponse</button>
+    <div class="ib-row"><button type="button" class="btn small" id="ib-later">Plus tard</button><button type="button" class="btn small" id="ib-cancel">Annuler la demande</button></div>
+    <textarea id="ib-text" class="hidden" rows="3" placeholder="Colle ici la réponse de Claude (appui long › Coller)"></textarea>
+  </div>
+</dialog>
 <dialog id="gsheet">
   <form id="gform" novalidate>
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
@@ -1042,7 +1057,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 23; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 24; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -2712,8 +2727,14 @@ Valeurs autorisées :
 - dial_texture : lisse, soleille, cotes, guilloche, grain, fume
 - complications : parmi ${COMP_KEYS.join(", ")}
 - category : parmi ${Object.keys(CAT_LABEL).join(", ")}
-Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre en mm ; strap_color = couleur du bracelet en hexadécimal si cuir, caoutchouc ou tissu, sinon vide ; dial_variants = les couleurs de cadran qui existent vraiment (6 au maximum, nom court en français) ; retail_eur = prix public neuf en France (entier) ou null ; champ inconnu = chaîne vide, n'invente rien.`;
+Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre en mm ; strap_color = couleur du bracelet en hexadécimal si cuir, caoutchouc ou tissu, sinon vide ; dial_variants = les couleurs de cadran qui existent vraiment (6 au maximum, nom court en français) ; retail_eur = prix public neuf en France (entier) ou null ; champ inconnu = chaîne vide, n'invente rien.
+
+Ajoute aussi dans le même objet JSON :
+- "images" : ${PHOTO_RULES}
+- "reviews" : ${REVIEW_RULES}`;
   }
+  const PHOTO_RULES = `liste de 3 adresses directes (URL) d'images produit officielles, prises sur le même modèle : montre vue strictement de face (cadran face à l'objectif, sans angle), à plat, bracelet ouvert à la verticale au-dessus et au-dessous du boîtier ; fond blanc pur et uni (packshot de catalogue), sans dégradé, décor ni ombre marquée ; montre entière, sans poignet, main, boîte, texte ni filigrane ; bonne couleur de cadran et bon bracelet ; haute définition (au moins 800 pixels). Cherche d'abord sur le site officiel de la marque puis chez les grands revendeurs ; ouvre les pages produit pour récupérer l'adresse réelle de l'image principale (balise og:image ou premier visuel de la galerie) : elle doit pointer vers l'image elle-même (.jpg, .png, .webp…), pas vers une page. Classe-les de la plus conforme à la moins conforme.`;
+  const REVIEW_RULES = `avis des utilisateurs et tests trouvés sur internet (forums horlogers comme Reddit r/Watches ou Forumamontres, sites et vidéos de test, notes des marchands), sous la forme {"user_rating":4.4,"rating_count":"environ 2 000 avis","scores":{"movement":7,"accuracy":6.5,"finish":7.5,"strap":5,"robustness":8,"value":9},"pros":["",""],"cons":["",""],"sources":[""]} ; notes sur 10 pour movement (qualité et fiabilité du mouvement), accuracy (précision réelle), finish (finitions boîtier, cadran, aiguilles), strap (qualité du bracelet d'origine), robustness (solidité, étanchéité, verre), value (rapport qualité/prix au prix public français) ; user_rating = note moyenne des utilisateurs sur 5 ; 3 points forts et 3 points faibles très courts en français ; 1 à 3 sources (noms de sites).`;
   function lastJSON(text){
     const end = text.lastIndexOf("}");
     for (let i = text.indexOf("{"); i >= 0 && i < end; i = text.indexOf("{", i + 1)){
@@ -2730,11 +2751,9 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
     closeSuggest();
     const brand = form.elements.brand.value.trim(), model = form.elements.model.value.trim();
     if (!brand && !model){ msg("Tape au moins la marque ou le modèle."); form.elements.brand.focus(); return; }
-    const p = claudePrompt(brand, model);
-    copyText(p);
-    window.open("https://claude.ai/new?q=" + encodeURIComponent(p), "_blank", "noopener");
+    sendToClaude(claudePrompt(brand, model), { type: "sheet", list: editing ? editing.list : "collection", id: editing && editing.id || null, brand, model });
     $("#ai-paste").classList.remove("hidden");
-    msg("Demande copiée. Dans Claude, colle-la si elle n'y est pas déjà et envoie. Quand il a répondu, copie sa réponse, reviens ici et touche « Coller la réponse ».");
+    msg("Claude s'ouvre : envoie la demande (fiche, photo et avis en une fois), copie sa réponse puis reviens ici.");
   }
   function applyAnswer(text){
     const msg = t => $("#ai-msg").textContent = t;
@@ -2760,16 +2779,34 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
     if (!currentPhotoSrc()) refreshPreview();
     $("#ai-paste").classList.add("hidden"); $("#ai-text").value = "";
     const rr = rarity(p), conf = String(r.confidence || "").toLowerCase();
-    msg((conf === "basse" ? "Identification incertaine, vérifie les champs." : "Fiche remplie, vérifie-la puis enregistre.") + (rr ? ` Rareté : ${rr.label}.` : ""));
+    const head = (conf === "basse" ? "Identification incertaine, vérifie les champs." : "Fiche remplie, vérifie-la puis enregistre.") + (rr ? ` Rareté : ${rr.label}.` : "");
+    const rk = fold(form.elements.brand.value) + "|" + fold(form.elements.model.value);
+    if (r.reviews && typeof r.reviews === "object"){ state.reviews = state.reviews || {}; state.reviews[rk] = normReview(r.reviews); persist(); }
+    const urls = Array.isArray(r.images) ? r.images : [];
+    msg(head + (r.reviews ? " Avis enregistrés." : ""));
+    if (urls.length && !currentPhotoSrc()){
+      msg(head + " Recherche de la photo…");
+      (async () => {
+        const best = await bestImage(urls);
+        if (!best || !sheet.open){ if (sheet.open) msg(head + " Photo introuvable : ajoute-la depuis la fiche."); return; }
+        try {
+          const out = await autoStudio(best.blob, DEF_ADJ);
+          pendingPhoto = out; pendingOrig = best.blob; pendingAdj = { ...DEF_ADJ }; photoCleared = false;
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          previewUrl = URL.createObjectURL(pendingPhoto); refreshPreview();
+          msg(head + " Photo officielle ajoutée" + (r.reviews ? ", avis enregistrés." : "."));
+        } catch(e){ msg(head + " Photo illisible : ajoute-la depuis la fiche."); }
+      })();
+    }
     return true;
   }
   $("#ai-btn").addEventListener("click", askClaude);
   $("#ai-paste-btn").addEventListener("click", async () => {
-    try { const t = await navigator.clipboard.readText(); if (applyAnswer(t)) return; }
+    try { const t = await navigator.clipboard.readText(); if (applyAnswer(t)){ clearPending(); return; } }
     catch(e){ $("#ai-msg").textContent = "Colle la réponse de Claude dans le cadre ci-dessous (appui long › Coller)."; }
     $("#ai-text").focus();
   });
-  $("#ai-text").addEventListener("input", e => { if (lastJSON(e.target.value)) applyAnswer(e.target.value); });
+  $("#ai-text").addEventListener("input", e => { if (lastJSON(e.target.value) && applyAnswer(e.target.value)) clearPending(); });
   try { localStorage.removeItem("mywatch-claude-key"); } catch(e){}
 
   // ---------- Vue 360° ----------
@@ -3601,35 +3638,33 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
   }
   function askReviews(){
     const [A, B] = cmp; if (!A || !B) return;
-    const p = reviewsPrompt(A, B);
-    copyText(p);
-    window.open("https://claude.ai/new?q=" + encodeURIComponent(p), "_blank", "noopener");
+    sendToClaude(reviewsPrompt(A, B), { type: "reviews" });
     $("#c-rev").classList.remove("hidden"); $("#c-rev-text").value = "";
-    $("#c-rev-msg").textContent = "Demande copiée. Dans Claude, colle-la si elle n'y est pas déjà et envoie. Quand il a répondu, copie sa réponse, reviens ici et touche « Coller la réponse ».";
+    $("#c-rev-msg").textContent = "Claude s'ouvre : envoie la demande, copie sa réponse puis reviens ici.";
     $("#c-rev").scrollIntoView({ block: "center" });
+  }
+  function normReview(x){
+    const strs = a => Array.isArray(a) ? a.filter(s => typeof s === "string" && s.trim()).slice(0, 4).map(s => s.trim().slice(0, 90)) : [];
+    const scores = {}; QUAL.forEach(([k]) => { const v = num(x.scores && x.scores[k]); if (v != null && v >= 0 && v <= 10) scores[k] = v; });
+    const rating = num(x.user_rating);
+    return { rating: rating != null && rating > 0 && rating <= 5 ? rating : null, count: String(x.rating_count || "").slice(0, 40), scores, pros: strs(x.pros), cons: strs(x.cons), sources: strs(x.sources), date: new Date().toISOString().slice(0, 10) };
   }
   function applyReviews(text){
     const r = lastJSON(text || ""), list = r && (Array.isArray(r.watches) ? r.watches : Array.isArray(r) ? r : null);
     if (!list || !list.length){ $("#c-rev-msg").textContent = "Je ne trouve pas les avis dans ce texte. Copie toute la réponse de Claude et réessaie."; return false; }
-    const strs = a => Array.isArray(a) ? a.filter(x => typeof x === "string" && x.trim()).slice(0, 4).map(x => x.trim().slice(0, 90)) : [];
     state.reviews = state.reviews || {};
-    cmp.forEach((c, i) => {
-      const x = list[i]; if (!c || !x || typeof x !== "object") return;
-      const scores = {}; QUAL.forEach(([k]) => { const v = num(x.scores && x.scores[k]); if (v != null && v >= 0 && v <= 10) scores[k] = v; });
-      const rating = num(x.user_rating);
-      state.reviews[revKey(c.w)] = { rating: rating != null && rating > 0 && rating <= 5 ? rating : null, count: String(x.rating_count || "").slice(0, 40), scores, pros: strs(x.pros), cons: strs(x.cons), sources: strs(x.sources), date: new Date().toISOString().slice(0, 10) };
-    });
+    cmp.forEach((c, i) => { const x = list[i]; if (c && x && typeof x === "object") state.reviews[revKey(c.w)] = normReview(x); });
     persist();
     $("#c-rev").classList.add("hidden"); $("#c-rev-text").value = "";
     renderCompare(); setStatus("Avis internet enregistrés.");
     return true;
   }
   $("#c-rev-paste").addEventListener("click", async () => {
-    try { const t = await navigator.clipboard.readText(); if (applyReviews(t)) return; }
+    try { const t = await navigator.clipboard.readText(); if (applyReviews(t)){ clearPending(); return; } }
     catch(e){ $("#c-rev-msg").textContent = "Colle la réponse de Claude dans le cadre ci-dessous (appui long › Coller)."; }
     $("#c-rev-text").focus();
   });
-  $("#c-rev-text").addEventListener("input", e => { if (lastJSON(e.target.value)) applyReviews(e.target.value); });
+  $("#c-rev-text").addEventListener("input", e => { if (lastJSON(e.target.value) && applyReviews(e.target.value)) clearPending(); });
   function renderCompare(){
     const [A, B] = cmp;
     $("#c-pick").classList.add("hidden"); $("#c-main").classList.remove("hidden"); $("#c-title").textContent = "Comparateur";
@@ -3764,12 +3799,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
   }
   function photosPrompt(items){
     const d = w => `${w.brand} ${w.model}${w.colorway ? " — version " + w.colorway : ""}${w.dial ? " (cadran " + nearestName(w.dial).toLowerCase() + ")" : ""}`;
-    return `Pour chaque montre ci-dessous, trouve sur internet l'adresse directe (URL) de 3 photos produit officielles, toutes prises sur le même modèle :
-- montre vue strictement de face (cadran face à l'objectif, sans angle ni perspective), à plat, bracelet ouvert à la verticale au-dessus et au-dessous du boîtier ;
-- fond blanc pur et uni (packshot de catalogue, détourage studio), sans dégradé, sans décor, sans ombre portée marquée ;
-- montre entière visible, non coupée, sans poignet, sans main, sans boîte, sans texte, logo de site ni filigrane par-dessus ;
-- la bonne couleur de cadran et le bon bracelet, en haute définition (au moins 800 pixels).
-Cherche d'abord sur le site officiel de la marque, puis chez les grands revendeurs (bijoutiers, horlogers en ligne, grands magasins). Ouvre les pages produit pour récupérer la vraie adresse de l'image principale (souvent la balise og:image ou le premier visuel de la galerie) ; l'adresse doit pointer directement vers l'image (.jpg, .png, .webp ou une adresse d'image du site), pas vers une page. Classe les 3 adresses de la plus conforme à la moins conforme.
+    return `Pour chaque montre ci-dessous, donne « images » : ${PHOTO_RULES}
 
 ${items.map((it, i) => `${i + 1}) ${d(it.target.w)}`).join("\n")}
 
@@ -3780,9 +3810,9 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     if (!PS) return;
     if (PS.done){ PS.done = false; nextBatch(); }
     if (!PS.items.length) return; const p = photosPrompt(PS.items);
-    copyText(p); window.open("https://claude.ai/new?q=" + encodeURIComponent(p), "_blank", "noopener");
+    sendToClaude(p, { type: "photos", scope: PS.scope, batch: PS.items.map(it => ({ kind: it.target.kind, id: it.target.id, key: it.target.kind === "catalog" ? modelKey(it.target.w) : "" })), queue: PS.queue.map(t => ({ kind: t.kind, id: t.id })) });
     $("#ps-paste").classList.remove("hidden");
-    $("#ps-msg").textContent = "Demande copiée. Dans Claude, colle-la si elle n'y est pas déjà et envoie.";
+    $("#ps-msg").textContent = "Claude s'ouvre : envoie la demande, copie sa réponse puis reviens ici.";
   });
   async function fetchImage(url){
     const tries = [url, "https://wsrv.nl/?url=" + encodeURIComponent(url.replace(/^https?:\/\//, "")) + "&w=1600&output=jpg"];
@@ -3805,6 +3835,18 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const border = wn / n, fill = obj / (W * H), size = Math.min(img.width, img.height);
     return border * 2 + (fill > .06 && fill < .7 ? 1 : 0) + (size >= 700 ? .5 : size >= 450 ? .25 : 0) - (Math.abs(img.width / img.height - 1) > 1.4 ? .5 : 0);
   }
+  // télécharge les images proposées et garde la plus propre (fond blanc, bien cadrée)
+  async function bestImage(list){
+    const urls = (Array.isArray(list) ? list : []).filter(u => typeof u === "string" && /^https?:\/\//.test(u)).slice(0, 5);
+    let best = null;
+    for (const u of urls){
+      const blob = await fetchImage(u); if (!blob) continue;
+      let q = 0; try { q = await photoQuality(blob); } catch(e){ continue; }
+      if (!best || q > best.q) best = { blob, q };
+      if (q >= 3.2) break; // fond blanc net et montre bien cadrée : inutile d'essayer les suivantes
+    }
+    return best;
+  }
   async function applyPhotos(text){
     if (!PS || PS.busy) return false;
     const r = lastJSON(text || ""), list = r && (Array.isArray(r.watches) ? r.watches : null);
@@ -3816,13 +3858,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
       const urls = (x && Array.isArray(x.images) ? x.images : []).filter(u => typeof u === "string" && /^https?:\/\//.test(u)).slice(0, 5);
       if (!urls.length){ it.status = "Aucune image proposée"; it.cls = "ko"; renderPS(); continue; }
       it.status = "Téléchargement…"; it.cls = ""; renderPS();
-      let best = null;
-      for (const u of urls){
-        const blob = await fetchImage(u); if (!blob) continue;
-        let q = 0; try { q = await photoQuality(blob); } catch(e){ continue; }
-        if (!best || q > best.q) best = { blob, q };
-        if (q >= 3.2) break; // fond blanc net et montre bien cadrée : inutile d'essayer les suivantes
-      }
+      const best = await bestImage(urls);
       if (!best){ it.status = "Images inaccessibles"; it.cls = "ko"; renderPS(); continue; }
       it.status = "Détourage…"; renderPS();
       try {
@@ -3843,15 +3879,75 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     return true;
   }
   $("#ps-paste-btn").addEventListener("click", async () => {
-    try { const t = await navigator.clipboard.readText(); if (await applyPhotos(t)) return; }
+    try { const t = await navigator.clipboard.readText(); if (await applyPhotos(t)){ clearPending(); return; } }
     catch(e){ $("#ps-msg").textContent = "Colle la réponse de Claude dans le cadre (appui long › Coller)."; }
     $("#ps-text").focus();
   });
-  $("#ps-text").addEventListener("input", e => { if (lastJSON(e.target.value)) applyPhotos(e.target.value); });
+  $("#ps-text").addEventListener("input", async e => { if (lastJSON(e.target.value) && await applyPhotos(e.target.value)) clearPending(); });
   $("#m-photos").addEventListener("click", () => openPhotoFinder(photoTargets("all"), "all"));
   $("#m-photos-w").addEventListener("click", () => openPhotoFinder(photoTargets("wishlist"), "wishlist"));
   $("#m-photos-c").addEventListener("click", () => openPhotoFinder(photoTargets("collection"), "collection"));
   $("#photos-btn").addEventListener("click", () => { if (tab === "collection" || tab === "wishlist") openPhotoFinder(photoTargets(tab), tab); });
+
+  // ---------- Pont avec l'app Claude (gratuit) : envoi en un geste, import proposé au retour ----------
+  const PEND_LS = "mywatch-claude-pending", isheet = $("#isheet");
+  let pending = null, leftForClaude = false;
+  try { pending = JSON.parse(localStorage.getItem(PEND_LS) || "null"); if (pending && Date.now() - pending.at > 6 * 3600e3) pending = null; } catch(e){ pending = null; }
+  function savePending(){ try { pending ? localStorage.setItem(PEND_LS, JSON.stringify(pending)) : localStorage.removeItem(PEND_LS); } catch(e){} }
+  function sendToClaude(prompt, ctx){
+    copyText(prompt);
+    pending = { ...ctx, at: Date.now() }; savePending(); leftForClaude = true;
+    window.open("https://claude.ai/new?q=" + encodeURIComponent(prompt), "_blank", "noopener");
+  }
+  function clearPending(){ pending = null; savePending(); if (isheet.open) isheet.close(); }
+  function offerImport(){
+    if (!pending || isheet.open || document.visibilityState !== "visible") return;
+    $("#ib-sub").textContent = { sheet: "Copie sa réponse (bouton « Copier » sous son message) : la fiche, la photo et les avis se remplissent d'un coup.", reviews: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les avis au comparateur.", photos: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les photos." }[pending.type] || "";
+    $("#ib-text").classList.add("hidden"); $("#ib-text").value = ""; $("#ib-go").disabled = false;
+    isheet.showModal();
+  }
+  // remet en place l'écran d'où la demande est partie (même si l'iPhone a rechargé l'app entre-temps)
+  function restoreContext(){
+    const p = pending; if (!p) return;
+    if (p.type === "sheet"){
+      if (!sheet.open){ openSheet(p.list || "collection", p.id && state[p.list] && state[p.list].some(x => x.id === p.id) ? p.id : null); if (!p.id){ form.elements.brand.value = p.brand || ""; form.elements.model.value = p.model || ""; updateFormWeb(); } }
+      $("#ai-paste").classList.remove("hidden");
+    } else if (p.type === "reviews"){
+      if (!csheet.open){ cmpLoad(); renderCompare(); csheet.showModal(); }
+      $("#c-rev").classList.remove("hidden");
+    } else if (p.type === "photos"){
+      if (!psheet.open || !PS){
+        const find = r => r.kind === "catalog" ? (() => { const e = CAT_MAP[r.key]; return e ? { kind: "catalog", id: null, w: e } : null; })() : (() => { const w = (state[r.kind] || []).find(x => x.id === r.id); return w ? { kind: r.kind, id: w.id, w } : null; })();
+        PS = { scope: p.scope || "", queue: (p.queue || []).map(find).filter(Boolean), items: (p.batch || []).map(find).filter(Boolean).map(t => ({ target: t, status: "En attente", cls: "" })) };
+        $("#ps-all-l").classList.toggle("hidden", !PS.scope); $("#ps-ask").classList.add("hidden"); $("#ps-help").textContent = "Import des photos proposées par Claude.";
+        renderPS(); psheet.showModal();
+      }
+      $("#ps-paste").classList.remove("hidden");
+    }
+  }
+  async function importText(t){
+    const p = pending; if (!p) return true;
+    if (!lastJSON(t || "")) return false;
+    restoreContext();
+    let ok = false;
+    if (p.type === "sheet") ok = applyAnswer(t);
+    else if (p.type === "reviews") ok = applyReviews(t);
+    else if (p.type === "photos") ok = await applyPhotos(t);
+    if (ok) clearPending();
+    return ok;
+  }
+  $("#ib-go").addEventListener("click", async () => {
+    let t = "";
+    try { t = await navigator.clipboard.readText(); } catch(e){}
+    if (t && await importText(t)) return;
+    $("#ib-sub").textContent = t ? "Je ne trouve pas la réponse dans ce que tu as copié. Dans Claude, touche « Copier » sous sa réponse, puis réessaie (ou colle-la ci-dessous)." : "Colle la réponse de Claude ci-dessous (appui long › Coller).";
+    $("#ib-text").classList.remove("hidden");
+  });
+  $("#ib-text").addEventListener("input", async e => { if (lastJSON(e.target.value)) await importText(e.target.value); });
+  $("#ib-later").addEventListener("click", () => { isheet.close(); restoreContext(); });
+  $("#ib-cancel").addEventListener("click", () => clearPending());
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden"){ if (pending) leftForClaude = true; } else if (leftForClaude){ leftForClaude = false; setTimeout(offerImport, 350); } });
+  window.addEventListener("pageshow", e => { if (e.persisted && pending) setTimeout(offerImport, 350); });
 
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
   document.addEventListener("click", closeFrom, true);
@@ -4191,11 +4287,12 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     await loadPhotos();
     render();
     hideSplash();
+    if (pending) setTimeout(offerImport, 2600);
     setTimeout(() => restandardize(), 2600);
     checkUpdate();
     if (needSave) persist();
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
-    if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(r => { document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") r.update().catch(() => {}); }); }).catch(() => {});
+    if ("serviceWorker" in navigator && location.protocol !== "file:") navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(r => { document.addEventListener("visibilitychange", () => { if (r && document.visibilityState === "visible") r.update().catch(() => {}); }); }).catch(() => {});
   }
   init();
 })();
