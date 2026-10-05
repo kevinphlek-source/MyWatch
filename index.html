@@ -567,6 +567,20 @@ dialog p.help:empty{display:none}
 .h-remind b{font-size:.95rem}.h-remind span{font-size:.8rem;opacity:.8}
 .h-remind .btns{display:flex;gap:8px}
 .h-remind .btn{background:#C9A35A;color:#1E1C18;border:0;font-weight:800}.h-remind .btn.ghost{background:transparent;color:#FFFDF8;border:1px solid rgba(255,255,255,.3)}
+
+.hero .sub.est{font-size:.82rem;margin-top:2px}
+.d-est{display:inline-block;margin-left:8px;font-size:.82rem;color:var(--muted);font-weight:700}
+.fund-cta .ic{font-size:1.1rem}
+/* animation « recherchée » : verrouillage de la cible */
+.joy.wishmode .joy-w{animation:wishIn .7s ease-out .05s both;margin:12% 0 16%}
+@keyframes wishIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+.joy-w .lock-ring,.joy-w .lock-ticks{position:absolute;left:-19%;top:-19%;width:138%!important;height:138%!important;max-width:none!important;max-height:none!important;border-radius:0!important;filter:none!important;pointer-events:none;opacity:0;overflow:visible;transform-origin:50% 50%;transform-box:border-box}
+.lock-ring circle{fill:none;stroke:#C9A35A}
+.lock-ring .dot{fill:#B5483F;stroke:none}
+.lock-ticks line{stroke:#A8823A;stroke-width:3.5;stroke-linecap:round}
+.lock-flash{position:absolute;inset:-19%;border-radius:50%;border:3px solid #E8D3A0;opacity:0;pointer-events:none}
+.joy.wishmode .joy-k{animation-delay:1.65s}.joy.wishmode .joy-t{animation-delay:1.8s}.joy.wishmode .joy-m{animation-delay:1.95s}.joy.wishmode .pill{animation-delay:2.1s}
+@media (prefers-reduced-motion: reduce){.lock-ring,.lock-ticks{opacity:1}}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -1208,10 +1222,10 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <p class="help" id="ps-msg" aria-live="polite"></p>
   </form>
 </dialog>
-<dialog id="fdsheet" aria-label="Financer une envie">
+<dialog id="fdsheet" aria-label="Objectif poignet">
   <form method="dialog" style="gap:12px" onsubmit="return false">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
-    <h2>Financer une envie</h2>
+    <h2>Objectif poignet</h2>
     <label id="fd-pick-l">Montre visée<select id="fd-watch"></select></label>
     <div class="fd-head" id="fd-head"></div>
     <label>Montant à réunir (€)<input id="fd-goal" inputmode="decimal" autocomplete="off"></label>
@@ -1220,7 +1234,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <label id="fd-date-l" class="hidden">Je veux l'acheter en<input id="fd-date" type="month"></label>
     <label>Déjà de côté (€)<input id="fd-saved" inputmode="decimal" autocomplete="off"></label>
     <p class="fd-calc" id="fd-calc"></p>
-    <div class="actions"><button type="button" class="btn danger hidden" id="fd-stop">Arrêter</button><span class="spacer"></span><button type="button" class="btn primary" id="fd-save">Lancer</button></div>
+    <div class="actions"><button type="button" class="btn danger hidden" id="fd-stop">Arrêter</button><span class="spacer"></span><button type="button" class="btn primary" id="fd-save">C'est parti</button></div>
   </form>
 </dialog>
 <dialog id="dpsheet" aria-label="Mettre de côté">
@@ -1230,7 +1244,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <p class="help" id="dp-for"></p>
     <label>Montant (€)<input id="dp-amount" inputmode="decimal" autocomplete="off"></label>
     <label>Note (facultatif)<input id="dp-note" autocomplete="off" placeholder="ex. prime, vente d'une montre…"></label>
-    <div class="actions"><span class="spacer"></span><button type="button" class="btn primary" id="dp-save">Ajouter à la cagnotte</button></div>
+    <div class="actions"><span class="spacer"></span><button type="button" class="btn primary" id="dp-save">Ajouter</button></div>
   </form>
 </dialog>
 <dialog id="vsheet" aria-label="Personnaliser la vitrine">
@@ -1270,7 +1284,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 29; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 30; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -2461,7 +2475,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
           ${specLine(w) ? `<span class="spec">${esc(specLine(w))}</span>` : ""}
           <span class="foot"><span class="pill">${r ? r.label : "Sans prix"}</span><span class="price">${money(shown) || "–"}</span></span>
           ${sub ? `<span class="sub">${esc(sub)}</span>` : ""}
-          ${wish && w.fund ? (() => { const f = fundInfo(w); return `<span class="fbar" title="Cagnotte ${Math.round(f.pct * 100)} %"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="sub">Cagnotte ${eur.format(f.saved)} / ${eur.format(f.goal)}</span>`; })() : ""}
+          ${wish && w.fund ? (() => { const f = fundInfo(w); return `<span class="fbar" title="Objectif poignet ${Math.round(f.pct * 100)} %"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="sub">Objectif poignet ${eur.format(f.saved)} / ${eur.format(f.goal)}</span>`; })() : ""}
         </span>
       </span>
     </button>`;
@@ -3607,7 +3621,8 @@ Ajoute aussi dans le même objet JSON :
     $("#d-brand").textContent = w.brand; $("#d-model").textContent = w.model;
     $("#d-web").innerHTML = webLinks(w);
     const priceShown = kind === "collection" ? (w.price || w.retail) : kind === "wishlist" ? (w.current || w.retail) : w.retail;
-    $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
+    const est = kind === "collection" ? marketValue(w) : null;
+    $("#d-price").innerHTML = `<strong>${money(priceShown) || "Prix non communiqué"}</strong>${est ? `<small class="d-est">≈ ${eur.format(est.value)} aujourd'hui</small>` : ""}${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}${own ? `<span class="d-own">${own === "collection" ? "Dans ta collection" : "Dans tes recherchées"}</span>` : ""}`;
     // versions : cadran, lunette, bracelet
     const vname = versionName(w, opts);
     if (vname) w.colorway = vname;
@@ -4229,19 +4244,19 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ph = photoOf(kind === "catalog" ? "catalog" : "collection", w) || (w.photo && photoSrc(w.photo) ? { src: photoSrc(w.photo) } : null);
     const r = rarity(valueOf(w, false));
-    const el = document.createElement("div"); el.className = "joy"; el.setAttribute("role", "status");
+    const el = document.createElement("div"); el.className = "joy" + (wish ? " wishmode" : ""); el.setAttribute("role", "status");
     el.innerHTML = `<canvas></canvas><div class="joy-c"><div class="joy-w"><span class="joy-shine"></span>${ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w)}<span class="joy-ring"></span><span class="joy-ring r2"></span></div>
-      <div class="joy-k">${mode === "goal" ? "Objectif atteint" : wish ? "Dans le viseur" : "Nouvelle pièce"}</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${mode === "goal" ? "Ta cagnotte est complète" : `${esc(w.brand)} ${wish ? "rejoint tes envies" : "rejoint ta collection"}`}</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
+      <div class="joy-k">${mode === "goal" ? "Objectif poignet atteint" : wish ? "Dans le viseur" : "Nouvelle pièce"}</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${mode === "goal" ? "Elle peut rejoindre ton poignet" : `${esc(w.brand)} ${wish ? "rejoint tes envies" : "rejoint ta collection"}`}</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
     if (wish){
-      const wEl = el.querySelector(".joy-w"); wEl.querySelectorAll(".joy-ring").forEach(x => x.remove());
-      wEl.insertAdjacentHTML("afterbegin", `<svg class="joy-target" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" stroke-width="3"/><circle cx="100" cy="100" r="74" stroke-width="2" stroke-dasharray="4 6"/><circle cx="100" cy="100" r="52" stroke-width="2.5"/><line x1="100" y1="0" x2="100" y2="22"/><line x1="100" y1="178" x2="100" y2="200"/><line x1="0" y1="100" x2="22" y2="100"/><line x1="178" y1="100" x2="200" y2="100"/><circle class="dot" cx="100" cy="4" r="3.5"/></svg>`);
+      const wEl = el.querySelector(".joy-w"); wEl.querySelectorAll(".joy-ring,.joy-shine").forEach(x => x.remove());
+      wEl.insertAdjacentHTML("beforeend", `<svg class="lock-ring" viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="114" stroke-width="2.5"/><circle cx="120" cy="120" r="102" stroke-width="1.5" stroke-dasharray="2 7"/><path d="M120 6a114 114 0 0 1 80 33" stroke-width="5" stroke-linecap="round" fill="none" stroke="#A8823A"/><circle class="dot" cx="120" cy="6" r="4.5"/></svg><svg class="lock-ticks" viewBox="0 0 240 240" aria-hidden="true"><line x1="120" y1="0" x2="120" y2="26"/><line x1="120" y1="214" x2="120" y2="240"/><line x1="0" y1="120" x2="26" y2="120"/><line x1="214" y1="120" x2="240" y2="120"/></svg><span class="lock-flash"></span>`);
     }
     document.body.appendChild(el);
     // confettis dorés
     const cv = el.querySelector("canvas"), g = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1);
     const W = cv.width = innerWidth * dpr, H = cv.height = innerHeight * dpr;
     const COLORS = ["#C9A35A", "#E8D3A0", "#A8823A", "#FFFDF8", "#B8BEC6", "#F1D98C"];
-    const parts = reduce ? [] : Array.from({ length: 140 }, (_, i) => { const a = -Math.PI / 2 + (Math.random() - .5) * 2.2, v = (8 + Math.random() * 12) * dpr; return { x: W / 2, y: H * .42, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4 * dpr, s: (4 + Math.random() * 6) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: COLORS[i % COLORS.length], d: Math.random() * 12 }; });
+    const parts = reduce || wish ? [] : Array.from({ length: 140 }, (_, i) => { const a = -Math.PI / 2 + (Math.random() - .5) * 2.2, v = (8 + Math.random() * 12) * dpr; return { x: W / 2, y: H * .42, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4 * dpr, s: (4 + Math.random() * 6) * dpr, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: COLORS[i % COLORS.length], d: Math.random() * 12 }; });
     let raf = 0, t0 = performance.now();
     const tick = t => {
       const dt = Math.max(0, Math.min(2, (t - t0) / 16.7)); t0 = t; g.clearRect(0, 0, W, H); let alive = 0;
@@ -4265,20 +4280,30 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
         setTimeout(() => { cancelAnimationFrame(raf); el.remove(); }, 1100);
       } else { el.classList.add("out"); bump(); setTimeout(() => { cancelAnimationFrame(raf); el.remove(); }, 500); }
     };
-    const timer = setTimeout(finish, reduce ? 1600 : 2900);
+    if (wish && !reduce){
+      // la cible tourne autour de la montre en se resserrant, ralentit puis se verrouille
+      const ring = el.querySelector(".lock-ring"), ticks = el.querySelector(".lock-ticks"), flash = el.querySelector(".lock-flash"), lockAt = 1500;
+      ring.animate([{ transform: "scale(1.75) rotate(-420deg)", opacity: 0 }, { opacity: 1, offset: .18 }, { transform: "scale(1) rotate(0deg)", opacity: 1 }], { duration: lockAt, easing: "cubic-bezier(.15,.7,.2,1)", fill: "forwards" });
+      ticks.animate([{ transform: "scale(1.45)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }], { duration: 260, delay: lockAt - 120, easing: "cubic-bezier(.3,1.6,.5,1)", fill: "forwards" });
+      ring.animate([{ transform: "scale(1)" }, { transform: "scale(.94)" }, { transform: "scale(1)" }], { duration: 300, delay: lockAt, easing: "ease-out" });
+      flash.animate([{ transform: "scale(.95)", opacity: .9 }, { transform: "scale(1.5)", opacity: 0 }], { duration: 650, delay: lockAt + 40, easing: "ease-out", fill: "forwards" });
+      el.querySelector(".joy-w").animate([{ filter: "brightness(1)" }, { filter: "brightness(1.12)" }, { filter: "brightness(1)" }], { duration: 400, delay: lockAt });
+    }
+    const timer = setTimeout(finish, reduce ? 1600 : wish ? 3600 : 2900);
     el.addEventListener("click", finish);
   }
 
   // ---------- Valeur à l'instant T (estimation, ou cote trouvée par Claude) ----------
   // profils : perte à la sortie de boutique puis évolution annuelle
   const VALUE_PROFILES = {
-    up:    { d0: 0,    r: .04,  label: "prend de la valeur" },
-    hold:  { d0: .10,  r: .01,  label: "tient sa valeur" },
-    lux:   { d0: .25,  r: -.02, label: "perd modérément" },
-    entry: { d0: .30,  r: -.03, label: "perd de la valeur" },
-    tool:  { d0: .35,  r: -.03, label: "perd de la valeur" },
-    fashion:{ d0: .55, r: -.05, label: "perd beaucoup" }
+    up:      { d0: 0,   r: .03 },   // modèles très demandés : prennent de la valeur
+    hold:    { d0: .05, r: .01 },   // grandes maisons et icônes : tiennent leur valeur
+    lux:     { d0: .15, r: -.015 }, // luxe courant : décote modérée
+    entry:   { d0: .12, r: -.02 },  // Seiko, Citizen, Tissot, Hamilton… : légère décote
+    tool:    { d0: .15, r: -.02 },  // Casio, Timex, Swatch
+    fashion: { d0: .40, r: -.04 }   // montres de mode
   };
+
   function valueProfile(w){
     const b = fold(w.brand), m = fold(w.model);
     if (/^rolex/.test(b) && /submariner|gmt|daytona|explorer|sea-dweller|yacht|sky-dweller|milgauss/.test(m)) return "up";
@@ -4297,10 +4322,12 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     if (w.quote && num(w.quote.value)){ const base = num(w.price) ?? num(w.retail); const v = num(w.quote.value); return { value: v, delta: base ? v - base : 0, pct: base ? (v - base) / base : 0, quote: true, date: w.quote.date, trend: w.quote.trend, base }; }
     const base = num(w.price) ?? num(w.retail); if (!base) return null;
     const p = VALUE_PROFILES[valueProfile(w)];
-    const t = w.date && !isNaN(Date.parse(w.date)) ? Date.parse(w.date) : Date.now() - 365 * 864e5;
+    // sans date d'achat : on considère une montre récente (6 mois)
+    const t = w.date && !isNaN(Date.parse(w.date)) ? Date.parse(w.date) : Date.now() - 182 * 864e5;
     const years = Math.max(0, (Date.now() - t) / (365.25 * 864e5));
-    const v = Math.max(base * .15, Math.round(base * (1 - p.d0 * Math.min(1, years * 4 + .25)) * Math.pow(1 + p.r, years)));
-    return { value: v, delta: v - base, pct: (v - base) / base, quote: false, profile: p.label, base };
+    // la décote « sortie de boutique » arrive pour moitié tout de suite, le reste sur la première année
+    const v = Math.max(base * .2, Math.round(base * (1 - p.d0 * (.5 + .5 * Math.min(1, years))) * Math.pow(1 + p.r, years)));
+    return { value: v, delta: v - base, pct: (v - base) / base, quote: false, base };
   }
   function collectionValue(arr){
     let value = 0, paid = 0, n = 0, quotes = 0;
@@ -4351,12 +4378,12 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
   }
   function reserveBar(pct){ const n = 30, on = Math.round(pct * n); return `<div class="reserve" aria-label="${Math.round(pct * 100)} %">${Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}"></i>`).join("")}</div>`; }
   function fundCard(w){
-    if (!w || !w.fund) return `<button type="button" class="fund-cta" data-fund="setup"><span class="ic">€</span><span><b>Financer cette montre</b><span>Une cagnotte : un montant par mois, ou une date d'achat visée</span></span></button>`;
+    if (!w || !w.fund) return `<button type="button" class="fund-cta" data-fund="setup"><span class="ic">⌚︎</span><span><b>Objectif poignet</b><span>Fixe ton rythme d'épargne et découvre quand elle sera à ton poignet</span></span></button>`;
     const f = fundInfo(w), hist = (w.fund.history || []).slice().reverse();
-    return `<div class="fund${f.done ? " done" : ""}"><h3>${f.done ? "Objectif atteint" : "Ma cagnotte"}</h3>
+    return `<div class="fund${f.done ? " done" : ""}"><h3>${f.done ? "Objectif poignet atteint" : "Objectif poignet"}</h3>
       <div class="amt"><b>${eur.format(f.saved)}</b><span>sur ${eur.format(f.goal)} · ${Math.round(f.pct * 100)} %</span></div>
       ${reserveBar(f.pct)}
-      <div class="eta">${f.done ? "La cagnotte est complète : elle est à toi !" : f.months != null ? `Encore ${eur.format(f.left)} · ≈ ${f.months} mois<small>${f.monthly ? `${eur.format(f.monthly)} par mois · achat vers ${monthName(f.eta)}` : ""}</small>` : `Encore ${eur.format(f.left)}<small>Fixe un montant mensuel pour estimer la date.</small>`}</div>
+      <div class="eta">${f.done ? "Tout est réuni : elle peut rejoindre ton poignet !" : f.months != null ? `Encore ${eur.format(f.left)} · ≈ ${f.months} mois<small>${f.monthly ? `${eur.format(f.monthly)} par mois · achat vers ${monthName(f.eta)}` : ""}</small>` : `Encore ${eur.format(f.left)}<small>Fixe un montant mensuel pour estimer la date.</small>`}</div>
       <div class="btns">${f.done ? `<button type="button" class="btn buy" data-act-fund="bought">Je l'ai achetée</button>` : `${f.monthly ? `<button type="button" class="btn primary" data-fund="quick">+ ${eur.format(f.monthly)}</button>` : ""}<button type="button" class="btn" data-fund="deposit">Autre montant</button>`}<button type="button" class="btn" data-fund="setup">Réglages</button></div>
       ${hist.length ? `<details><summary>Historique (${hist.length})</summary><ul class="hist">${hist.map((x, i) => `<li><b>${eur.format(num(x.a) || 0)}</b><span>${new Date(x.d).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}${x.n ? " · " + esc(x.n) : ""}</span><button type="button" data-fund-del="${hist.length - 1 - i}" aria-label="Supprimer">✕</button></li>`).join("")}</ul></details>` : ""}</div>`;
   }
@@ -4367,7 +4394,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     persist();
     if (dsheet.open && detail && detail.id === w.id) renderDetail();
     if (tab === "home") renderHome(); else if (tab !== "catalog") render();
-    setStatus(`${eur.format(a)} ajoutés à la cagnotte.`);
+    setStatus(`${eur.format(a)} ajoutés à ton objectif poignet.`);
     if (!before && fundInfo(w).done){ if (dsheet.open) dsheet.close(); setTimeout(() => celebrate(w, "wishlist", "goal"), 80); }
   }
   // fenêtre de réglage
@@ -4376,7 +4403,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const wl = state.wishlist; if (!wl.length){ setStatus("Ajoute d'abord une montre à tes envies."); return; }
     if (dsheet.open) dsheet.close();
     $("#fd-pick-l").classList.toggle("hidden", !!id);
-    $("#fd-watch").innerHTML = wl.map(w => `<option value="${esc(w.id)}">${esc(w.brand + " " + w.model)}${w.fund ? " (cagnotte en cours)" : ""}</option>`).join("");
+    $("#fd-watch").innerHTML = wl.map(w => `<option value="${esc(w.id)}">${esc(w.brand + " " + w.model)}${w.fund ? " (objectif en cours)" : ""}</option>`).join("");
     fdFill(id || (wl.find(w => !w.fund) || wl[0]).id);
     $("#fdsheet").showModal();
   }
@@ -4391,7 +4418,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const d = new Date(); d.setMonth(d.getMonth() + 12); $("#fd-date").value = f.deadline || monthKey(d);
     $("#fd-saved").value = w.fund ? "" : "";
     $("#fd-saved").closest("label").classList.toggle("hidden", !!w.fund);
-    $("#fd-stop").classList.toggle("hidden", !w.fund); $("#fd-save").textContent = w.fund ? "Enregistrer" : "Lancer";
+    $("#fd-stop").classList.toggle("hidden", !w.fund); $("#fd-save").textContent = w.fund ? "Enregistrer" : "C'est parti";
     fdSync();
   }
   function fdSync(){
@@ -4417,9 +4444,9 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     persist(); $("#fdsheet").close();
     if (tab === "home") renderHome(); else if (tab !== "catalog") render();
     openWatchSheet("wishlist", w.id);
-    setStatus(isNew ? "Cagnotte lancée." : "Cagnotte mise à jour.");
+    setStatus(isNew ? "Objectif poignet lancé." : "Objectif poignet mis à jour.");
   });
-  $("#fd-stop").addEventListener("click", () => { const w = fdFor; if (!w || !confirm("Arrêter cette cagnotte et effacer son historique ?")) return; delete w.fund; persist(); $("#fdsheet").close(); if (tab === "home") renderHome(); else render(); });
+  $("#fd-stop").addEventListener("click", () => { const w = fdFor; if (!w || !confirm("Arrêter cet objectif poignet et effacer son historique ?")) return; delete w.fund; persist(); $("#fdsheet").close(); if (tab === "home") renderHome(); else render(); });
   // versement
   let dpFor = null;
   function openDeposit(w){ dpFor = w; $("#dp-for").textContent = `${w.brand} ${w.model}`; $("#dp-amount").value = fundInfo(w).monthly || ""; $("#dp-note").value = ""; $("#dpsheet").showModal(); setTimeout(() => $("#dp-amount").focus(), 50); }
@@ -4439,8 +4466,8 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const funds = state.wishlist.filter(w => w.fund), mk = monthKey();
     const remind = funds.filter(w => { const f = fundInfo(w); return !f.done && f.monthly > 0 && w.fund.skip !== mk && !(w.fund.history || []).some(x => String(x.d).slice(0, 7) === mk); });
     let h = remind.map(w => { const f = fundInfo(w); return `<div class="h-remind"><span>Versement de ${new Date().toLocaleDateString("fr-FR", { month: "long" })}</span><b>${esc(w.brand)} ${esc(w.model)} · ${eur.format(f.monthly)}</b><div class="btns"><button type="button" class="btn small" data-fundadd="${esc(w.id)}">+ ${eur.format(f.monthly)}</button><button type="button" class="btn small ghost" data-fundskip="${esc(w.id)}">Pas ce mois-ci</button></div></div>`; }).join("");
-    if (funds.length) h += `<div class="h-funds">${funds.map(w => { const f = fundInfo(w); return `<div class="h-fund" data-wish="${esc(w.id)}"><span class="th">${thumbOf("wishlist", w)}</span><span class="tx"><small>${f.done ? "Objectif atteint" : "Cagnotte"}</small><b>${esc(w.brand)} ${esc(w.model)}</b><span class="meter"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="gap">${eur.format(f.saved)} / ${eur.format(f.goal)}${f.eta && !f.done ? ` · ${monthName(f.eta)}` : ""}</span></span></div>`; }).join("")}</div>`;
-    else if (state.wishlist.length) h += `<button type="button" class="fund-cta" data-fundnew=""><span class="ic">€</span><span><b>Financer une envie</b><span>Choisis la montre visée et ton rythme d'épargne</span></span></button>`;
+    if (funds.length) h += `<div class="h-funds">${funds.map(w => { const f = fundInfo(w); return `<div class="h-fund" data-wish="${esc(w.id)}"><span class="th">${thumbOf("wishlist", w)}</span><span class="tx"><small>${f.done ? "Objectif poignet atteint" : "Objectif poignet"}</small><b>${esc(w.brand)} ${esc(w.model)}</b><span class="meter"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="gap">${eur.format(f.saved)} / ${eur.format(f.goal)}${f.eta && !f.done ? ` · ${monthName(f.eta)}` : ""}</span></span></div>`; }).join("")}</div>`;
+    else if (state.wishlist.length) h += `<button type="button" class="fund-cta" data-fundnew=""><span class="ic">⌚︎</span><span><b>Objectif poignet</b><span>Choisis ta prochaine montre et ton rythme d'épargne</span></span></button>`;
     return h;
   }
 
@@ -4466,7 +4493,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
       <div class="h-hello"><span>${esc(date)}</span><h2>${hello}</h2></div>
       ${pick ? `<button type="button" class="h-day" data-open="${esc(pick.id)}"><span class="h-day-img">${thumbOf("collection", pick)}</span><span><small>Montre du jour</small><b>${esc(pick.brand)}</b><strong>${esc(pick.model)}</strong><em>Et si tu la portais aujourd'hui ?</em></span></button>` : ""}
       <div class="h-kpis">
-        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(collectionValue(col).value) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""} · estimée</span></button>
+        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(collectionValue(col).paid) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""}${col.length ? ` · ≈ ${eur.format(collectionValue(col).value)}` : ""}</span></button>
         <button type="button" class="h-kpi" data-go="wishlist"><b>${wl.length}</b><span>envie${wl.length > 1 ? "s" : ""}${budget ? " · " + eur.format(budget) : ""}</span></button>
         <button type="button" class="h-kpi" data-go="catalog"><b>${CAT_LIST.length}</b><span>modèles</span></button>
       </div>
@@ -4584,8 +4611,8 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     const mvAll = collectionValue(col), gain = mvAll.value - mvAll.paid;
     const brands = {}; col.forEach(w => brands[w.brand || "?"] = (brands[w.brand || "?"] || 0) + 1);
     const both = [];
-    h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(mvAll.value)}</b><span>Valeur estimée aujourd'hui${mvAll.quotes ? ` (dont ${mvAll.quotes} cote${mvAll.quotes > 1 ? "s" : ""} Claude)` : ""}</span></div>
-      <div class="st-kpi"><b>${eur.format(mvAll.paid)}</b><span>Payé</span></div>
+    h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(mvAll.paid)}</b><span>Payé pour ta collection</span></div>
+      <div class="st-kpi"><b>${eur.format(mvAll.value)}</b><span>Valeur estimée${mvAll.quotes ? ` (dont ${mvAll.quotes} cote${mvAll.quotes > 1 ? "s" : ""} Claude)` : ""}</span></div>
       <div class="st-kpi"><b class="mv ${gain >= 0 ? "up" : "down"}" style="background:none;padding:0">${gain >= 0 ? "+" : "−"}${eur.format(Math.abs(gain))}</b><span>${gain >= 0 ? "Plus-value" : "Moins-value"} estimée${mvAll.paid ? ` (${gain >= 0 ? "+" : "−"}${Math.abs(Math.round(gain / mvAll.paid * 100))} %)` : ""}</span></div>
       <div class="st-kpi"><b>${col.length}</b><span>Montre${col.length > 1 ? "s" : ""}</span></div>
       <div class="st-kpi"><b>${Object.keys(brands).length}</b><span>Marque${Object.keys(brands).length > 1 ? "s" : ""}</span></div></div>
@@ -4725,8 +4752,8 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
       const brands = new Set(arr.map(w => fold(w.brand))).size;
       const mv = collectionValue(arr);
       hero.innerHTML = `<span class="eyebrow">Ma collection</span>
-        <div class="big">${eur.format(mv.value || total)}</div>
-        ${mv.n ? `<div class="sub">valeur estimée · payé ${eur.format(mv.paid)} <span class="mv ${mv.value >= mv.paid ? "up" : "down"}">${mv.value >= mv.paid ? "+" : "−"}${eur.format(Math.abs(mv.value - mv.paid))}</span></div>` : ""}
+        <div class="big">${eur.format(total)}</div>
+        ${mv.n ? `<div class="sub est">payé · valeur estimée ${eur.format(mv.value)} <span class="mv ${mv.value >= mv.paid ? "up" : "down"}">${mv.value >= mv.paid ? "+" : "−"}${Math.abs(Math.round((mv.value - mv.paid) / (mv.paid || 1) * 100))} %</span></div>` : ""}
         <div class="sub"><strong>${arr.length}</strong> montre${arr.length > 1 ? "s" : ""} · <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}</div>
         ${rarityBar(arr, false)}
         <div class="tiles"><div class="tile"><b>${arr.length ? auto + " / " + arr.length : "–"}</b><small>Mécaniques</small></div><div class="tile"><b>${avg ? String(avg).replace(".", ",") + " mm" : "–"}</b><small>Diamètre moyen</small></div><div class="tile"><b>${top ? esc(top.brand) : "–"}</b><small>Pièce maîtresse</small></div></div>`;
