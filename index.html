@@ -376,7 +376,6 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 #isheet textarea{font-size:16px;min-height:70px}
 
 /* ---------- Refonte : plus sobre ---------- */
-#menu-btn{display:none!important}
 .photos-btn{padding:8px 11px!important}
 .photos-btn svg{width:18px;height:18px}
 .shown:empty{display:none}
@@ -440,6 +439,92 @@ dialog p.help:empty{display:none}
 .tabbar .count.bump{animation:bump .6s cubic-bezier(.2,1.6,.4,1)}
 @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion: reduce){.joy *,.joy{animation-duration:.01s!important;animation-delay:0s!important}.joy-shine{display:none}}
+
+/* ---------- Accueil & statistiques ---------- */
+.wrap.pagemode>*:not(.appbar):not(#page):not(#status){display:none!important}
+.page{display:flex;flex-direction:column;gap:18px;padding-bottom:20px}
+.h-hello span{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.h-hello h2{font-family:var(--serif);font-size:2.2rem;margin:2px 0 0;line-height:1.05}
+.h-day{display:flex;align-items:center;gap:16px;border:1px solid var(--line);background:linear-gradient(135deg,var(--surface),var(--surface2,#F8F3EA));border-radius:24px;padding:14px;text-align:left;color:var(--ink);font:inherit;cursor:pointer;box-shadow:0 10px 30px rgba(60,45,20,.08)}
+.h-day-img{width:118px;height:118px;flex:none;border-radius:18px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.h-day-img img{width:100%;height:100%;object-fit:cover}.h-day-img svg{width:115%;height:115%}
+.h-day small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.h-day b{display:block;font-size:.8rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.08em}
+.h-day strong{display:block;font-family:var(--serif);font-size:1.35rem;line-height:1.15;margin-top:2px}
+.h-day em{display:block;font-style:normal;font-size:.82rem;color:var(--muted);margin-top:6px}
+.h-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.h-kpi{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:12px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.h-kpi b{font-size:1.15rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-kpi span{font-size:.72rem;color:var(--muted);font-weight:700}
+.h-goal{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:14px;display:flex;gap:14px;align-items:center;cursor:pointer}
+.h-goal .th{width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.h-goal .th img{width:100%;height:100%;object-fit:cover}.h-goal .th svg{width:120%;height:120%}
+.h-goal .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.h-goal small{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.h-goal b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meter{height:8px;border-radius:999px;background:var(--line);overflow:hidden}.meter i{display:block;height:100%;border-radius:999px;background:var(--brass)}
+.h-goal .gap{font-size:.75rem;color:var(--muted);font-weight:700}
+.h-stats{display:flex;align-items:center;gap:12px;border:0;border-radius:20px;padding:16px;background:#1E1C18;color:#FFFDF8;font:inherit;text-align:left;cursor:pointer}
+.h-stats svg{width:30px;height:30px;flex:none;color:#C9A35A}
+.h-stats b{display:block;font-size:1rem}.h-stats span{font-size:.8rem;opacity:.75}
+.h-stats i{margin-left:auto;font-style:normal;font-size:1.3rem;color:#C9A35A}
+.h-sec{display:flex;align-items:baseline;justify-content:space-between;margin-top:6px}
+.h-sec h2{font-family:var(--serif);font-size:1.6rem;margin:0}
+.news{display:flex;flex-direction:column;gap:10px}
+.nw{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:10px}
+.nw-img{width:84px;height:84px;border-radius:12px;overflow:hidden;flex:none;background:linear-gradient(135deg,#EFE8DA,#E2D6BE);display:grid;place-items:center;color:var(--brass)}
+.nw-img img{width:100%;height:100%;object-fit:cover}
+.nw-img svg{width:34px;height:34px}
+.nw-tx{display:flex;flex-direction:column;gap:4px;min-width:0}
+.nw-tx small{font-size:.7rem;color:var(--brass);font-weight:800;letter-spacing:.04em}
+.nw-tx b{font-size:.92rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nw.big{flex-direction:column;align-items:stretch;padding:0;overflow:hidden}
+.nw.big .nw-img{width:100%;height:190px;border-radius:0}
+.nw.big .nw-tx{padding:12px 14px 14px}.nw.big .nw-tx b{font-family:var(--serif);font-size:1.2rem;-webkit-line-clamp:3}
+.nw.sk{height:104px;background:linear-gradient(90deg,var(--surface),#F1EADC,var(--surface));background-size:200% 100%;animation:sk 1.2s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.news-msg{font-size:.85rem;color:var(--muted);text-align:center;padding:12px}
+.news-msg a{color:var(--brass);font-weight:800}
+.st-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st-kpi{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.st-kpi b{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
+.st-kpi span{font-size:.75rem;color:var(--muted);font-weight:700}
+.st-kpi.hero{grid-column:1/-1;background:#1E1C18;color:#FFFDF8;border:0}
+.st-kpi.hero b{font-family:var(--serif);font-size:2.6rem;font-weight:700}.st-kpi.hero span{color:#D8CBB0}
+.st-card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.st-card h3{margin:0;font-size:1rem;font-weight:800}
+.st-card .sub{margin:-8px 0 0;font-size:.78rem;color:var(--muted)}
+.hb{display:grid;grid-template-columns:minmax(84px,34%) 1fr auto;align-items:center;gap:8px 10px;font-size:.84rem}
+.hb .l{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .t{height:12px;border-radius:0 4px 4px 0;background:transparent;position:relative}
+.hb .t i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--brass);min-width:3px}
+.hb .t i.mute{background:#C9BFAE}
+.hb .v{font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.st-line{position:relative}
+.st-line svg{width:100%;height:auto;display:block;overflow:visible}
+.st-line text{font-size:10px;fill:var(--muted);font-family:inherit}
+.st-tip{position:absolute;pointer-events:none;background:#1E1C18;color:#FFFDF8;border-radius:10px;padding:6px 9px;font-size:.75rem;font-weight:700;white-space:nowrap;transform:translate(-50%,-115%);opacity:0;transition:opacity .15s}
+.st-tip small{display:block;font-weight:600;opacity:.75}
+.dials{display:flex;flex-wrap:wrap;gap:10px}
+.dials span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.68rem;color:var(--muted);font-weight:700;width:56px;text-align:center}
+.dials i{width:40px;height:40px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line),inset 0 -6px 10px rgba(0,0,0,.18)}
+.sizes{position:relative;height:64px;margin:6px 8px 0}
+.sizes .ax{position:absolute;left:0;right:0;top:30px;height:2px;background:var(--line)}
+.sizes .d{position:absolute;top:22px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--brass);border:2px solid var(--surface)}
+.sizes .avg{position:absolute;top:10px;width:2px;height:42px;background:#1E1C18;margin-left:-1px}
+.sizes .lab{position:absolute;top:46px;font-size:.7rem;color:var(--muted);font-weight:700;transform:translateX(-50%);white-space:nowrap}
+.sizes .avgl{position:absolute;top:-8px;font-size:.7rem;font-weight:800;transform:translateX(-50%);white-space:nowrap}
+.recs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rec{border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:2px;background:var(--surface2,#F8F3EA);cursor:pointer}
+.rec small{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.rec b{font-size:.88rem;line-height:1.2}.rec span{font-size:.78rem;color:var(--muted);font-weight:700}
+.st-empty{color:var(--muted);font-size:.85rem;margin:0}
+/* ---------- Animation « envie » : la cible ---------- */
+.joy-target{position:absolute;inset:-14%;width:128%;height:128%;animation:lockOn 1.1s cubic-bezier(.2,.9,.25,1) .1s both;z-index:-1}
+.joy-target circle{fill:none;stroke:#C9A35A}
+.joy-target line{stroke:#A8823A;stroke-width:2;stroke-linecap:round}
+.joy-target .dot{fill:#B5483F;stroke:none}
+@keyframes lockOn{0%{transform:scale(2.2) rotate(-60deg);opacity:0}70%{opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -711,10 +796,12 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <circle cx="35" cy="30" r="1.4" fill="#F4D98A"/>
       <rect x="23" y="47" width="24" height="3" rx="1.5" fill="#F4D98A" opacity=".8"/>
     </svg>
-    <h1>Mes montres</h1>
+    <h1>MyWatch</h1>
+    <button type="button" class="icon-btn" id="stats-btn" aria-label="Statistiques"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></button>
     <button type="button" class="icon-btn" id="cmp-btn" aria-label="Comparer deux montres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M12 5l-7 2M12 5l7 2"/><path d="M5 7l-3 7a3.5 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3.5 3 0 0 0 6 0z"/></svg></button>
-    <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages et sauvegarde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
+    <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
   </header>
+  <section class="page hidden" id="page"></section>
   <section class="hero" id="hero"></section>
   <section class="showcase" id="showcase"></section>
   <div class="sec-head"><h2 id="list-title">Mes montres</h2><span class="more" id="list-count"></span></div>
@@ -767,11 +854,12 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 
 <button class="fab" id="add">Ajouter une montre</button>
 <nav class="tabbar" role="tablist" aria-label="Sections">
+  <button role="tab" data-tab="home" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></svg>Accueil</button>
   <button role="tab" data-tab="collection" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><rect x="8" y="18" width="8" height="4" rx="1"/><circle cx="12" cy="12" r="6"/><path d="M12 9v3l2 1.5"/></svg>Collection<span class="count" id="t-collection"></span></button>
-  <button role="tab" data-tab="wishlist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Envies<span class="count" id="t-wishlist"></span></button>
   <button type="button" class="plus" id="tab-add" aria-label="Ajouter une montre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button role="tab" data-tab="wishlist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Envies<span class="count" id="t-wishlist"></span></button>
   <button role="tab" data-tab="catalog" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><circle cx="17.2" cy="17.2" r="3.2"/><path d="M19.6 19.6 21.5 21.5"/></svg>Catalogue</button>
-  <button type="button" id="tab-menu" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Réglages</button>
+  <button type="button" id="tab-menu" class="hidden" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Réglages</button>
 </nav>
 <dialog id="msheet" aria-label="Réglages">
   <form method="dialog" style="gap:12px">
@@ -1116,7 +1204,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 27; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 28; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1756,7 +1844,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     } }
   ];
 
-  let state = load(), tab = "collection", editing = null;
+  let state = load(), tab = "home", editing = null;
   let pendingPhoto = null, pendingOrig = null, pendingAdj = null, photoCleared = false, previewUrl = null;
   let artifactNs = null, sampleFn = null, assetsNs = null, canSendImages = false;
   let aiCtl = null, delArmed = false;
@@ -2407,6 +2495,9 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     $("#c-wishlist").textContent = state.wishlist.length;
     document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
     $("#t-collection").textContent = state.collection.length || ""; $("#t-wishlist").textContent = state.wishlist.length || "";
+    const pm = tab === "home" || tab === "stats";
+    $(".wrap").classList.toggle("pagemode", pm); $("#page").classList.toggle("hidden", !pm);
+    if (pm){ tab === "home" ? renderHome() : renderStats(); return; }
     renderHeroCard(); renderShowcase();
     const isCat = tab === "catalog";
     $("#cat-tools").classList.toggle("hidden", !isCat);
@@ -2602,10 +2693,12 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); if (Array.isArray(state.showcase.collection)) state.showcase.collection.push(saved.id); tab = "collection"; }
     else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); if (Array.isArray(state.showcase[editing.list])) state.showcase[editing.list].push(saved.id); }
     const joy = editing.mode === "buy" || (!w && editing.list === "collection");
+    const joyWish = !joy && !w && editing.list === "wishlist";
     save.disabled = false; closeSheet(); persist(); render();
     const r = rarity(valueOf(saved, tab === "wishlist"));
     setStatus(r ? `Enregistré. Rareté : ${r.label}.` : "Enregistré. Ajoute un prix pour obtenir sa rareté.");
     if (joy) celebrate(saved, "collection");
+    else if (joyWish) celebrate(saved, "wishlist", "wish");
   });
   $("#cancel").addEventListener("click", closeSheet);
   $("#del").addEventListener("click", () => {
@@ -3517,7 +3610,7 @@ Ajoute aussi dans le même objet JSON :
     if (act === "wish" || act === "own"){
       const nw = entryToWatch(w);
       if (act === "own"){ delete nw.current; delete nw.target; delete nw.priority; nw.price = w.retail; nw.date = ""; state.collection.push(nw); setTimeout(() => celebrate(nw, "catalog"), 60); }
-      else state.wishlist.push(nw);
+      else { state.wishlist.push(nw); setTimeout(() => celebrate(nw, "catalog", "wish"), 60); }
       persist(); dsheet.close();
       $("#c-wishlist").textContent = state.wishlist.length; $("#c-collection").textContent = state.collection.length;
       if (tab === "catalog") renderCatalog(); else render();
@@ -3580,9 +3673,9 @@ Ajoute aussi dans le même objet JSON :
   $("#cat-q").addEventListener("input", () => { clearTimeout(catTimer); catTimer = setTimeout(() => { state.view.catalog.q = $("#cat-q").value; renderCatalog(); }, 200); });
 
   // ---------- Navigation ----------
-  $("#add").addEventListener("click", () => openSheet(tab, null));
+  $("#add").addEventListener("click", () => openSheet(["collection", "wishlist"].includes(tab) ? tab : "collection", null));
   document.querySelectorAll(".tabbar button[data-tab]").forEach(b => b.addEventListener("click", () => { if (tab !== b.dataset.tab){ tab = b.dataset.tab; render(); window.scrollTo({ top: 0, behavior: "instant" in document.documentElement.style ? "instant" : "auto" }); } }));
-  $("#tab-add").addEventListener("click", () => openSheet(tab === "catalog" ? "wishlist" : tab, null));
+  $("#tab-add").addEventListener("click", () => openSheet(tab === "wishlist" ? "wishlist" : "collection", null));
   $("#tab-menu").addEventListener("click", () => $("#menu-btn").click());
   // ---------- Mises à jour : vérifiées à chaque ouverture et à chaque retour dans l'app ----------
   async function hardUpdate(){
@@ -4058,7 +4151,8 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   document.addEventListener("touchmove", e => { if (lockY !== null && e.target.tagName === "DIALOG" && e.target.scrollHeight <= e.target.clientHeight) e.preventDefault(); }, { passive: false });
 
   // ---------- Célébration : une nouvelle montre rejoint la collection ----------
-  function celebrate(w, kind){
+  function celebrate(w, kind, mode){
+    const wish = mode === "wish";
     if (!w) return;
     document.querySelectorAll(".joy").forEach(x => x.remove());
     const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -4066,7 +4160,11 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const r = rarity(valueOf(w, false));
     const el = document.createElement("div"); el.className = "joy"; el.setAttribute("role", "status");
     el.innerHTML = `<canvas></canvas><div class="joy-c"><div class="joy-w"><span class="joy-shine"></span>${ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w)}<span class="joy-ring"></span><span class="joy-ring r2"></span></div>
-      <div class="joy-k">Nouvelle pièce</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${esc(w.brand)} rejoint ta collection</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
+      <div class="joy-k">${wish ? "Dans le viseur" : "Nouvelle pièce"}</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${esc(w.brand)} ${wish ? "rejoint tes envies" : "rejoint ta collection"}</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
+    if (wish){
+      const wEl = el.querySelector(".joy-w"); wEl.querySelectorAll(".joy-ring").forEach(x => x.remove());
+      wEl.insertAdjacentHTML("afterbegin", `<svg class="joy-target" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" stroke-width="3"/><circle cx="100" cy="100" r="74" stroke-width="2" stroke-dasharray="4 6"/><circle cx="100" cy="100" r="52" stroke-width="2.5"/><line x1="100" y1="0" x2="100" y2="22"/><line x1="100" y1="178" x2="100" y2="200"/><line x1="0" y1="100" x2="22" y2="100"/><line x1="178" y1="100" x2="200" y2="100"/><circle class="dot" cx="100" cy="4" r="3.5"/></svg>`);
+    }
     document.body.appendChild(el);
     // confettis dorés
     const cv = el.querySelector("canvas"), g = cv.getContext("2d"), dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -4083,8 +4181,8 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     let done = false;
     const finish = () => {
       if (done) return; done = true; clearTimeout(timer);
-      const tabBtn = document.querySelector('.tabbar button[data-tab="collection"]'), wEl = el.querySelector(".joy-w");
-      const bump = () => { const c = $("#t-collection"); if (c){ c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); } };
+      const tabBtn = document.querySelector(`.tabbar button[data-tab="${wish ? "wishlist" : "collection"}"]`), wEl = el.querySelector(".joy-w");
+      const bump = () => { const c = $(wish ? "#t-wishlist" : "#t-collection"); if (c){ c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); } };
       if (!reduce && tabBtn && wEl.animate){
         const a = wEl.getBoundingClientRect(), b = tabBtn.getBoundingClientRect();
         const dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2);
@@ -4098,6 +4196,188 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const timer = setTimeout(finish, reduce ? 1600 : 2900);
     el.addEventListener("click", finish);
   }
+
+  // ---------- Page d'accueil ----------
+  const page = $("#page");
+  const go = t => { tab = t; render(); window.scrollTo(0, 0); };
+  function thumbOf(kind, w){ const ph = photoOf(kind, w); return ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w); }
+  function renderHome(){
+    const now = new Date(), hr = now.getHours();
+    const hello = hr < 5 ? "Bonne nuit" : hr < 18 ? "Bonjour" : "Bonsoir";
+    const date = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    const col = state.collection, wl = state.wishlist;
+    const day = Math.floor((Date.now() - now.getTimezoneOffset() * 6e4) / 864e5);
+    const pick = col.length ? col[day % col.length] : null;
+    const value = col.reduce((s, w) => s + (valueOf(w, false) || 0), 0);
+    const budget = wl.reduce((s, w) => s + (num(w.current) || num(w.retail) || num(w.target) || 0), 0);
+    const goals = wl.map(w => { const c = num(w.current) || num(w.retail), t = num(w.target); return { w, c, t, pct: c && t ? Math.min(1, t / c) : null }; }).filter(g => g.c);
+    goals.sort((a, b) => (num(a.w.priority) || 2) - (num(b.w.priority) || 2) || (b.pct || 0) - (a.pct || 0));
+    const g = goals[0];
+    const brands = {}; col.forEach(w => brands[w.brand] = (brands[w.brand] || 0) + 1);
+    const top = Object.entries(brands).sort((a, b) => b[1] - a[1])[0];
+    page.innerHTML = `
+      <div class="h-hello"><span>${esc(date)}</span><h2>${hello}</h2></div>
+      ${pick ? `<button type="button" class="h-day" data-open="${esc(pick.id)}"><span class="h-day-img">${thumbOf("collection", pick)}</span><span><small>Montre du jour</small><b>${esc(pick.brand)}</b><strong>${esc(pick.model)}</strong><em>Et si tu la portais aujourd'hui ?</em></span></button>` : ""}
+      <div class="h-kpis">
+        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(value) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""}</span></button>
+        <button type="button" class="h-kpi" data-go="wishlist"><b>${wl.length}</b><span>envie${wl.length > 1 ? "s" : ""}${budget ? " · " + eur.format(budget) : ""}</span></button>
+        <button type="button" class="h-kpi" data-go="catalog"><b>${CAT_LIST.length}</b><span>modèles</span></button>
+      </div>
+      ${g ? `<div class="h-goal" data-wish="${esc(g.w.id)}"><span class="th">${thumbOf("wishlist", g.w)}</span><span class="tx"><small>Prochain objectif</small><b>${esc(g.w.brand)} ${esc(g.w.model)}</b>${g.pct !== null ? `<span class="meter"><i style="width:${Math.round(g.pct * 100)}%"></i></span><span class="gap">${g.c <= g.t ? "Au prix visé : c'est le moment !" : `${eur.format(g.c)} · encore ${eur.format(g.c - g.t)} au-dessus de ta cible`}</span>` : `<span class="gap">${eur.format(g.c)}</span>`}</span></div>` : ""}
+      <button type="button" class="h-stats" data-go="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span><b>Mes statistiques</b><span>${col.length ? `${Object.keys(brands).length} marque${Object.keys(brands).length > 1 ? "s" : ""}${top ? ` · ${esc(top[0])} en tête` : ""}` : "Ta collection en chiffres"}</span></span><i>›</i></button>
+      <div class="h-sec"><h2>Actualités</h2><button type="button" class="linkbtn" id="news-refresh">Actualiser</button></div>
+      <div class="news" id="news"></div>`;
+    loadNews(false);
+  }
+  page.addEventListener("click", e => {
+    const t = e.target.closest("[data-go],[data-open],[data-wish],#news-refresh,[data-rec]"); if (!t) return;
+    if (t.id === "news-refresh") return loadNews(true);
+    if (t.dataset.go) return go(t.dataset.go);
+    if (t.dataset.open) return openWatchSheet("collection", t.dataset.open);
+    if (t.dataset.wish) return openWatchSheet("wishlist", t.dataset.wish);
+    if (t.dataset.rec){ const [k, id] = t.dataset.rec.split(":"); return openWatchSheet(k, id); }
+  });
+  $("#stats-btn").addEventListener("click", () => go("stats"));
+
+  // ---------- Actualités horlogères (flux RSS publics, sans compte) ----------
+  const NEWS_LS = "mywatch-news", NEWS_TTL = 30 * 6e4;
+  const FEEDS = [
+    { name: "Google Actualités", url: "https://news.google.com/rss/search?q=montre%20horlogerie&hl=fr&gl=FR&ceid=FR:fr", gnews: true },
+    { name: "Monochrome", url: "https://monochrome-watches.com/feed/" },
+    { name: "Fratello", url: "https://www.fratellowatches.com/feed/" },
+    { name: "Hodinkee", url: "https://www.hodinkee.com/articles/rss.xml" },
+    { name: "Worn & Wound", url: "https://wornandwound.com/feed/" }
+  ];
+  const NEWS_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l3 2" stroke-linecap="round"/></svg>`;
+  const txt = s => { const d = new DOMParser().parseFromString(String(s || ""), "text/html"); return (d.body.textContent || "").replace(/\s+/g, " ").trim(); };
+  const firstImg = html => { const m = /<img[^>]+src=["']([^"']+)["']/i.exec(String(html || "")); return m ? m[1] : ""; };
+  function withTimeout(ms){ const c = new AbortController(); setTimeout(() => c.abort(), ms); return c.signal; }
+  async function fetchFeed(f){
+    const enc = encodeURIComponent(f.url);
+    const norm = it => { if (f.gnews){ const m = / - ([^-]+)$/.exec(it.title); if (m){ it.source = m[1].trim(); it.title = it.title.slice(0, m.index); } } return it; };
+    try {
+      const r = await fetch("https://api.rss2json.com/v1/api.json?rss_url=" + enc, { signal: withTimeout(9000) });
+      const j = await r.json();
+      if (j && j.status === "ok" && Array.isArray(j.items) && j.items.length) return j.items.map(i => norm({ title: txt(i.title), link: i.link, date: Date.parse(String(i.pubDate || "").replace(" ", "T") + "Z") || 0, img: i.thumbnail || (i.enclosure && /image/.test(i.enclosure.type || "image") && i.enclosure.link) || firstImg(i.description || i.content), source: f.name }));
+    } catch(e){}
+    try {
+      const r = await fetch("https://api.allorigins.win/raw?url=" + enc, { signal: withTimeout(9000) });
+      const doc = new DOMParser().parseFromString(await r.text(), "text/xml");
+      return [...doc.querySelectorAll("item")].slice(0, 15).map(it => {
+        const get = n => { const e = it.getElementsByTagName(n)[0]; return e ? e.textContent : ""; };
+        const media = it.getElementsByTagNameNS("*", "content")[0] || it.getElementsByTagNameNS("*", "thumbnail")[0], enc2 = it.getElementsByTagName("enclosure")[0];
+        const src = it.getElementsByTagName("source")[0];
+        return norm({ title: txt(get("title")), link: get("link"), date: Date.parse(get("pubDate")) || 0, img: (media && media.getAttribute("url")) || (enc2 && enc2.getAttribute("url")) || firstImg(get("description") || get("encoded")), source: (src && src.textContent) || f.name });
+      });
+    } catch(e){}
+    return [];
+  }
+  const ago = t => { if (!t) return ""; const m = Math.round((Date.now() - t) / 6e4); return m < 60 ? `il y a ${Math.max(1, m)} min` : m < 1440 ? `il y a ${Math.round(m / 60)} h` : m < 2880 ? "hier" : new Date(t).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }); };
+  function showNews(items, note){
+    const box = $("#news"); if (!box) return;
+    if (!items || !items.length){ box.innerHTML = `<p class="news-msg">${note || "Actualités indisponibles pour le moment."} <a href="https://news.google.com/search?q=montres%20horlogerie&hl=fr&gl=FR&ceid=FR:fr" target="_blank" rel="noopener">Ouvrir Google Actualités</a></p>`; return; }
+    const list = items.slice(0, 10), hi = list.findIndex(n => n.img); if (hi > 0) list.unshift(list.splice(hi, 1)[0]);
+    box.innerHTML = list.map((n, i) => `<a class="nw${i === 0 && n.img ? " big" : ""}" href="${esc(n.link)}" target="_blank" rel="noopener"><span class="nw-img">${n.img ? `<img src="${esc(n.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createRange().createContextualFragment('${NEWS_ICON.replace(/"/g, "&quot;")}'))">` : NEWS_ICON}</span><span class="nw-tx"><small>${esc(n.source)}${n.date ? " · " + ago(n.date) : ""}</small><b>${esc(n.title)}</b></span></a>`).join("");
+  }
+  let newsBusy = false;
+  async function loadNews(force){
+    let cache = null; try { cache = JSON.parse(localStorage.getItem(NEWS_LS) || "null"); } catch(e){}
+    if (cache && cache.items && cache.items.length) showNews(cache.items); else { const b = $("#news"); if (b) b.innerHTML = '<div class="nw sk"></div><div class="nw sk"></div><div class="nw sk"></div>'; }
+    if (!force && cache && Date.now() - cache.at < NEWS_TTL) return;
+    if (newsBusy) return; newsBusy = true;
+    try {
+      const all = (await Promise.all(FEEDS.map(fetchFeed))).flat().filter(n => n.title && /^https?:/.test(n.link || ""));
+      const seen = new Set(), items = all.sort((a, b) => b.date - a.date).filter(n => { const k = fold(n.title).slice(0, 60); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 20);
+      if (items.length){ try { localStorage.setItem(NEWS_LS, JSON.stringify({ at: Date.now(), items })); } catch(e){} showNews(items); }
+      else if (!(cache && cache.items && cache.items.length)) showNews([], "Pas de connexion aux actualités.");
+    } finally { newsBusy = false; }
+  }
+
+  // ---------- Statistiques ----------
+  function hbars(rows, fmt){
+    const max = Math.max(...rows.map(r => r[1]), 1);
+    return `<div class="hb">${rows.map(([l, v, extra, mute]) => `<span class="l" title="${esc(String(l).replace(/<[^>]+>/g, ""))}">${l}</span><span class="t" title="${esc(String(l).replace(/<[^>]+>/g, ""))} : ${esc(fmt ? fmt(v) : v)}"><i class="${mute ? "mute" : ""}" style="width:${(v / max * 100).toFixed(1)}%"></i></span><span class="v">${fmt ? fmt(v) : v}${extra ? ` <small style="color:var(--muted);font-weight:700">${extra}</small>` : ""}</span>`).join("")}</div>`;
+  }
+  function topN(map, n){ const e = Object.entries(map).sort((a, b) => b[1] - a[1]); if (e.length <= n) return e; const rest = e.slice(n - 1).reduce((s, x) => s + x[1], 0); return [...e.slice(0, n - 1), ["Autres", rest, "", true]]; }
+  function lineChart(pts){
+    // pts : [{ t, v, label }] triés par date ; une seule série (valeur cumulée)
+    const W = 320, H = 150, pl = 6, pr = 6, pt = 14, pb = 22;
+    const t0 = pts[0].t, t1 = pts[pts.length - 1].t || t0 + 1, vmax = Math.max(...pts.map(p => p.v)) * 1.08 || 1;
+    const X = t => pl + (t1 === t0 ? (W - pl - pr) / 2 : (t - t0) / (t1 - t0) * (W - pl - pr)), Y = v => pt + (1 - v / vmax) * (H - pt - pb);
+    let d = ""; pts.forEach((p, i) => { d += (i ? ` H${X(p.t).toFixed(1)} V${Y(p.v).toFixed(1)}` : `M${X(p.t).toFixed(1)} ${Y(p.v).toFixed(1)}`); });
+    const area = d + ` H${X(t1).toFixed(1)} V${Y(0)} H${X(t0).toFixed(1)} Z`;
+    const yr = t => new Date(t).getFullYear();
+    const ticks = [...new Set(pts.map(p => yr(p.t)))];
+    const tickEls = ticks.length > 1 ? ticks.map(y => { const t = Date.UTC(y, 0, 1); return t >= t0 && t <= t1 ? `<line x1="${X(t)}" x2="${X(t)}" y1="${pt}" y2="${H - pb}" stroke="var(--line)"/><text x="${X(t) + 3}" y="${H - 6}">${y}</text>` : ""; }).join("") : `<text x="${pl}" y="${H - 6}">${new Date(t0).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}</text><text x="${W - pr}" y="${H - 6}" text-anchor="end">${new Date(t1).toLocaleDateString("fr-FR", { month: "short", year: "numeric" })}</text>`;
+    return `<div class="st-line" data-pts='${esc(JSON.stringify(pts.map(p => [X(p.t), Y(p.v), p.label, eur.format(p.v)])))}'><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valeur cumulée de la collection"><line x1="${pl}" x2="${W - pr}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line)"/>${tickEls}<path d="${area}" fill="var(--brass)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linejoin="round"/>${pts.map(p => `<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="4" fill="var(--brass)" stroke="var(--surface)" stroke-width="2"/>`).join("")}<text x="${W - pr}" y="${Y(pts[pts.length - 1].v) - 8}" text-anchor="end" style="fill:var(--ink);font-weight:800">${eur.format(pts[pts.length - 1].v)}</text></svg><div class="st-tip"></div></div>`;
+  }
+  page.addEventListener("pointermove", e => lineTip(e));
+  page.addEventListener("pointerdown", e => lineTip(e));
+  function lineTip(e){
+    const box = e.target.closest && e.target.closest(".st-line"); document.querySelectorAll(".st-tip").forEach(t => { if (!box || !box.contains(t)) t.style.opacity = 0; });
+    if (!box) return;
+    const pts = JSON.parse(box.dataset.pts), svg = box.querySelector("svg"), r = svg.getBoundingClientRect(), k = r.width / 320;
+    const x = (e.clientX - r.left) / k; let best = pts[0]; pts.forEach(p => { if (Math.abs(p[0] - x) < Math.abs(best[0] - x)) best = p; });
+    const tip = box.querySelector(".st-tip"); tip.innerHTML = `${esc(best[3])}<small>${esc(best[2])}</small>`; tip.style.left = best[0] * k + "px"; tip.style.top = best[1] * k + "px"; tip.style.opacity = 1;
+  }
+  function renderStats(){
+    const col = state.collection, wl = state.wishlist;
+    const card = (title, body, sub) => `<div class="st-card"><h3>${title}</h3>${sub ? `<p class="sub">${sub}</p>` : ""}${body}</div>`;
+    let h = `<div class="h-hello"><span>Ta collection en chiffres</span><h2>Statistiques</h2></div>`;
+    if (!col.length){ page.innerHTML = h + `<p class="st-empty">Ajoute ta première montre pour voir tes statistiques.</p>`; return; }
+    const val = col.reduce((s, w) => s + (valueOf(w, false) || 0), 0);
+    const paid = col.reduce((s, w) => s + (num(w.price) ?? num(w.retail) ?? 0), 0);
+    const both = col.filter(w => num(w.price) != null && num(w.retail) != null), saved = both.reduce((s, w) => s + num(w.retail) - num(w.price), 0);
+    const brands = {}; col.forEach(w => brands[w.brand || "?"] = (brands[w.brand || "?"] || 0) + 1);
+    h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(val)}</b><span>Valeur de la collection (prix publics)</span></div>
+      <div class="st-kpi"><b>${eur.format(paid)}</b><span>Dépensé</span></div>
+      <div class="st-kpi"><b>${both.length ? (saved >= 0 ? "" : "−") + eur.format(Math.abs(saved)) : "—"}</b><span>${both.length ? (saved >= 0 ? "Économisé sur le prix public" : "Payé au-dessus du prix public") : "Économies (prix payés manquants)"}</span></div>
+      <div class="st-kpi"><b>${col.length}</b><span>Montre${col.length > 1 ? "s" : ""}</span></div>
+      <div class="st-kpi"><b>${Object.keys(brands).length}</b><span>Marque${Object.keys(brands).length > 1 ? "s" : ""}</span></div></div>`;
+    // évolution
+    const dated = col.filter(w => w.date && !isNaN(Date.parse(w.date))).map(w => ({ t: Date.parse(w.date), w })).sort((a, b) => a.t - b.t);
+    if (dated.length >= 2){ let acc = 0; const pts = dated.map(x => ({ t: x.t, v: (acc += (num(x.w.price) ?? valueOf(x.w, false) ?? 0)), label: `${x.w.brand} ${x.w.model} · ${new Date(x.t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}` })); h += card("Évolution de la collection", lineChart(pts), "Montant cumulé de tes achats. Touche le graphique pour le détail."); }
+    else h += card("Évolution de la collection", `<p class="st-empty">Ajoute la date d'achat de tes montres pour voir l'évolution dans le temps.</p>`);
+    // répartitions
+    h += card("Marques", hbars(topN(brands, 6)));
+    const cats = {}; col.forEach(w => { const c = CAT_LABEL[categoryOf(w)] || "Autre"; cats[c] = (cats[c] || 0) + 1; });
+    h += card("Styles", hbars(topN(cats, 6)));
+    const mv = {}; col.forEach(w => { const m = MOVE[w.movementType] || "Non précisé"; mv[m] = (mv[m] || 0) + 1; });
+    const mech = col.filter(w => ["automatique", "manuel"].includes(w.movementType)).length;
+    h += card("Mouvements", hbars(topN(mv, 5)), `${Math.round(mech / col.length * 100)} % mécaniques`);
+    const rr = RAR.map(r => [`<span class="pill ${r.key}">${r.label}</span>`, col.filter(w => { const x = rarity(valueOf(w, false)); return x && x.key === r.key; }).length]).filter(x => x[1]);
+    if (rr.length) h += card("Rareté", hbars(rr));
+    // cadrans
+    h += card("Couleurs de cadran", `<div class="dials">${col.map(w => `<span title="${esc(w.brand + " " + w.model)}"><i style="background:${esc(w.dial || "#2F3B4C")}"></i>${esc(nearestName(w.dial))}</span>`).join("")}</div>`);
+    // tailles
+    const sz = col.map(w => ({ s: num(w.size), w })).filter(x => x.s);
+    if (sz.length){
+      const lo = Math.min(34, ...sz.map(x => x.s)) - 1, hi = Math.max(46, ...sz.map(x => x.s)) + 1, P = s => ((s - lo) / (hi - lo) * 100).toFixed(1) + "%", avg = sz.reduce((s, x) => s + x.s, 0) / sz.length;
+      h += card("Tailles de boîtier", `<div class="sizes"><span class="ax"></span>${sz.map(x => `<span class="d" style="left:${P(x.s)}" title="${esc(x.w.brand + " " + x.w.model)} · ${x.s} mm"></span>`).join("")}<span class="avg" style="left:${P(avg)}"></span><span class="avgl" style="left:${P(avg)}">moyenne ${String(Math.round(avg * 10) / 10).replace(".", ",")} mm</span><span class="lab" style="left:0;transform:none">${Math.round(lo)} mm</span><span class="lab" style="left:auto;right:0;transform:none">${Math.round(hi)} mm</span></div>`);
+    }
+    // records
+    const rec = (label, w, v, kind = "collection") => w ? `<div class="rec" data-rec="${kind}:${esc(w.id)}"><small>${label}</small><b>${esc(w.brand)} ${esc(w.model)}</b><span>${v}</span></div>` : "";
+    const by = (f, dir = 1) => col.filter(w => f(w) != null).sort((a, b) => dir * (f(b) - f(a)))[0];
+    const priciest = by(w => valueOf(w, false)), deal = both.length ? by(w => num(w.retail) - num(w.price)) : null;
+    const deep = by(w => num(w.water)), big = by(w => num(w.size)), small = by(w => num(w.size), -1), last = dated.length ? dated[dated.length - 1].w : null;
+    h += card("Records", `<div class="recs">${rec("La plus précieuse", priciest, eur.format(valueOf(priciest, false) || 0))}${deal && num(deal.retail) - num(deal.price) > 0 ? rec("Meilleure affaire", deal, `−${eur.format(num(deal.retail) - num(deal.price))}`) : ""}${rec("La plus étanche", deep, deep ? (deep.water === "1000" ? "1 000 m+" : deep.water + " m") : "")}${big && small && big !== small ? rec("La plus grande", big, big.size + " mm") + rec("La plus fine au poignet", small, small.size + " mm") : ""}${last ? rec("Dernière arrivée", last, new Date(last.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })) : ""}</div>`);
+    // envies
+    if (wl.length){
+      const bud = wl.reduce((s, w) => s + (num(w.current) || num(w.retail) || num(w.target) || 0), 0);
+      const rows = wl.filter(w => (num(w.current) || num(w.retail)) && num(w.target)).map(w => { const c = num(w.current) || num(w.retail), t = num(w.target); return [esc(w.model), Math.min(100, Math.round(t / c * 100)), c <= t ? "au prix visé" : `−${eur.format(c - t)}`]; });
+      h += card("Envies", `<div class="st-kpis"><div class="st-kpi"><b>${eur.format(bud)}</b><span>Pour tout acquérir</span></div><div class="st-kpi"><b>${wl.length}</b><span>Montre${wl.length > 1 ? "s" : ""} visée${wl.length > 1 ? "s" : ""}</span></div></div>${rows.length ? `<p class="sub" style="margin:0">Prix cible atteint (en % du prix constaté)</p>` + hbars(rows, v => v + " %") : ""}`);
+    }
+    page.innerHTML = h;
+  }
+
+  // ---------- Relance après quelques minutes d'absence ----------
+  const RESTART_MS = 5 * 6e4;
+  let hiddenAt = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") hiddenAt = Date.now();
+    else if (hiddenAt && Date.now() - hiddenAt > RESTART_MS){ hiddenAt = 0; location.reload(); }
+  });
+  window.addEventListener("pageshow", e => { if (e.persisted && hiddenAt && Date.now() - hiddenAt > RESTART_MS) location.reload(); });
 
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
   document.addEventListener("click", closeFrom, true);
@@ -4432,6 +4712,8 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     setTimeout(() => { sp.classList.add("out"); setTimeout(() => sp.remove(), 650); }, wait);
   }
   async function init(){
+    state.view = { ...defaultView(), layout: state.view.layout || "grid" }; tab = "home";
+    const cq = $("#cat-q"); if (cq) cq.value = "";
     const needSave = applyPatches(state);
     assetsNs = localAssets;
     await loadPhotos();
