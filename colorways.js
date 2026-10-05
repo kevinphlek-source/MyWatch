@@ -330,6 +330,14 @@ Baltic|Aquascaphe GMT = Noir #15181C ; Bleu #1F3D5C ; Crème #F2F0EA
 Dan Henry|1970 Diver = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
 Timex|Weekender = Blanc #F2F3F4 ; Noir #15181C ; Bleu #1F3D5C
 Ice-Watch|ICE classic = Noir #15181C ; Blanc #F2F3F4 ; Bleu #1F3D5C ; Rouge #A3282D ; Vert #1F5A3A
+Seiko|Presage Cocktail Time Réserve de marche = Bordeaux #7A1F2B ; Bleu #1F3D5C ; Argenté #C9CED4
+Seiko|Prospex Sumo = Bleu #1F3D5C ; Noir #15181C ; Vert #1F5A3A
+Seiko|Prospex King Turtle = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
+Citizen|Automatique NJ0150 = Bleu #1F3D5C ; Noir #15181C ; Vert #1F5A3A ; Blanc #F2F3F4
+Citizen|Promaster Tough = Kaki #2B3A2A ; Noir #15181C
+Timex|Q Timex GMT = Bleu #1F3D5C ; Noir #15181C ; Vert #1F5A3A
+Timex|Q Timex Chronographe = Noir #15181C ; Blanc « panda » #F2F3F4
+Timex|Waterbury Diver Automatic = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
 `;
 
 // Bracelets proposés pour chaque modèle (le premier est celui du catalogue).

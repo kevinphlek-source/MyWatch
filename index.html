@@ -464,10 +464,10 @@ dialog p.help:empty{display:none}
 .h-goal b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meter{height:8px;border-radius:999px;background:var(--line);overflow:hidden}.meter i{display:block;height:100%;border-radius:999px;background:var(--brass)}
 .h-goal .gap{font-size:.75rem;color:var(--muted);font-weight:700}
-.h-stats{display:flex;align-items:center;gap:12px;border:0;border-radius:20px;padding:16px;background:#1E1C18;color:#FFFDF8;font:inherit;text-align:left;cursor:pointer}
-.h-stats svg{width:30px;height:30px;flex:none;color:#C9A35A}
-.h-stats b{display:block;font-size:1rem}.h-stats span{font-size:.8rem;opacity:.75}
-.h-stats i{margin-left:auto;font-style:normal;font-size:1.3rem;color:#C9A35A}
+.h-stats{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:20px;padding:14px;background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.h-stats .st-ic{width:44px;height:44px;border-radius:14px;flex:none;display:grid;place-items:center;background:var(--brass-soft);color:var(--brass)}.h-stats svg{width:24px;height:24px}
+.h-stats b{display:block;font-size:.95rem}.h-stats .tx span{font-size:.78rem;color:var(--muted);font-weight:600}
+.h-stats i{margin-left:auto;font-style:normal;font-size:1.3rem;color:var(--muted)}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;margin-top:6px}
 .h-sec h2{font-family:var(--serif);font-size:1.6rem;margin:0}
 .news{display:flex;flex-direction:column;gap:10px}
@@ -581,6 +581,9 @@ dialog p.help:empty{display:none}
 .lock-flash{position:absolute;inset:-19%;border-radius:50%;border:3px solid #E8D3A0;opacity:0;pointer-events:none}
 .joy.wishmode .joy-k{animation-delay:1.65s}.joy.wishmode .joy-t{animation-delay:1.8s}.joy.wishmode .joy-m{animation-delay:1.95s}.joy.wishmode .pill{animation-delay:2.1s}
 @media (prefers-reduced-motion: reduce){.lock-ring,.lock-ticks{opacity:1}}
+
+.suggest li.sg-typeli{padding:12px 10px;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0}
+.sg-type{color:var(--brass);font-weight:800}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -854,8 +857,8 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     </svg>
     <h1>MyWatch</h1>
     <button type="button" class="icon-btn" id="stats-btn" aria-label="Statistiques"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></button>
-    <button type="button" class="icon-btn" id="cmp-btn" aria-label="Comparer deux montres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M12 5l-7 2M12 5l7 2"/><path d="M5 7l-3 7a3.5 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3.5 3 0 0 0 6 0z"/></svg></button>
-    <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
+    <button type="button" class="icon-btn" id="cmp-btn" aria-label="Comparer deux montres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.1 7.2 6.7 3.6h3.6l.6 3.6M6.1 16.8l.6 3.6h3.6l.6-3.6"/><circle cx="8.5" cy="12" r="5.2"/><path d="M13.1 7.2l.6-3.6h3.6l.6 3.6zM13.1 16.8l.6 3.6h3.6l.6-3.6z" fill="var(--surface,#FFFDF8)"/><circle cx="15.5" cy="12" r="5.2" fill="var(--surface,#FFFDF8)"/><path d="M15.5 9.4V12l1.7 1.1"/></svg></button>
+    <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M19.92 9.88 L22.47 10.34 L22.47 13.66 L19.92 14.12 L19.43 15.47 L21.09 17.46 L18.95 20.00 L16.70 18.72 L15.47 19.43 L15.45 22.02 L12.18 22.60 L11.29 20.17 L9.88 19.92 L8.20 21.90 L5.33 20.24 L6.20 17.80 L5.28 16.70 L2.73 17.14 L1.59 14.02 L3.83 12.71 L3.83 11.29 L1.59 9.98 L2.73 6.86 L5.28 7.30 L6.20 6.20 L5.33 3.76 L8.20 2.10 L9.88 4.08 L11.29 3.83 L12.18 1.40 L15.45 1.98 L15.47 4.57 L16.70 5.28 L18.95 4.00 L21.09 6.54 L19.43 8.53 Z"/><circle cx="12" cy="12" r="3.6"/></svg></button>
   </header>
   <section class="page hidden" id="page"></section>
   <section class="hero" id="hero"></section>
@@ -1146,7 +1149,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <dialog id="dsheet" class="detail" aria-label="Fiche de la montre">
   <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
   <button type="button" class="d-close" id="d-close" aria-label="Fermer">✕</button>
-  <button type="button" class="icon-btn d-cmp" id="d-cmp" aria-label="Comparer avec une autre montre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M12 5l-7 2M12 5l7 2"/><path d="M5 7l-3 7a3.5 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3.5 3 0 0 0 6 0z"/></svg></button>
+  <button type="button" class="icon-btn d-cmp" id="d-cmp" aria-label="Comparer avec une autre montre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.1 7.2 6.7 3.6h3.6l.6 3.6M6.1 16.8l.6 3.6h3.6l.6-3.6"/><circle cx="8.5" cy="12" r="5.2"/><path d="M13.1 7.2l.6-3.6h3.6l.6 3.6zM13.1 16.8l.6 3.6h3.6l.6-3.6z" fill="var(--surface,#FFFDF8)"/><circle cx="15.5" cy="12" r="5.2" fill="var(--surface,#FFFDF8)"/><path d="M15.5 9.4V12l1.7 1.1"/></svg></button>
   <div class="d-hero" id="d-hero"></div>
   <div class="d-credit" id="d-credit"></div>
   <div class="d-body">
@@ -1284,7 +1287,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 30; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 31; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1751,7 +1754,48 @@ Lacoste|12.12|Q|42|50|m|#15181C|r|r|c|l||l|n|b|130
 Tommy Hilfiger|Decker|Q|44|50|m|#1F3D5C|r|s|s|l|chrono+daydate|l|n|b|180
 Hugo Boss|Hero Chronographe|Q|43|50|m|#15181C|r|s|s|t|chrono+date|l|b|b|300
 Michael Kors|Lexington Chronographe|Q|44|50|m|#D9B56E|r|g|s|l|chrono+date|s|b|b|300
-Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
+Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60
+Seiko|5 Sports Squelette|A|42.5|100|h|#15181C|r|s|s|l|skeleton|l|b|b|380
+Seiko|Presage Cocktail Time Réserve de marche|A|40.8|50|h|#7A1F2B|r|s|l|l|power+date|s|a|d|550
+Seiko|Presage Classic|A|40.2|50|s|#F2F0EA|r|s|l|l|date|l|a|d|1100
+Seiko|Presage Craftsmanship Émail|A|40.6|50|s|#F4F1E8|r|s|l|l|date|l|r|f|1300
+Seiko|Presage GMT|A|40.8|50|h|#1F3D5C|r|s|s|l|gmt+date|s|a|d|650
+Seiko|Presage Sharp Edged GMT|A|42.2|100|s|#1E3F7A|r|s|s|l|gmt+power+date|g|a|d|1150
+Seiko|Prospex Captain Willard|A|42.7|200|s|#2B3A2A|c|s|c|d|date|l|p|g|1250
+Seiko|Prospex Sumo|A|45|200|s|#1F3D5C|r|s|s|d|date|l|p|g|1150
+Seiko|Prospex King Turtle|A|45|200|s|#15181C|c|s|s|d|daydate|l|p|g|600
+Seiko|Prospex Marinemaster 300|A|44.3|300|s|#15181C|r|s|s|d|date|l|p|g|3500
+Seiko|Prospex Speedtimer Mécanique|A|42.5|100|s|#F2F0EA|r|s|s|t|chrono+date|l|b|b|2900
+Seiko|Prospex Alpinist GMT|A|39.5|200|s|#1F5A3A|r|s|s|l|gmt+date|l|a|d|1300
+Seiko|Classique Chronographe quartz|Q|41.5|100|h|#F2F3F4|r|s|s|t|chrono+date|l|b|b|230
+Seiko|Classique Solaire|S|40|100|h|#F2F3F4|r|s|l|l|date|l|b|b|200
+Seiko|Lukia|S|30|50|s|#F2F0EA|r|s|s|l|date|l|b|b|400
+Seiko|Astron GPS Solar Dual-Time|S|42.9|100|s|#15181C|r|t|t|l|gmt+worldtime|l|b|b|2500
+Citizen|Promaster Diver Super Titanium|S|44|200|s|#15181C|r|t|t|d|date|l|p|b|350
+Citizen|Promaster Marine Chronographe|S|44|200|m|#15181C|r|s|c|d|chrono+date|l|b|b|330
+Citizen|Promaster Land|S|46|200|m|#15181C|r|s|c|f|date|l|n|b|300
+Citizen|Promaster Sky radio-pilotée|S|44|200|s|#15181C|r|t|t|f|chrono+worldtime|l|n|b|650
+Citizen|Promaster Tough|S|42|200|m|#2B3A2A|r|s|n|l|date|l|n|b|220
+Citizen|Eco-Drive Classique|S|40|100|m|#F2F3F4|r|s|l|l|date|l|b|b|170
+Citizen|Eco-Drive Élégance|S|40|50|m|#F2F3F4|r|s|l|l||l|b|b|150
+Citizen|Eco-Drive radio-pilotée Titane|S|42|100|s|#15181C|r|t|t|l|date|l|b|b|380
+Citizen|Eco-Drive Chronographe Titane|S|42|100|s|#15181C|r|t|t|t|chrono+date|l|b|b|330
+Citizen|Automatique NJ0150|A|40|50|m|#1F3D5C|r|s|s|l|date|l|b|b|250
+Citizen|Automatique Cœur ouvert|A|42|50|m|#15181C|r|s|l|l|openheart|l|r|b|230
+Citizen|Series 8 830|A|40.8|100|s|#15181C|r|s|s|l|date|l|b|b|1500
+Citizen|Series 8 880 GMT|A|41|100|s|#1F3D5C|r|s|s|g|gmt+date|l|b|b|1900
+Timex|Q Timex Chronographe|Q|40|50|a|#15181C|r|s|s|t|chrono+date|l|b|b|260
+Timex|Q Timex GMT|Q|38|50|a|#1F3D5C|r|s|s|g|gmt+daydate|l|b|b|220
+Timex|Q Timex Falcon Eye|Q|38|50|a|#1F3D5C|c|s|s|l|daydate|l|b|b|200
+Timex|Marlin Phase de lune|Q|39|30|a|#F2F0EA|r|s|l|l|moon|l|b|b|220
+Timex|Waterbury Chronographe|Q|42|50|m|#F2F3F4|r|s|l|t|chrono+date|l|n|b|180
+Timex|Waterbury Diver Automatic|A|42|200|s|#15181C|r|s|s|d|date|l|p|b|380
+Timex|Expedition North Field Post Solar|S|41|100|s|#2B3A2A|r|s|n|l|date|l|n|b|200
+Timex|Navi XL Automatic|A|41|200|s|#15181C|r|s|n|d|date|l|n|b|330
+Timex|Giorgio Galli S2|A|38|50|s|#15181C|r|s|s|l|date|l|b|b|500
+Timex|Standard|Q|41|50|m|#15181C|r|r|c|l|date|l|n|b|70
+Timex|T80|Q|34|30|a|#9FB08F|t|s|s|l|alarm|l|b|b|90|n
+Timex|Weekender Chronographe|Q|40|30|m|#15181C|r|s|n|l|chrono|l|n|b|90`;
   const CODE = {
     T: { A: "automatique", M: "manuel", Q: "quartz", S: "solaire", K: "kinetic", D: "springdrive" },
     G: { s: "saphir", m: "mineral", h: "hardlex", a: "hesalite" },
@@ -2735,6 +2779,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     $("#ai-msg").textContent = ""; $("#ai-btn").disabled = false; $("#ai-paste").classList.add("hidden"); $("#ai-text").value = "";
     refreshPreview(); syncCaps();
     $("#fs-tech").open = $("#fs-look").open = false; updateFormSums();
+    form.elements.model.inputMode = form.elements.brand.value.trim() ? "none" : "text";
     sheet.showModal();
   }
   function closeSheet(){ if (aiCtl) aiCtl.abort(); closeSuggest(); sheet.close(); if (previewUrl){ URL.revokeObjectURL(previewUrl); previewUrl = null; } }
@@ -2824,6 +2869,11 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     let pool = pairs;
     if (brand){ const same = pairs.filter(p => fold(p[0]) === fold(brand)); if (same.length) pool = same; }
     if (!q.trim() && !brand) return [];
+    // liste complète de la marque, sans clavier : on choisit dans la liste, ou « Autre modèle » ouvre le clavier
+    if (brand && form.elements.model.inputMode === "none"){
+      const all = pool.slice().sort((a, b) => a[1].localeCompare(b[1], "fr")).slice(0, 150).map(p => { const t = sugThumb(p[0], p[1]); return { thumb: t.html, label: `<span class="sg-tx"><span>${esc(p[1])}</span></span>${t.price ? `<span class="sg-pr">${t.price}</span>` : ""}`, brand: p[0], model: p[1] }; });
+      return [{ type: true, label: `<span class="sg-type">✎ Autre modèle : le saisir</span>` }, ...all];
+    }
     return pool.map(p => ({ p, r: rank(p[1], q) })).filter(x => x.r >= 0).sort((a, b) => a.r - b.r || a.p[1].localeCompare(b.p[1])).slice(0, 8)
       .map(x => { const t = sugThumb(x.p[0], x.p[1]); return { thumb: t.html, label: `<span class="sg-tx"><span>${hl(x.p[1], q)}</span>${fold(x.p[0]) !== fold(brand) ? `<small>${esc(x.p[0])}</small>` : ""}</span>${t.price ? `<span class="sg-pr">${t.price}</span>` : ""}`, brand: x.p[0], model: x.p[1] }; });
   }
@@ -2848,7 +2898,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     sugItems = computeSuggestions(input.dataset.suggest, input.value);
     if (!sugItems.length) return;
     sugBox = document.createElement("ul"); sugBox.className = "suggest"; sugBox.setAttribute("role", "listbox");
-    sugBox.innerHTML = sugItems.map((s, i) => s.thumb !== undefined ? `<li role="option" class="sg" id="sg-${i}" data-i="${i}"><span class="sg-th">${s.thumb}</span>${s.label}</li>` : `<li role="option" id="sg-${i}" data-i="${i}">${s.label}</li>`).join("");
+    sugBox.innerHTML = sugItems.map((s, i) => s.type ? `<li role="option" class="sg-typeli" id="sg-${i}" data-i="${i}">${s.label}</li>` : s.thumb !== undefined ? `<li role="option" class="sg" id="sg-${i}" data-i="${i}"><span class="sg-th">${s.thumb}</span>${s.label}</li>` : `<li role="option" id="sg-${i}" data-i="${i}">${s.label}</li>`).join("");
     const host = input.closest(".row") || input.parentElement; host.style.position = "relative";
     host.appendChild(sugBox);
     sugBox.addEventListener("pointerdown", e => { sugTouching = true; if (e.pointerType === "mouse") e.preventDefault(); });
@@ -2915,19 +2965,22 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
   function pick(i){
     const s = sugItems[i]; if (!s) return;
     const kind = sugInput.dataset.suggest;
+    if (s.type){ const m = form.elements.model; closeSuggest(); m.inputMode = "text"; m.blur(); m.focus(); m.select && m.select(); return; }
     if (s.brand) form.elements.brand.value = s.brand;
     if (kind === "model" && s.model){
       form.elements.model.value = s.model;
       autoDesign();
     }
     closeSuggest();
-    if (kind === "brand") form.elements.model.focus();
+    if (kind === "brand"){ form.elements.model.inputMode = "none"; form.elements.model.focus(); }
     updateFormWeb();
   }
+  form.elements.brand.addEventListener("input", () => { form.elements.model.inputMode = form.elements.brand.value.trim() ? "none" : "text"; });
   document.querySelectorAll("[data-suggest]").forEach(inp => {
     inp.setAttribute("role", "combobox"); inp.setAttribute("aria-autocomplete", "list");
     inp.addEventListener("input", () => showSuggest(inp));
     inp.addEventListener("focus", () => { if (inp.dataset.suggest === "model") showSuggest(inp); });
+    inp.addEventListener("click", () => { if (inp.dataset.suggest === "model" && !sugBox) showSuggest(inp); });
     inp.addEventListener("blur", () => setTimeout(() => { if (sugInput === inp && !sugTouching) closeSuggest(); }, 150));
     inp.addEventListener("keydown", e => {
       if (!sugBox) return;
@@ -4498,7 +4551,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
         <button type="button" class="h-kpi" data-go="catalog"><b>${CAT_LIST.length}</b><span>modèles</span></button>
       </div>
       ${homeFunds()}
-      <button type="button" class="h-stats" data-go="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span><b>Mes statistiques</b><span>${col.length ? `${Object.keys(brands).length} marque${Object.keys(brands).length > 1 ? "s" : ""}${top ? ` · ${esc(top[0])} en tête` : ""}` : "Ta collection en chiffres"}</span></span><i>›</i></button>
+      <button type="button" class="h-stats" data-go="stats"><span class="st-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></span><span class="tx"><b>Mes statistiques</b><span>${col.length ? `${Object.keys(brands).length} marque${Object.keys(brands).length > 1 ? "s" : ""}${top ? ` · ${esc(top[0])} en tête` : ""}` : "Ta collection en chiffres"}</span></span><i>›</i></button>
       <div class="h-sec"><h2>Actualités</h2><button type="button" class="linkbtn" id="news-refresh">Actualiser</button></div>
       <div class="news" id="news"></div>`;
     loadNews(false);
