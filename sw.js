@@ -1,5 +1,5 @@
 // Mode hors ligne : l'app se charge même sans réseau, mais prend toujours la dernière version quand le réseau est là.
-const CACHE = "mes-montres-v22";
+const CACHE = "mes-montres-v23";
 const CORE = ["./", "index.html", "manifest.webmanifest", "colorways.js", "fonts/bodoni-moda-latin-500-normal.woff2", "fonts/bodoni-moda-latin-600-normal.woff2", "fonts/bodoni-moda-latin-700-normal.woff2", "fonts/manrope-latin-400-normal.woff2", "fonts/manrope-latin-500-normal.woff2", "fonts/manrope-latin-600-normal.woff2", "fonts/manrope-latin-700-normal.woff2", "fonts/manrope-latin-800-normal.woff2", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", e => {
