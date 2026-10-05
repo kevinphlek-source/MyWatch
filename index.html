@@ -584,6 +584,31 @@ dialog p.help:empty{display:none}
 
 .suggest li.sg-typeli{padding:12px 10px;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0}
 .sg-type{color:var(--brass);font-weight:800}
+
+/* ---------- Catalogue : marques ---------- */
+.brand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px}
+.bt{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:10px 6px 12px;font:inherit;color:var(--ink);cursor:pointer;text-align:center;min-width:0;box-shadow:0 6px 16px rgba(60,45,20,.06)}
+.bt-th{width:64px;height:64px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.bt-th svg{width:130%;height:130%}.bt-th img{width:100%;height:100%;object-fit:cover}
+.bt b{font-family:var(--serif);font-size:.95rem;line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt small{font-size:.7rem;color:var(--muted);font-weight:700}
+.brand-all{margin:12px 16px 0}
+.brand-all summary{cursor:pointer;font-weight:800;color:var(--brass);font-size:.9rem;list-style:none;text-align:center;padding:8px}
+.brand-all summary::-webkit-details-marker{display:none}
+.brand-list{display:flex;flex-wrap:wrap;gap:8px;padding-top:6px}
+.brand-list .chip small{color:var(--muted);font-weight:700;margin-left:2px}
+/* ---------- Envies : objectif poignet ---------- */
+.of-list{display:flex;flex-direction:column;gap:10px;padding:0 16px}
+.of-card{display:flex;gap:14px;align-items:center;border:1px solid var(--line);background:linear-gradient(160deg,var(--surface),var(--surface2,#F8F3EA));border-radius:22px;padding:14px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;box-shadow:0 10px 26px rgba(60,45,20,.08)}
+.of-card.done{border-color:var(--ok)}
+.of-th{width:96px;height:96px;border-radius:18px;overflow:hidden;flex:none;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.of-th img{width:100%;height:100%;object-fit:cover}.of-th svg{width:120%;height:120%}
+.of-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.of-tx small{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.of-tx b{font-family:var(--serif);font-size:1.15rem;line-height:1.15}
+.of-amt{font-size:.82rem;color:var(--muted);font-weight:700}.of-amt strong{color:var(--ink);font-size:1rem}
+.of-eta{font-size:.78rem;color:var(--muted);font-weight:600}
+.of-card .reserve{height:16px}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -1287,7 +1312,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 31; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 32; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -4875,8 +4900,13 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
     if (tab === "catalog"){
       const v = state.view.catalog;
       if (!v.q && !activeFilters(v)){
-        items = ICONS.map(k => { const i = CAT_LIST.findIndex(e => e.brand + "|" + e.model === k); return i < 0 ? null : { w: CAT_LIST[i], ref: "k:" + i, extra: `<em>${money(CAT_LIST[i].retail)}</em>` }; }).filter(Boolean);
-        html = `<div class="sec-head" style="padding:0 16px"><h2>Les icônes</h2><span class="more">À découvrir</span></div>`;
+        const counts = {}; CAT_LIST.forEach(e => counts[e.brand] = (counts[e.brand] || 0) + 1);
+        const brands = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"));
+        const flagship = b => { const k = ICONS.find(x => x.startsWith(b + "|")); return k ? k.split("|")[1] : (CAT_LIST.find(e => e.brand === b) || {}).model; };
+        const tile = ([b, n]) => `<button type="button" class="bt" data-brandpick="${esc(b)}"><span class="bt-th">${sugThumb(b, flagship(b)).html}</span><b>${esc(b)}</b><small>${n} modèle${n > 1 ? "s" : ""}</small></button>`;
+        html = `<div class="sec-head" style="padding:0 16px"><h2>Les marques</h2><span class="more">${brands.length} marques</span></div>
+          <div class="brand-grid">${brands.slice(0, 12).map(tile).join("")}</div>
+          <details class="brand-all"><summary>Toutes les marques (${brands.length})</summary><div class="brand-list">${brands.slice().sort((a, b) => a[0].localeCompare(b[0], "fr")).map(([b, n]) => `<button type="button" class="chip" data-brandpick="${esc(b)}">${esc(b)} <small>${n}</small></button>`).join("")}</div></details>`;
       }
     } else if (tab === "collection"){
       const arr = showcaseList("collection");
@@ -4886,19 +4916,27 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
       const arr = showcaseList("wishlist");
       if (!arr.length) html = `<div class="empty-state">${watchSVG({ dial: "#15181C", brand: "", bezel: "plongee", indices: "points", hands: "glaive" })}<h3>Aucune envie pour l'instant</h3><p>Repère une montre dans le catalogue et ajoute-la ici.</p><button type="button" class="btn primary" data-go="catalog">Parcourir le catalogue</button></div>`;
       else {
-        html = `<div class="sec-head" style="padding:0 16px"><h2>Prochains achats</h2><button type="button" class="more link" data-custom="wishlist">Personnaliser</button></div>`;
-        items = arr.map(w => {
-          const c = num(w.current), t = num(w.target), pct = c && t ? Math.max(4, Math.min(100, Math.round(t / c * 100))) : null;
-          const tag = c !== null && t !== null && c <= t ? "Prix cible atteint" : ({ 1: "Priorité haute", 2: "", 3: "" })[w.priority] || "";
-          return { w, ref: "w:" + w.id, tag, extra: `<em>${money(w.current || w.retail)}${t ? ` · cible ${money(t)}` : ""}</em>${pct ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ""}` };
-        });
+        const funded = state.wishlist.filter(w => w.fund);
+        if (funded.length){
+          html = `<div class="sec-head" style="padding:0 16px"><h2>Objectif poignet</h2></div><div class="of-list">${funded.map(w => { const f = fundInfo(w); return `<button type="button" class="of-card${f.done ? " done" : ""}" data-fundopen="${esc(w.id)}"><span class="of-th">${thumbOf("wishlist", w)}</span><span class="of-tx"><small>${esc(w.brand)}</small><b>${esc(w.model)}</b><span class="of-amt"><strong>${eur.format(f.saved)}</strong> / ${eur.format(f.goal)} · ${Math.round(f.pct * 100)} %</span>${reserveBar(f.pct)}<span class="of-eta">${f.done ? "Objectif atteint : elle peut rejoindre ton poignet" : f.eta ? `≈ ${f.months} mois · ${monthName(f.eta)}` : `encore ${eur.format(f.left)}`}</span></span></button>`; }).join("")}</div>`;
+        } else html = `<div style="padding:0 16px"><button type="button" class="fund-cta" data-fundnew=""><span class="ic">⌚︎</span><span><b>Objectif poignet</b><span>Choisis la montre que tu vises et ton rythme d'épargne</span></span></button></div>`;
       }
     }
     box.innerHTML = html + (items.length ? `<div class="rail">${items.map(x => featCard(x.w, x.ref, x.tag, x.extra)).join("")}</div>` : "");
     box.classList.toggle("hidden", !html);
     box.querySelectorAll("[data-thumb]").forEach(fillThumb);
   }
+  function pickBrand(b){
+    state.view.catalog.brand = b || ""; persist();
+    const row = $("#brand-chips");
+    if (b && row && ![...row.querySelectorAll(".chip")].some(c => c.dataset.brand === b)){ const c = document.createElement("button"); c.type = "button"; c.className = "chip"; c.dataset.brand = b; c.textContent = b; row.children[0].after(c); }
+    renderCatalog();
+    if (b){ const t = $("#list-title"); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 70, behavior: "smooth" }); const chip = row && row.querySelector(`.chip[data-brand="${CSS.escape(b)}"]`); if (chip) chip.scrollIntoView({ inline: "center", block: "nearest" }); }
+  }
   $("#showcase").addEventListener("click", e => {
+    const bp = e.target.closest("[data-brandpick]"); if (bp){ pickBrand(bp.dataset.brandpick); return; }
+    const fw = e.target.closest("[data-fundopen]"); if (fw){ openWatchSheet("wishlist", fw.dataset.fundopen); return; }
+    const fn = e.target.closest("[data-fundnew]"); if (fn){ openFund(""); return; }
     const cu = e.target.closest("[data-custom]"); if (cu){ openShowcaseEditor(cu.dataset.custom); return; }
     const go = e.target.closest("[data-go]"); if (go){ tab = go.dataset.go; render(); return; }
     const f = e.target.closest(".feat"); if (!f) return;
@@ -4907,7 +4945,7 @@ trend : hausse, stable ou baisse. Montants entiers en euros.`;
   });
   $("#hero").addEventListener("click", e => {
     const c = e.target.closest("#brand-chips .chip"); if (!c) return;
-    state.view.catalog.brand = c.dataset.brand || ""; persist(); renderCatalog();
+    pickBrand(c.dataset.brand || "");
   });
 
   // ---------- Vignettes photo-réalistes (rendu 3D mis en cache) ----------
