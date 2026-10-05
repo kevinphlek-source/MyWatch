@@ -278,6 +278,64 @@ label.sw.other{flex-direction:row;gap:6px;padding:3px 10px 3px 3px;font-size:.82
 .cw-sep{flex:none;align-self:center;writing-mode:vertical-rl;transform:rotate(180deg);font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);padding-left:6px;margin:0 2px}
 .d-saved{font-size:.8rem;color:var(--ok);font-weight:700;min-height:1em;margin:0}
 .d-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* ---------- Comparateur ---------- */
+.cmp{--ca:var(--brass);--cb:#4F6D8A}
+.cmp-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:6px;margin-top:4px}
+.c-slot{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;color:var(--ink);cursor:pointer;text-align:center;min-width:0;font:inherit}
+.c-img{width:100%;aspect-ratio:1;border-radius:18px;background:var(--surface2,#F8F3EA);display:grid;place-items:center;overflow:hidden;border:2px solid transparent;transition:transform .25s}
+.c-slot.a .c-img{border-color:var(--ca)} .c-slot.b .c-img{border-color:var(--cb)}
+.c-img img,.c-img svg{width:100%;height:100%;object-fit:contain;display:block}
+.c-slot.empty .c-img{border:2px dashed var(--line);color:var(--muted);font-size:.8rem;font-weight:700;padding:10px}
+.c-slot.empty .c-img b{display:block;font-size:1.8rem;line-height:1;color:var(--brass)}
+.c-slot:active .c-img{transform:scale(.97)}
+.c-brand{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.c-model{font-family:var(--serif);font-weight:700;font-size:.98rem;line-height:1.15;overflow-wrap:anywhere}
+.c-change{font-size:.72rem;color:var(--brass);font-weight:700}
+.c-vs{align-self:center;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--surface);font-family:var(--serif);font-weight:700;font-style:italic;font-size:.95rem;box-shadow:0 6px 16px rgba(0,0,0,.18);margin-top:-30px}
+.c-score{display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:16px;padding:12px;background:var(--brass-soft);text-align:center}
+.c-score .sc{font-family:var(--serif);font-size:2rem;font-weight:700;line-height:1;display:flex;gap:12px;align-items:center}
+.c-score .sc .a{color:var(--ca)} .c-score .sc .b{color:var(--cb)} .c-score .sc i{font-style:normal;color:var(--muted);font-size:1.2rem}
+.c-score p{margin:4px 0 0;font-size:.85rem;color:var(--ink)}
+.c-sec{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:8px 0 -6px;text-align:center}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.duel .lbl{grid-column:1/-1;text-align:center;font-size:.74rem;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.duel .lbl em{font-style:normal;text-transform:none;letter-spacing:0;color:var(--brass);font-weight:700}
+.duel .va,.duel .vb{font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:6px;min-width:0}
+.duel .va{justify-content:flex-end;text-align:right} .duel .vb{justify-content:flex-start}
+.duel .win{color:var(--ink)}
+.duel .crown{width:16px;height:16px;flex:none;color:var(--brass);animation:pop .5s .4s both}
+.duel .vb .crown{color:var(--cb)}
+.duel .same{grid-column:1/-1;justify-self:center;font-size:.72rem;font-weight:800;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 10px;margin-top:2px}
+.bars{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:4px;height:10px}
+.bars span{background:var(--line);border-radius:999px;overflow:hidden;display:flex}
+.bars span:first-child{justify-content:flex-end}
+.bars i{display:block;height:100%;width:0;border-radius:999px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bars span:first-child i{background:var(--ca)} .bars span:last-child i{background:var(--cb)}
+.cmp.go .bars i{width:var(--p)}
+.dial-dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.2);flex:none}
+.c-wrist{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;border-bottom:1px solid var(--line)}
+.c-wrist svg{width:150px;height:150px}
+.c-wrist circle{transition:r .8s cubic-bezier(.2,.8,.2,1)}
+.c-wrist p{margin:0;font-size:.85rem;text-align:center}
+.c-comps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:.75rem}
+.c-comps div{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
+.c-comps b{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.c-comps span{border-radius:999px;padding:2px 8px;background:var(--surface2,#F8F3EA);border:1px solid var(--line)}
+.c-comps .oa span{border-color:var(--ca)} .c-comps .ob span{border-color:var(--cb)}
+.c-hint{text-align:center;color:var(--muted);font-size:.9rem;margin:6px 0}
+.c-pick{display:flex;flex-direction:column;gap:10px}
+.c-pick input{border-radius:999px}
+.c-pick h3{margin:6px 0 0}
+.c-list{display:flex;flex-direction:column;gap:6px}
+.c-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 10px;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+.c-item .th{width:40px;height:40px;border-radius:10px;overflow:hidden;flex:none;display:grid;place-items:center;background:var(--surface2,#F8F3EA)}
+.c-item .th img{width:100%;height:100%;object-fit:cover}
+.c-item .th .dial-dot{width:24px;height:24px}
+.c-item small{display:block;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.c-item strong{font-size:.9rem}
+.c-item em{margin-left:auto;font-style:normal;color:var(--muted);font-size:.8rem;white-space:nowrap}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+
 .d-actions .btn{width:100%}
 .d-link{text-align:center;font-size:.88rem;font-weight:700;color:var(--brass);text-decoration:none;padding:6px}
 .backup{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -536,6 +594,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
       <rect x="23" y="47" width="24" height="3" rx="1.5" fill="#F4D98A" opacity=".8"/>
     </svg>
     <h1>Mes montres</h1>
+    <button type="button" class="icon-btn" id="cmp-btn" aria-label="Comparer deux montres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M12 5l-7 2M12 5l7 2"/><path d="M5 7l-3 7a3.5 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3.5 3 0 0 0 6 0z"/></svg></button>
     <button type="button" class="icon-btn" id="menu-btn" aria-label="Réglages et sauvegarde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></button>
   </header>
   <section class="hero" id="hero"></section>
@@ -870,6 +929,18 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <div class="actions"><span class="spacer"></span><button type="button" class="btn" id="st-cancel">Annuler</button><button type="button" class="btn primary" id="st-save">Enregistrer</button></div>
   </form>
 </dialog>
+<dialog id="csheet" class="cmp" aria-label="Comparateur">
+  <form method="dialog" style="gap:12px" onsubmit="return false">
+    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    <h2 id="c-title">Comparateur</h2>
+    <div id="c-main"></div>
+    <div class="c-pick hidden" id="c-pick">
+      <input type="search" id="c-q" placeholder="Rechercher une marque ou un modèle" autocomplete="off" spellcheck="false">
+      <div id="c-results"></div>
+      <button type="button" class="btn" id="c-back">Retour au duel</button>
+    </div>
+  </form>
+</dialog>
 <dialog id="vsheet" aria-label="Personnaliser la vitrine">
   <form method="dialog" style="gap:12px">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
@@ -898,7 +969,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 19; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 20; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1271,7 +1342,101 @@ Nivada Grenchen|Antarctic|A|38|100|s|#F2F3F4|r|s|s|l||l|n|b|900
 Furlan Marri|Mechaquartz|Q|38|30|s|#E9E6DE|r|s|l|l|chrono|s|a|d|450
 Movado|Museum Classic|Q|40|30|s|#15181C|r|s|l|l||l|b|b|600
 Fossil|Grant Chronographe|Q|44|50|m|#F2F3F4|r|s|l|l|chrono|l|r|b|150
-Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150`;
+Daniel Wellington|Classic 40|Q|40|30|m|#F2F3F4|r|p|l|l||l|b|b|150
+Seiko|5 Sports Field (SRPG)|A|39.4|100|h|#2B3A2A|r|s|n|l|daydate|l|n|b|300
+Seiko|5 Sports SKX Midi (SRPK)|A|38|100|h|#15181C|r|s|s|d|daydate|l|p|m|330
+Seiko|5 Sports Suits (SRPJ)|A|40|100|h|#C9CED4|r|s|s|l|daydate|s|a|b|300
+Seiko|Prospex Monster|A|42.4|200|h|#15181C|r|s|s|d|daydate|l|p|g|450
+Seiko|Prospex Arnie Solaire|S|47.8|200|h|#15181C|c|s|c|d|alarm|l|p|b|450|x
+Seiko|Prospex Tuna Solaire|S|46.7|200|h|#15181C|r|n|c|d|date|l|p|g|480
+Seiko|Prospex Chronographe Solaire|S|41.4|100|s|#15181C|r|s|s|t|chrono+date|l|b|b|550
+Seiko|Presage Sharp Edged|A|39.3|100|s|#1F3D5C|r|s|s|l|power+date|g|a|d|890
+Seiko|Essentials Quartz|Q|40|100|h|#F2F3F4|r|s|s|l|date|s|b|b|180
+Casio|G-Shock DW-6900|Q|50|200|m|#9FB08F|r|r|c|l|alarm|l|b|b|100|n
+Casio|G-Shock GA-110|Q|51.2|200|m|#15181C|r|r|c|l|alarm|l|b|b|130|x
+Casio|G-Shock GA-700|Q|53.4|200|m|#15181C|q|r|c|l|alarm|l|b|b|120|x
+Casio|G-Shock GBD-200|Q|46.1|200|m|#9FB08F|q|r|c|l|alarm|l|b|b|160|n
+Casio|G-Shock GW-5000 Made in Japan|S|42.8|200|m|#9FB08F|q|s|c|l|alarm|l|b|b|450|n
+Casio|G-Shock GM-5600 Métal|Q|42.8|200|m|#9FB08F|q|s|c|l|alarm|l|b|b|200|n
+Casio|G-Shock GM-B2100 Full Metal|S|44.4|200|s|#15181C|o|s|s|l|alarm|l|b|b|650
+Casio|G-Shock Rangeman GW-9400|S|53.6|200|m|#9FB08F|r|r|c|l|alarm|l|b|b|300|n
+Casio|Pro Trek PRW-35|S|47.3|100|m|#9FB08F|r|r|c|l|alarm|l|b|b|250|n
+Casio|Edifice EFR-526|Q|47.5|100|m|#15181C|r|s|s|t|chrono+date|l|b|b|150
+Casio|Edifice EQB-1000|S|45.4|100|s|#15181C|r|s|s|l|chrono+date|l|b|b|260
+Casio|Vintage A158W|Q|33.2|30|a|#9FB08F|t|s|s|l|alarm|l|b|b|25|n
+Casio|Vintage A700|Q|36.3|30|a|#9FB08F|t|s|m|l|alarm|l|b|b|60|n
+Casio|Vintage A1000|Q|39|30|m|#9FB08F|t|s|s|l|alarm|l|b|b|120|n
+Casio|Vintage AE-1200 World Time|Q|42.1|100|m|#9FB08F|q|r|c|l|worldtime+alarm|l|b|b|50|n
+Casio|CA-53W Calculatrice|Q|43.2|30|a|#9FB08F|t|r|c|l|alarm|l|b|b|35|n
+Casio|W-800H|Q|44.2|100|m|#9FB08F|r|r|c|l|alarm|l|b|b|25|n
+Casio|MRW-200H|Q|45|100|m|#15181C|r|r|c|f|daydate|l|n|b|40
+Citizen|Eco-Drive Nighthawk|S|42|200|m|#15181C|r|s|s|f|gmt+date|l|n|b|330
+Citizen|Promaster Skyhawk A-T|S|46|200|m|#15181C|r|s|s|f|chrono+worldtime+alarm|l|n|b|550|x
+Citizen|Promaster Navihawk A-T|S|48|200|m|#15181C|r|s|s|f|chrono+worldtime|l|n|b|500
+Citizen|Eco-Drive BM8180 Militaire|S|37|100|m|#15181C|r|s|n|l|date|l|n|b|130
+Citizen|Eco-Drive Super Titanium|S|40|100|s|#15181C|r|t|t|l|date|l|b|b|250
+Citizen|Eco-Drive Chronographe Sport|S|42|100|m|#15181C|r|s|s|t|chrono+date|l|b|b|250
+Orient|Sun & Moon|A|42.5|30|m|#F2F0EA|r|s|l|l|date+daynight|l|a|d|300
+Orient|Orient Star Semi-Skeleton|A|38.5|50|s|#F2F0EA|r|s|l|l|power+openheart|l|a|d|450
+Orient|Orient Star M45 GMT|A|41|100|s|#15181C|r|s|s|g|gmt+power+date|l|a|m|650
+Orient|Orient Star Phase de lune|A|41|50|s|#1F3D5C|r|s|l|l|moon+power+date|s|a|d|700
+Tissot|PRX 35 mm Powermatic 80|A|35|100|s|#1E3F7A|r|s|s|l|date|g|a|b|725
+Tissot|Seastar 1000 Chronographe quartz|Q|45.5|300|s|#15181C|r|s|c|d|chrono+date|s|a|b|475
+Tissot|Supersport Chrono|Q|45.5|100|m|#15181C|r|s|l|t|chrono+date|l|n|b|450
+Tissot|PR 100|Q|40|100|s|#C9CED4|r|s|s|l|date|s|a|b|375
+Tissot|Classic Dream|Q|38|30|s|#F2F3F4|r|s|s|l|date|l|b|b|250
+Tissot|T-Classic Tradition 5.5|Q|38|30|s|#F2F0EA|r|s|l|l|date|l|r|f|300
+Tissot|Carson Premium Powermatic 80|A|40|50|s|#1E3F7A|r|s|l|l|date|s|a|d|795
+Tissot|Ballade Powermatic 80 COSC|A|41|50|s|#C9CED4|r|s|s|l|date|g|r|f|850
+Tissot|T-Race Chronographe|Q|45|100|m|#15181C|r|s|c|t|chrono+date|l|n|b|495
+Tissot|Gentleman quartz|Q|40|100|s|#15181C|r|s|s|l|date|s|a|b|375
+Hamilton|Khaki Field Quartz|Q|38|100|s|#15181C|r|s|n|l|date|l|n|b|445
+Hamilton|Khaki Field Titanium Auto|A|38|100|s|#2B3A2A|r|t|n|l|date|l|n|g|995
+Hamilton|Khaki Navy Scuba Auto|A|40|100|s|#15181C|r|s|s|d|date|l|a|b|795
+Hamilton|Jazzmaster Thinline quartz|Q|40|50|s|#C9CED4|r|s|l|l|date|s|a|d|495
+Hamilton|American Classic Ardmore quartz|Q|40|30|s|#F2F0EA|t|s|l|l||l|n|b|495
+Certina|DS Caimano|Q|39|100|s|#F2F3F4|r|s|l|l|date|l|a|d|400
+Certina|DS Podium Chronographe|Q|43|100|s|#15181C|r|s|s|t|chrono+date|s|a|b|550
+Swatch|Scuba Fifty Fathoms|A|42.3|100|s|#15181C|r|r|n|d||l|p|g|400
+Swatch|Big Bold|Q|47|30|m|#15181C|r|r|c|l||l|b|b|100
+Swatch|Gent Originals|Q|34|30|m|#F2F3F4|r|r|c|l||l|n|b|70
+Swatch|Irony Chrono|Q|43|30|m|#15181C|r|s|s|l|chrono+date|l|b|b|170
+Timex|Weekender|Q|38|30|m|#F2F3F4|r|s|n|l||l|n|b|60
+Timex|Camper MK1|Q|40|50|m|#2B3A2A|r|r|n|l||l|n|b|110
+Timex|Ironman Classic 30|Q|38|100|m|#9FB08F|r|r|c|l|chrono+alarm|l|b|b|60|n
+Timex|M79 Automatic|A|40|50|a|#15181C|r|s|s|g||l|b|b|280
+Timex|Marlin Automatic|A|40|50|a|#C9CED4|r|s|l|l|date|s|b|b|290
+Timex|Easy Reader|Q|38|30|m|#F2F3F4|r|s|l|l||l|n|b|60
+Baltic|Aquascaphe GMT|A|39|200|s|#15181C|r|s|s|g|gmt|l|p|g|690
+Lorier|Neptune|A|39|200|s|#15181C|r|s|s|d||l|p|m|470
+Lorier|Hyperion GMT|A|39|100|s|#F2F0EA|r|s|s|g|gmt+date|l|a|d|520
+Lorier|Falcon|A|36|100|a|#15181C|r|s|s|l||l|e|m|400
+Dan Henry|1970 Diver|A|40|200|s|#15181C|c|s|s|d|date|l|p|b|330
+Sea-Gull|1963 Chronographe|M|38|30|a|#F2F0EA|r|s|l|l|chrono|l|n|d|400
+Vostok|Amphibia|A|41|200|m|#1F3D5C|r|s|s|d||l|n|b|90
+Victorinox|FieldForce|Q|42|100|s|#15181C|r|s|l|l|date|l|n|b|350
+Festina|Chrono Bike|Q|44|100|m|#15181C|r|s|s|t|chrono+date|l|n|b|200
+Festina|Timeless Chronographe|Q|42|50|m|#1F3D5C|r|s|s|l|chrono+date|s|b|b|150
+Fossil|Townsman Automatique|A|44|50|m|#15181C|r|s|l|l|openheart|l|r|b|200
+Fossil|Machine|Q|45|50|m|#15181C|r|n|s|l|daydate|l|n|b|150
+Daniel Wellington|Iconic Link|Q|40|50|m|#F2F3F4|r|s|s|l||l|b|b|200
+Nixon|Time Teller|Q|40|100|m|#15181C|r|s|s|l||l|b|b|130
+Nixon|Sentry|Q|42|100|m|#15181C|r|s|s|l|date|l|b|b|200
+Invicta|Pro Diver 8926OB|A|40|200|m|#15181C|r|s|s|d|date|l|p|m|120
+Junghans|Max Bill quartz|Q|38|30|a|#F2F0EA|r|s|l|l|date|l|n|b|445
+Maurice Lacroix|Aikon quartz|Q|40|100|s|#1F3D5C|r|s|s|l|date|g|a|b|990
+Michel Herbelin|Newport Yacht Club|Q|42|100|s|#1F3D5C|r|s|s|l|date|l|n|b|400
+Pierre Lannier|Week-End Vintage|Q|40|50|m|#F2F3F4|r|s|l|l|date|l|n|b|100
+Briston|Clubmaster Classic|Q|40|100|m|#15181C|c|r|n|l|date|l|n|b|180
+Mondaine|Classic Swiss Railways|Q|40|30|s|#F2F3F4|r|s|l|l||l|b|b|200
+Mondaine|Evo2|Q|40|30|s|#F2F3F4|r|s|l|l|date|l|b|b|230
+Spinnaker|Hull Diver|A|42|300|m|#1F3D5C|r|s|s|d|date|l|p|m|250
+Studio Underd0g|Watermel0n|Q|38.5|50|s|#F2F0EA|r|s|l|l|chrono|l|n|b|500
+Lacoste|12.12|Q|42|50|m|#15181C|r|r|c|l||l|n|b|130
+Tommy Hilfiger|Decker|Q|44|50|m|#1F3D5C|r|s|s|l|chrono+daydate|l|n|b|180
+Hugo Boss|Hero Chronographe|Q|43|50|m|#15181C|r|s|s|t|chrono+date|l|b|b|300
+Michael Kors|Lexington Chronographe|Q|44|50|m|#D9B56E|r|g|s|l|chrono+date|s|b|b|300
+Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
   const CODE = {
     T: { A: "automatique", M: "manuel", Q: "quartz", S: "solaire", K: "kinetic", D: "springdrive" },
     G: { s: "saphir", m: "mineral", h: "hardlex", a: "hesalite" },
@@ -3098,6 +3263,7 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
       act = `<button type="button" class="btn" data-act="edit" style="grid-column:1/-1">Modifier le prix ou la date</button>`;
     }
     if (kind !== "catalog") act += `<button type="button" class="btn danger${detail.delArmed ? " armed" : ""}" data-act="delete" style="grid-column:1/-1">${detail.delArmed ? "Toucher encore pour confirmer la suppression" : wish ? "Retirer de mes recherchées" : "Retirer de ma collection"}</button>`;
+    act += `<button type="button" class="btn" data-act="compare" style="grid-column:1/-1">Comparer avec une autre montre</button>`;
     $("#d-actions").innerHTML = act;
     $("#d-photos").href = "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(`${w.brand} ${w.model}${vname ? " " + vname.replace(/[«»()]/g, "") : ""} montre`);
   }
@@ -3120,6 +3286,7 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
   $("#d-actions").addEventListener("click", ev => {
     const b = ev.target.closest("[data-act]"); if (!b || !detail) return;
     const w = detail.shown, act = b.dataset.act;
+    if (act === "compare"){ const ref = cmpRef(detail.kind, w); dsheet.close(); openCompare(ref); return; }
     if (act === "wish" || act === "own"){
       const nw = entryToWatch(w);
       if (act === "own"){ delete nw.current; delete nw.target; delete nw.priority; nw.price = w.retail; nw.date = ""; state.collection.push(nw); }
@@ -3217,6 +3384,144 @@ Règles : dial = couleur principale du cadran en hexadécimal ; size = diamètre
     $("#m-version").textContent = `Version ${APP_VERSION}. L'app se met à jour toute seule quand une nouvelle version est publiée.`; $("#m-size").value = state.photoSize || 62; $("#m-size-v").textContent = $("#m-size").value + " %"; $("#m-size-msg").textContent = ""; $("#msheet").showModal(); });
   $("#m-size").addEventListener("input", e => { $("#m-size-v").textContent = e.target.value + " %"; });
   $("#m-size").addEventListener("change", e => { state.photoSize = +e.target.value; persist(); $("#m-size-msg").textContent = "Toutes tes photos sont remises à cette taille…"; restandardize().then(() => { $("#m-size-msg").textContent = "C'est fait."; }); });
+  // ---------- Comparateur ----------
+  const csheet = $("#csheet"), CMP_LS = "mywatch-compare";
+  const CROWN = `<svg class="crown" viewBox="0 0 16 16" fill="currentColor" aria-label="gagne"><path d="M2 12h12l1-7-4 3-3-5-3 5-4-3z"/></svg>`;
+  const GLASS_RANK = { saphir: 3, hesalite: 2, hardlex: 2, mineral: 1 };
+  let cmp = [null, null], cmpPick = -1;
+  function cmpRef(kind, w){ return kind === "catalog" ? { kind, key: fold(w.brand) + "|" + fold(w.model), w } : { kind, id: w.id, w }; }
+  function cmpResolve(r){
+    if (!r) return null;
+    if (r.kind === "catalog"){
+      const base = CAT_MAP[r.key]; if (!base) return null;
+      let w = r.w && fold(r.w.brand) + "|" + fold(r.w.model) === r.key ? r.w : base;
+      if (w === base){ const first = colorwaysFor(base)[0]; if (first && first.dial.toLowerCase() === String(base.dial).toLowerCase()) w = applyColorway(base, first); }
+      return { ...r, w };
+    }
+    const w = (state[r.kind] || []).find(x => x.id === r.id); return w ? { ...r, w } : null;
+  }
+  function cmpSave(){ try { localStorage.setItem(CMP_LS, JSON.stringify(cmp.map(r => r && (r.kind === "catalog" ? { kind: r.kind, key: r.key } : { kind: r.kind, id: r.id })))); } catch(e){} }
+  function cmpLoad(){ try { const a = JSON.parse(localStorage.getItem(CMP_LS) || "[]"); cmp = [0, 1].map(i => cmpResolve(a[i])); } catch(e){ cmp = [null, null]; } }
+  function cmpValue(r){ return valueOf(r.w, r.kind === "wishlist"); }
+  function openCompare(ref){
+    cmpLoad();
+    if (ref){
+      const same = cmp.findIndex(r => r && r.kind === ref.kind && (r.id || r.key) === (ref.id || ref.key));
+      if (same < 0){ cmp = [ref, cmp[0] && !(cmp[0].kind === ref.kind && (cmp[0].id || cmp[0].key) === (ref.id || ref.key)) ? cmp[0] : cmp[1]]; }
+      cmpSave();
+    }
+    renderCompare(); csheet.showModal(); csheet.scrollTop = 0;
+    if (ref && !cmp[1]) showPicker(1);
+  }
+  function slotHTML(r, i){
+    const side = i ? "b" : "a";
+    if (!r) return `<button type="button" class="c-slot empty ${side}" data-slot="${i}"><span class="c-img"><span><b>+</b>Choisir une montre</span></span></button>`;
+    const ph = photoOf(r.kind, r.w), v = cmpValue(r), rr = rarity(v);
+    return `<button type="button" class="c-slot ${side}" data-slot="${i}"><span class="c-img">${ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(r.w)}</span>
+      <span class="c-brand">${esc(r.w.brand)}</span><span class="c-model">${esc(r.w.model)}</span>
+      ${rr ? `<span class="pill ${rr.key}">${rr.label}</span>` : ""}<span class="c-change">Changer</span></button>`;
+  }
+  function duel(label, a, b, opt = {}){
+    // opt.na/nb : nombres pour les barres ; opt.win : 0, 1 ou -1 (aucun gagnant) ; opt.note : texte sous le titre
+    const w = opt.win ?? -1, same = opt.same;
+    let bars = "";
+    if (opt.na != null && opt.nb != null && (opt.na > 0 || opt.nb > 0)){
+      const m = Math.max(opt.na, opt.nb) || 1, p = n => Math.max(6, Math.round(n / m * 100)) + "%";
+      bars = `<div class="bars"><span><i style="--p:${p(opt.na)}"></i></span><span><i style="--p:${p(opt.nb)}"></i></span></div>`;
+    }
+    return `<div class="duel"><div class="lbl">${label}${opt.note ? ` <em>· ${opt.note}</em>` : ""}</div>
+      <div class="va${w === 0 ? " win" : ""}">${w === 0 ? CROWN : ""}${a || "—"}</div><div class="vb${w === 1 ? " win" : ""}">${b || "—"}${w === 1 ? CROWN : ""}</div>${bars}${same ? `<span class="same">Pareil</span>` : ""}</div>`;
+  }
+  const better = (x, y, higher = true) => x == null || y == null || x === y ? -1 : (higher ? (x > y ? 0 : 1) : (x < y ? 0 : 1));
+  function renderCompare(){
+    const [A, B] = cmp;
+    $("#c-pick").classList.add("hidden"); $("#c-main").classList.remove("hidden"); $("#c-title").textContent = "Comparateur";
+    let h = `<div class="cmp-head">${slotHTML(A, 0)}<span class="c-vs">VS</span>${slotHTML(B, 1)}</div>`;
+    if (!A || !B){ $("#c-main").innerHTML = h + `<p class="c-hint">Choisis deux montres de ta collection, de tes envies ou du catalogue pour les comparer en un coup d'œil.</p>`; return; }
+    const a = A.w, b = B.w, score = [0, 0], wins = [[], []];
+    const tally = (win, what) => { if (win >= 0){ score[win]++; wins[win].push(what); } return win; };
+    // prix
+    const pa = cmpValue(A), pb = cmpValue(B);
+    const wPrice = tally(better(pa, pb, false), "moins chère");
+    // étanchéité
+    const wa = num(a.water), wb = num(b.water);
+    const wWater = tally(better(wa, wb), "plus étanche");
+    // verre
+    const ga = GLASS_RANK[a.glass], gb = GLASS_RANK[b.glass];
+    const wGlass = tally(better(ga, gb), "meilleur verre");
+    // complications
+    const ca = (a.comps || []).length, cb = (b.comps || []).length;
+    const wComps = tally(better(ca, cb), "plus de fonctions");
+    const name = r => r.w.model.length > 22 ? r.w.brand : r.w.model;
+    let verdict;
+    if (score[0] === score[1]) verdict = `<div class="sc"><span class="a">${score[0]}</span><i>–</i><span class="b">${score[1]}</span></div><p><strong>Match nul !</strong> Deux belles montres : à toi de choisir avec le cœur.</p>`;
+    else { const k = score[0] > score[1] ? 0 : 1; verdict = `<div class="sc"><span class="a">${score[0]}</span><i>–</i><span class="b">${score[1]}</span></div><p><strong>${esc(name(cmp[k]))}</strong> l'emporte : ${wins[k].join(", ")}.</p>`; }
+    h += `<div class="c-score">${verdict}</div>`;
+    // poignet
+    const sa = num(a.size), sb = num(b.size);
+    if (sa && sb){
+      const m = Math.max(sa, sb), R = n => (n / m * 66).toFixed(1), d = Math.abs(sa - sb);
+      h += `<div class="c-wrist"><div class="c-sec">Au poignet</div><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${R(sa)}" fill="var(--ca)" fill-opacity=".12" stroke="var(--ca)" stroke-width="3"/><circle cx="75" cy="75" r="${R(sb)}" fill="none" stroke="var(--cb)" stroke-width="3" stroke-dasharray="7 5"/></svg>
+        <p>${d < .5 ? "Exactement la même taille." : `<strong>${esc(name(sa > sb ? A : B))}</strong> est plus grande de ${String(+d.toFixed(1)).replace(".", ",")} mm.`}</p></div>`;
+    }
+    const mm = n => n ? String(n).replace(".", ",") + " mm" : "";
+    const wtr = v => v ? (v === "1000" ? "1 000 m+" : v + " m") : "";
+    const L = (f, v) => esc(optLabel(f, v));
+    const eq = (x, y) => !!x && x === y;
+    h += `<div class="c-sec">Duel</div>`;
+    h += duel("Prix", money(pa), money(pb), { na: pa, nb: pb, win: wPrice, note: "le moins cher gagne", same: pa != null && pa === pb });
+    h += duel("Étanchéité", wtr(a.water), wtr(b.water), { na: wa, nb: wb, win: wWater, same: eq(a.water, b.water) });
+    h += duel("Verre", L("glass", a.glass), L("glass", b.glass), { win: wGlass, same: eq(a.glass, b.glass) });
+    h += duel("Fonctions", ca ? ca + " complication" + (ca > 1 ? "s" : "") : "Heure seule", cb ? cb + " complication" + (cb > 1 ? "s" : "") : "Heure seule", { na: ca, nb: cb, win: wComps, same: ca === cb && ca > 0 });
+    h += `<div class="c-sec">Caractère</div>`;
+    h += duel("Taille", mm(a.size), mm(b.size), { na: sa, nb: sb, same: eq(String(a.size), String(b.size)) });
+    h += duel("Mouvement", esc(MOVE[a.movementType] || ""), esc(MOVE[b.movementType] || ""), { same: eq(a.movementType, b.movementType) });
+    h += duel("Catégorie", esc(CAT_LABEL[categoryOf(a)] || ""), esc(CAT_LABEL[categoryOf(b)] || ""), { same: categoryOf(a) === categoryOf(b) });
+    h += duel("Cadran", `${esc(nearestName(a.dial))}<span class="dial-dot" style="background:${esc(a.dial)}"></span>`, `<span class="dial-dot" style="background:${esc(b.dial)}"></span>${esc(nearestName(b.dial))}`);
+    h += duel("Boîtier", L("case", a.case), L("case", b.case), { same: eq(a.case, b.case) });
+    h += duel("Forme", L("shape", a.shape), L("shape", b.shape), { same: eq(a.shape, b.shape) });
+    h += duel("Lunette", L("bezel", a.bezel), L("bezel", b.bezel), { same: eq(a.bezel, b.bezel) });
+    h += duel("Bracelet", L("strap", a.strap), L("strap", b.strap), { same: eq(a.strap, b.strap) });
+    if (a.display !== "analogique" || b.display !== "analogique") h += duel("Affichage", L("display", a.display), L("display", b.display), { same: eq(a.display, b.display) });
+    const sA = new Set(a.comps || []), sB = new Set(b.comps || []);
+    const both = [...sA].filter(c => sB.has(c)), onlyA = [...sA].filter(c => !sB.has(c)), onlyB = [...sB].filter(c => !sA.has(c));
+    if (sA.size || sB.size){
+      const chips = l => l.length ? l.map(c => `<span>${esc(COMP_LABEL[c] || c)}</span>`).join("") : `<span style="opacity:.5">—</span>`;
+      h += `<div class="c-sec">Complications</div><div class="c-comps"><div class="oa"><b>Seulement elle</b>${chips(onlyA)}</div><div><b>En commun</b>${chips(both)}</div><div class="ob"><b>Seulement elle</b>${chips(onlyB)}</div></div>`;
+    }
+    $("#c-main").innerHTML = h;
+    csheet.classList.remove("go"); requestAnimationFrame(() => requestAnimationFrame(() => csheet.classList.add("go")));
+  }
+  function pickItem(kind, w, idx){
+    const ph = kind !== "catalog" && w.photo && photoSrc(w.photo) ? photoSrc(w.photo) : "";
+    const v = valueOf(w, kind === "wishlist");
+    return `<button type="button" class="c-item" data-kind="${kind}" data-i="${idx}"><span class="th">${ph ? `<img src="${esc(ph)}" alt="">` : `<span class="dial-dot" style="background:${esc(w.dial || "#2F3B4C")}"></span>`}</span><span><small>${esc(w.brand)}</small><strong>${esc(w.model)}</strong></span><em>${money(v)}</em></button>`;
+  }
+  let pickPool = {};
+  function renderPicker(){
+    const q = fold($("#c-q").value.trim()), hit = w => !q || fold(w.brand + " " + w.model).includes(q) || q.split(/\s+/).every(t => fold(w.brand + " " + w.model).includes(t));
+    pickPool = { collection: state.collection.filter(hit), wishlist: state.wishlist.filter(hit), catalog: q.length >= 2 ? CAT_LIST.filter(hit).slice(0, 60) : [] };
+    const group = (kind, title) => pickPool[kind].length ? `<h3>${title}</h3><div class="c-list">${pickPool[kind].map((w, i) => pickItem(kind, w, i)).join("")}</div>` : "";
+    $("#c-results").innerHTML = group("collection", "Ma collection") + group("wishlist", "Mes envies") + (q.length >= 2 ? group("catalog", "Catalogue") || `<p class="c-hint">Aucune montre du catalogue ne correspond.</p>` : `<p class="c-hint">Tape au moins 2 lettres pour chercher dans le catalogue (${CAT_LIST.length} modèles).</p>`);
+  }
+  function showPicker(i){
+    cmpPick = i;
+    $("#c-title").textContent = `Choisir la montre ${i ? "B" : "A"}`;
+    $("#c-main").classList.add("hidden"); $("#c-pick").classList.remove("hidden");
+    $("#c-q").value = ""; renderPicker(); csheet.scrollTop = 0;
+  }
+  $("#c-q").addEventListener("input", renderPicker);
+  $("#c-back").addEventListener("click", renderCompare);
+  $("#c-results").addEventListener("click", e => {
+    const it = e.target.closest(".c-item"); if (!it) return;
+    const w = pickPool[it.dataset.kind][+it.dataset.i]; if (!w) return;
+    cmp[cmpPick] = cmpResolve(cmpRef(it.dataset.kind, w)) || cmpRef(it.dataset.kind, w); cmpSave();
+    if (!cmp[1 - cmpPick]) { showPicker(1 - cmpPick); return; }
+    renderCompare(); csheet.scrollTop = 0;
+  });
+  $("#c-main").addEventListener("click", e => { const s = e.target.closest("[data-slot]"); if (s) showPicker(+s.dataset.slot); });
+  $("#cmp-btn").addEventListener("click", () => openCompare(null));
+
   const closeFrom = e => { const x = e.target.closest && e.target.closest("[data-close]"); if (!x) return; e.preventDefault(); e.stopPropagation(); const d = x.closest("dialog"); if (!d || !d.open) return; if (d.id === "sheet") closeSheet(); else d.close(); };
   document.addEventListener("click", closeFrom, true);
   document.addEventListener("touchend", closeFrom, { capture: true, passive: false });

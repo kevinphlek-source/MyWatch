@@ -309,6 +309,27 @@ Furlan Marri|Mechaquartz = Saumon #E3A58C ; Gris #C9CED4 ; Bleu #1E3F7A ; Vert #
 Movado|Museum Classic = Noir #15181C ; Bleu #1E3F7A ; Blanc #F2F3F4
 Fossil|Grant Chronographe = Noir #15181C ; Blanc #F2F3F4 ; Bleu #1E3F7A
 Daniel Wellington|Classic 40 = Blanc #F2F3F4 ; Noir #15181C
+Seiko|5 Sports SKX Midi (SRPK) = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A ; Blanc #F2F3F4 ; Orange #D9682B
+Seiko|5 Sports Field (SRPG) = Kaki #2B3A2A ; Noir #15181C ; Bleu #1F3D5C ; Beige #D8CDB4
+Seiko|Prospex Monster = Noir #15181C ; Bleu #1F3D5C ; Orange #D9682B
+Seiko|Essentials Quartz = Blanc #F2F3F4 ; Bleu #1F3D5C ; Noir #15181C
+Casio|Vintage A700 = Argenté #9FB08F ; Doré #9FB08F c:doré s:milanais
+Casio|G-Shock GA-110 = Noir #15181C ; Blanc #F2F3F4 c:resine ; Rouge #A3282D
+Casio|G-Shock GM-B2100 Full Metal = Acier #15181C ; Noir #15181C c:noir ; Doré #15181C c:doré
+Citizen|Eco-Drive Nighthawk = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
+Orient|Sun & Moon = Crème #F2F0EA ; Noir #15181C ; Bleu #1F3D5C
+Tissot|PRX 35 mm Powermatic 80 = Bleu #1E3F7A ; Argenté #C9CED4 ; Vert #1F5A3A ; Rose #E8A3B5 ; Noir #15181C
+Tissot|Seastar 1000 Chronographe quartz = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
+Hamilton|Khaki Field Quartz = Noir #15181C ; Kaki #2B3A2A ; Blanc #F2F3F4
+Swatch|Scuba Fifty Fathoms = Noir #15181C ; Bleu #1F3D5C ; Rouge #A3282D ; Vert #1F5A3A ; Jaune #D9B53A ; Orange #D9682B ; Blanc #F2F3F4
+Swatch|Big Bold = Noir #15181C ; Blanc #F2F3F4 ; Bleu #1F3D5C
+Lorier|Neptune = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
+Vostok|Amphibia = Bleu #1F3D5C ; Noir #15181C ; Vert #1F5A3A ; Blanc #F2F3F4
+Mondaine|Classic Swiss Railways = Blanc #F2F3F4 ; Noir #15181C
+Baltic|Aquascaphe GMT = Noir #15181C ; Bleu #1F3D5C ; Crème #F2F0EA
+Dan Henry|1970 Diver = Noir #15181C ; Bleu #1F3D5C ; Vert #1F5A3A
+Timex|Weekender = Blanc #F2F3F4 ; Noir #15181C ; Bleu #1F3D5C
+Ice-Watch|ICE classic = Noir #15181C ; Blanc #F2F3F4 ; Bleu #1F3D5C ; Rouge #A3282D ; Vert #1F5A3A
 `;
 
 // Bracelets proposés pour chaque modèle (le premier est celui du catalogue).
