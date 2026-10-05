@@ -525,6 +525,48 @@ dialog p.help:empty{display:none}
 .joy-target line{stroke:#A8823A;stroke-width:2;stroke-linecap:round}
 .joy-target .dot{fill:#B5483F;stroke:none}
 @keyframes lockOn{0%{transform:scale(2.2) rotate(-60deg);opacity:0}70%{opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+
+/* ---------- Valeur et cagnottes ---------- */
+.mv{font-size:.78em;font-weight:800;border-radius:999px;padding:1px 7px;white-space:nowrap}
+.mv.up{color:var(--ok);background:var(--ok-soft)}.mv.down{color:var(--danger);background:rgba(180,74,67,.1)}
+.mv-src{color:var(--muted);font-weight:600}
+.nw-mono{width:100%;height:100%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.5rem;color:#FFFDF8;background:linear-gradient(135deg,#C9A35A,#8E6A26)}
+.fbar{display:block;height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:6px}.fbar i{display:block;height:100%;background:var(--brass);border-radius:999px}
+.fund-cta{display:flex;align-items:center;gap:12px;width:100%;border:1px dashed rgba(168,130,58,.6);background:var(--brass-soft);border-radius:18px;padding:14px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.fund-cta b{display:block}.fund-cta span{font-size:.8rem;color:var(--muted)}
+.fund-cta .ic{width:36px;height:36px;border-radius:50%;background:var(--brass);color:#fff;display:grid;place-items:center;flex:none;font-weight:800}
+.fund{border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,var(--surface),var(--surface2,#F8F3EA))}
+.fund h3{margin:0;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.fund .amt{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.fund .amt b{font-family:var(--serif);font-size:1.9rem}.fund .amt span{color:var(--muted);font-weight:700}
+.reserve{display:flex;gap:3px;height:22px;align-items:flex-end}
+.reserve i{flex:1;border-radius:2px;background:var(--line);height:60%}
+.reserve i:nth-child(5n){height:100%}
+.reserve i.on{background:linear-gradient(180deg,#C9A35A,#A8823A)}
+.fund .eta{font-size:.85rem;font-weight:700}.fund .eta small{display:block;color:var(--muted);font-weight:600;font-size:.78rem;margin-top:2px}
+.fund .btns{display:flex;gap:8px;flex-wrap:wrap}
+.fund details summary{cursor:pointer;font-size:.8rem;font-weight:700;color:var(--muted)}
+.fund .hist{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:.82rem}
+.fund .hist li{display:flex;gap:8px;align-items:center}.fund .hist li span{color:var(--muted);flex:1}
+.fund .hist button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:2px 6px}
+.fund.done{border-color:var(--ok);background:var(--ok-soft)}
+.fd-head{display:flex;align-items:center;gap:12px}.fd-head:empty{display:none}
+.fd-head .th{width:52px;height:52px;border-radius:12px;overflow:hidden;flex:none;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.fd-head .th img{width:100%;height:100%;object-fit:cover}.fd-head .th svg{width:120%;height:120%}
+.fd-calc{margin:0;padding:12px;border-radius:14px;background:var(--brass-soft);font-weight:700;font-size:.9rem}
+.fd-calc:empty{display:none}
+.seg .btn[aria-pressed="true"]{background:#1E1C18;color:#FFFDF8;border-color:#1E1C18}
+.h-funds{display:flex;flex-direction:column;gap:10px}
+.h-fund{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.h-fund .th{width:52px;height:52px;border-radius:12px;overflow:hidden;flex:none;background:radial-gradient(circle at 50% 40%,#fff,#EFE8DA);display:grid;place-items:center}
+.h-fund .th img{width:100%;height:100%;object-fit:cover}.h-fund .th svg{width:120%;height:120%}
+.h-fund .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.h-fund small{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);font-weight:800}
+.h-fund b{font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-fund .gap{font-size:.75rem;color:var(--muted);font-weight:700}
+.h-remind{border-radius:20px;padding:14px;background:#1E1C18;color:#FFFDF8;display:flex;flex-direction:column;gap:10px}
+.h-remind b{font-size:.95rem}.h-remind span{font-size:.8rem;opacity:.8}
+.h-remind .btns{display:flex;gap:8px}
+.h-remind .btn{background:#C9A35A;color:#1E1C18;border:0;font-weight:800}.h-remind .btn.ghost{background:transparent;color:#FFFDF8;border:1px solid rgba(255,255,255,.3)}
 @keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
 
 .d-actions .btn{width:100%}
@@ -870,7 +912,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <h3>Taille des montres sur les photos</h3>
     <label class="size-row"><input type="range" id="m-size" min="45" max="80" step="1"><span id="m-size-v"></span></label>
     <p class="help" id="m-size-msg"></p>
-    <h3>Rareté (prix public neuf)</h3>
+    <h3>Rareté (selon le prix)</h3>
     <div class="rules-grid"><span class="pill">Commune</span><span>moins de 200 €</span><span class="pill rare">Rare</span><span>200 à 399 €</span><span class="pill epic">Épique</span><span>400 à 799 €</span><span class="pill leg">Légendaire</span><span>800 € et plus</span></div>
     <h3>Sauvegarde</h3>
     <div class="seg" style="--n:2"><button type="button" class="btn" id="m-export">Exporter</button><button type="button" class="btn" id="m-import">Restaurer</button></div>
@@ -908,17 +950,15 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 
     <div class="row only-collection">
       <label>Prix payé (€)<input name="price" inputmode="decimal" autocomplete="off"></label>
-      <label>Prix public (€)<input name="retail" inputmode="decimal" autocomplete="off"></label>
-    </div>
-    <div class="only-collection">
       <label>Date d'achat<input name="date" type="date"></label>
+      <label class="hidden">Prix public (€)<input name="retail" inputmode="decimal" autocomplete="off"></label>
     </div>
     <div class="row only-wishlist">
       <label>Prix constaté (€)<input name="current" inputmode="decimal" autocomplete="off"></label>
       <label>Prix cible (€)<input name="target" inputmode="decimal" autocomplete="off"></label>
     </div>
     <div class="row only-wishlist">
-      <label>Prix public (€)<input name="retail2" inputmode="decimal" autocomplete="off"></label>
+      <label class="hidden">Prix public (€)<input name="retail2" inputmode="decimal" autocomplete="off"></label>
       <label>Priorité
         <select name="priority"><option value="1">Haute</option><option value="2" selected>Moyenne</option><option value="3">Basse</option></select>
       </label>
@@ -1112,6 +1152,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <dl class="d-specs" id="d-specs"></dl>
     <div class="d-comps" id="d-comps"></div>
     <div class="d-scores" id="d-scores"></div>
+    <div class="d-fund" id="d-fund"></div>
     <div class="d-actions" id="d-actions"></div>
     <a class="d-link hidden" id="d-photos" target="_blank" rel="noopener"></a>
   </div>
@@ -1167,6 +1208,31 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
     <p class="help" id="ps-msg" aria-live="polite"></p>
   </form>
 </dialog>
+<dialog id="fdsheet" aria-label="Financer une envie">
+  <form method="dialog" style="gap:12px" onsubmit="return false">
+    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    <h2>Financer une envie</h2>
+    <label id="fd-pick-l">Montre visée<select id="fd-watch"></select></label>
+    <div class="fd-head" id="fd-head"></div>
+    <label>Montant à réunir (€)<input id="fd-goal" inputmode="decimal" autocomplete="off"></label>
+    <div class="seg" style="--n:2"><button type="button" class="btn" data-fdmode="monthly">Par mois</button><button type="button" class="btn" data-fdmode="date">Pour une date</button></div>
+    <label id="fd-monthly-l">Je mets de côté chaque mois (€)<input id="fd-monthly" inputmode="decimal" autocomplete="off"></label>
+    <label id="fd-date-l" class="hidden">Je veux l'acheter en<input id="fd-date" type="month"></label>
+    <label>Déjà de côté (€)<input id="fd-saved" inputmode="decimal" autocomplete="off"></label>
+    <p class="fd-calc" id="fd-calc"></p>
+    <div class="actions"><button type="button" class="btn danger hidden" id="fd-stop">Arrêter</button><span class="spacer"></span><button type="button" class="btn primary" id="fd-save">Lancer</button></div>
+  </form>
+</dialog>
+<dialog id="dpsheet" aria-label="Mettre de côté">
+  <form method="dialog" style="gap:12px" onsubmit="return false">
+    <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    <h2>Mettre de côté</h2>
+    <p class="help" id="dp-for"></p>
+    <label>Montant (€)<input id="dp-amount" inputmode="decimal" autocomplete="off"></label>
+    <label>Note (facultatif)<input id="dp-note" autocomplete="off" placeholder="ex. prime, vente d'une montre…"></label>
+    <div class="actions"><span class="spacer"></span><button type="button" class="btn primary" id="dp-save">Ajouter à la cagnotte</button></div>
+  </form>
+</dialog>
 <dialog id="vsheet" aria-label="Personnaliser la vitrine">
   <form method="dialog" style="gap:12px">
     <button type="button" class="x-close" data-close aria-label="Fermer"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
@@ -1204,7 +1270,7 @@ dialog:not(.viewer){margin:calc(env(safe-area-inset-top,0px) + 14px) auto auto;m
 <script>
 (function(){
   const LS_KEY = "mes-montres-v1";
-  const APP_VERSION = 28; // à augmenter avec version.json à chaque mise à jour
+  const APP_VERSION = 29; // à augmenter avec version.json à chaque mise à jour
   const INITIAL = {"version": 1, "collection": [{"id": "casio-efk110", "brand": "Casio", "model": "Edifice EFK-110 (2026)", "ref": "EFK-110D-2A", "movement": "Miyota 8215", "size": "38", "dial": "#1F3F73", "price": "279", "date": "", "notes": "Cadran bleu, verre saphir, fond transparent, étanchéité 100 m, réserve de marche 42 h, épaisseur 11,8 mm", "photo": "", "case": "acier", "strap": "acier", "retail": "279", "comps": ["date"], "movementType": "automatique", "water": "100", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "soleille", "indices": "appliques", "hands": "baton"}, {"id": "citizen-tsuyosa-ss", "brand": "Citizen", "model": "Tsuyosa Small Seconds", "ref": "NK5010", "movement": "Citizen 8322", "size": "40", "dial": "#8C5A2E", "price": "379", "date": "", "notes": "Cadran bronze texturé, petite seconde à 6 h, couronne à 4 h, verre saphir, étanchéité 50 m, réserve de marche 60 h", "photo": "", "case": "acier", "strap": "acier", "retail": "379", "comps": ["smallsec"], "movementType": "automatique", "water": "50", "glass": "saphir", "display": "analogique", "shape": "rond", "bezel": "lisse", "dialTexture": "grain", "indices": "appliques", "hands": "baton"}], "wishlist": [{"id": "lip-gdg", "brand": "Lip", "model": "Général de Gaulle 35 quartz", "ref": "", "movement": "Ronda 715", "size": "35", "dial": "#D9D6CF", "current": "199", "target": "", "link": "https://lip.fr/en/55-gdg", "priority": "1", "notes": "Boîtier doré, cadran argenté soleillé, cuir marron, verre minéral, étanchéité 50 m, épaisseur 10 mm", "photo": "", "case": "doré", "strap": "cuir", "retail": "199", "comps": ["date"], "movementType": "quartz", "water": "50", "glass": "mineral", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#6B4226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}, {"id": "seiko-presage", "brand": "Seiko", "model": "Presage Cocktail Time", "ref": "SRPB43J1", "movement": "Seiko 4R35", "size": "40.5", "dial": "#A9C6DA", "current": "430", "target": "350", "link": "", "priority": "2", "notes": "Cadran bleu glacier, verre Hardlex bombé, étanchéité 50 m, réserve de marche 41 h. Attendre le Black Friday", "photo": "", "case": "acier", "strap": "cuir", "retail": "430", "comps": ["date"], "movementType": "automatique", "water": "50", "glass": "hardlex", "display": "analogique", "shape": "rond", "bezel": "lisse", "strapColor": "#1E2226", "dialTexture": "soleille", "indices": "appliques", "hands": "dauphine"}], "ai": {"month": "2026-10", "count": 5, "limit": 30}, "patches": ["2026-09-27-fiches", "2026-09-27-fiches-v2", "2026-09-27-fiches-v3", "2026-09-27-couleurs-bracelet", "2026-10-04-rendu-realiste"], "view": {"layout": "list", "collection": {"sort": "value-desc", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}, "wishlist": {"sort": "priority", "rarity": [], "move": [], "strap": [], "brand": "", "comp": ""}}};
   const PHOTO_URLS = {};
 
@@ -1879,7 +1945,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
   function uid(){ return Math.random().toString(36).slice(2, 10); }
   function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
   function photoSrc(id){ return id ? (PHOTO_URLS[id] || "") : ""; }
-  function valueOf(w, wish){ return num(w.retail) ?? (wish ? (num(w.current) ?? num(w.target)) : num(w.price)); }
+  function valueOf(w, wish){ return wish ? (num(w.current) ?? num(w.retail) ?? num(w.target)) : (num(w.price) ?? num(w.retail)); }
   function rarity(v){ return v === null || v === undefined ? null : RAR.find(r => v >= r.min); }
   function fold(s){ return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
   const f1 = n => Math.round(n * 100) / 100;
@@ -2395,6 +2461,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
           ${specLine(w) ? `<span class="spec">${esc(specLine(w))}</span>` : ""}
           <span class="foot"><span class="pill">${r ? r.label : "Sans prix"}</span><span class="price">${money(shown) || "–"}</span></span>
           ${sub ? `<span class="sub">${esc(sub)}</span>` : ""}
+          ${wish && w.fund ? (() => { const f = fundInfo(w); return `<span class="fbar" title="Cagnotte ${Math.round(f.pct * 100)} %"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="sub">Cagnotte ${eur.format(f.saved)} / ${eur.format(f.goal)}</span>`; })() : ""}
         </span>
       </span>
     </button>`;
@@ -2690,7 +2757,7 @@ Ice-Watch|ICE classic|Q|40|100|m|#15181C|r|r|c|l||l|n|b|60`;
     if (hadNew && pendingOrig){ try { d.photoOrig = (await localAssets.upload(pendingOrig)).id; } catch(e){} d.photoAdj = pendingAdj; d.photoStd = stdKey(); }
     else if (photoCleared){ d.photoOrig = ""; d.photoAdj = null; d.photoStd = ""; }
     let saved;
-    if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; state.collection.push(saved); if (Array.isArray(state.showcase.collection)) state.showcase.collection.push(saved.id); tab = "collection"; }
+    if (editing.mode === "buy"){ const old = current(); state.wishlist = state.wishlist.filter(x => x.id !== editing.id); saved = { ...(old || {}), id: uid(), ...d }; delete saved.current; delete saved.target; delete saved.priority; delete saved.fund; state.collection.push(saved); if (Array.isArray(state.showcase.collection)) state.showcase.collection.push(saved.id); tab = "collection"; }
     else if (w){ Object.assign(w, d); saved = w; } else { saved = { id: uid(), ...d }; state[editing.list].push(saved); if (Array.isArray(state.showcase[editing.list])) state.showcase[editing.list].push(saved.id); }
     const joy = editing.mode === "buy" || (!w && editing.list === "collection");
     const joyWish = !joy && !w && editing.list === "wishlist";
@@ -3566,7 +3633,7 @@ Ajoute aussi dans le même objet JSON :
       ["Lunette", esc(optLabel("bezel", w.bezel))],
       ["Cadran", `<span class="sw-dot" style="background:${esc(w.dial)}"></span>${esc((opts.dials.find(o => isOn.dial(o)) || {}).name || nearestName(w.dial))}, ${esc(optLabel("dialTexture", w.dialTexture).toLowerCase())}`],
       ["Bracelet", esc(curStrap ? curStrap.name : optLabel("strap", w.strap))],
-      ...(kind === "collection" ? [["Prix payé", money(w.price)], ["Prix public", money(w.retail)], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
+      ...(kind === "collection" ? [["Prix payé", money(w.price)], ["Valeur aujourd'hui", (() => { const m = marketValue(w); return m ? `${eur.format(m.value)} <span class="mv ${m.delta >= 0 ? "up" : "down"}">${m.delta >= 0 ? "+" : "−"}${Math.abs(Math.round(m.pct * 100))} %</span> <small class="mv-src">${m.quote ? "cote du " + new Date(m.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "estimation"}</small>` : ""; })()], ["Achetée", w.date ? new Date(w.date + "T12:00").toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : ""]] : []),
       ...(kind === "wishlist" ? [["Prix constaté", money(w.current)], ["Prix cible", money(w.target)], ["Priorité", ({ 1: "Haute", 2: "Moyenne", 3: "Basse" })[w.priority] || ""]] : [])
     ].filter(([, v]) => v);
     $("#d-specs").innerHTML = specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
@@ -3581,10 +3648,11 @@ Ajoute aussi dans le même objet JSON :
     } else if (kind === "wishlist"){
       act = `<button type="button" class="btn buy" data-act="bought">Je l'ai achetée</button><button type="button" class="btn" data-act="edit">Modifier les prix</button>`;
     } else {
-      act = `<button type="button" class="btn" data-act="edit" style="grid-column:1/-1">Modifier le prix ou la date</button>`;
+      act = `<button type="button" class="btn" data-act="edit">Modifier le prix</button><button type="button" class="btn" data-act="quote">✦ Cote actuelle</button>`;
     }
     if (kind !== "catalog") act += `<button type="button" class="btn danger${detail.delArmed ? " armed" : ""}" data-act="delete" style="grid-column:1/-1">${detail.delArmed ? "Toucher encore pour confirmer la suppression" : wish ? "Retirer de mes recherchées" : "Retirer de ma collection"}</button>`;
     $("#d-actions").innerHTML = act;
+    $("#d-fund").innerHTML = kind === "wishlist" ? fundCard(state.wishlist.find(x => x.id === detail.id) || w) : "";
     $("#d-photos").href = "https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(`${w.brand} ${w.model}${vname ? " " + vname.replace(/[«»()]/g, "") : ""} montre`);
   }
   $("#d-cw").addEventListener("click", ev => {
@@ -3617,6 +3685,7 @@ Ajoute aussi dans le même objet JSON :
       setStatus(`${w.brand} ${w.model}${w.colorway ? " (" + w.colorway + ")" : ""} ajoutée à ${act === "own" ? "ta collection" : "tes recherchées"}.`);
     } else if (act === "edit"){ dsheet.close(); openSheet(detail.kind, detail.id); }
     else if (act === "bought"){ dsheet.close(); openSheet("wishlist", detail.id); $("#buy").click(); }
+    else if (act === "quote"){ askQuotes([detail.id]); }
     else if (act === "delete"){
       if (!detail.delArmed){ detail.delArmed = true; renderDetail(); return; }
       const w = state[detail.kind].find(x => x.id === detail.id);
@@ -3851,6 +3920,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     $("#c-pick").classList.add("hidden"); $("#c-main").classList.remove("hidden"); $("#c-title").textContent = "Comparateur";
     $("#c-rev").classList.add("hidden");
     let h = `<div class="cmp-head">${slotHTML(A, 0)}<span class="c-vs">VS</span>${slotHTML(B, 1)}</div>`;
+    if (A || B) h += `<div style="text-align:center;margin-top:-4px"><button type="button" class="linkbtn" id="c-reset">Nouvelle comparaison</button></div>`;
     if (!A || !B){ $("#c-main").innerHTML = h + `<p class="c-hint">Choisis deux montres.</p>`; return; }
     const a = A.w, b = B.w, score = [0, 0], wins = [[], []];
     const tally = (win, what) => { if (win >= 0){ score[win]++; wins[win].push(what); } return win; };
@@ -3917,7 +3987,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, dans le même ordr
     $("#c-main").innerHTML = h;
     csheet.classList.remove("go"); requestAnimationFrame(() => requestAnimationFrame(() => csheet.classList.add("go")));
   }
-  $("#c-main").addEventListener("click", e => { if (e.target.closest("#c-ask-rev")) askReviews(); });
+  $("#c-main").addEventListener("click", e => { if (e.target.closest("#c-ask-rev")) askReviews(); if (e.target.closest("#c-reset")){ cmp = [null, null]; cmpSave(); renderCompare(); } });
   function pickItem(kind, w, idx){
     const ph = kind !== "catalog" && w.photo && photoSrc(w.photo) ? photoSrc(w.photo) : "";
     const v = valueOf(w, kind === "wishlist");
@@ -4083,7 +4153,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   function clearPending(){ pending = null; savePending(); if (isheet.open) isheet.close(); }
   function offerImport(){
     if (!pending || isheet.open || document.visibilityState !== "visible") return;
-    $("#ib-sub").textContent = { sheet: "Copie sa réponse (bouton « Copier » sous son message) : la fiche, la photo et les avis se remplissent d'un coup.", reviews: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les avis au comparateur.", photos: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les photos." }[pending.type] || "";
+    $("#ib-sub").textContent = { sheet: "Copie sa réponse (bouton « Copier » sous son message) : la fiche, la photo et les avis se remplissent d'un coup.", reviews: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les avis au comparateur.", photos: "Copie sa réponse (bouton « Copier » sous son message) pour ajouter les photos.", quote: "Copie sa réponse (bouton « Copier » sous son message) pour mettre à jour les cotes." }[pending.type] || "";
     $("#ib-text").classList.add("hidden"); $("#ib-text").value = ""; $("#ib-go").disabled = false;
     isheet.showModal();
   }
@@ -4114,6 +4184,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     if (p.type === "sheet") ok = applyAnswer(t);
     else if (p.type === "reviews") ok = applyReviews(t);
     else if (p.type === "photos") ok = await applyPhotos(t);
+    else if (p.type === "quote") ok = applyQuotes(t);
     if (ok) clearPending();
     return ok;
   }
@@ -4160,7 +4231,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const r = rarity(valueOf(w, false));
     const el = document.createElement("div"); el.className = "joy"; el.setAttribute("role", "status");
     el.innerHTML = `<canvas></canvas><div class="joy-c"><div class="joy-w"><span class="joy-shine"></span>${ph ? `<img src="${esc(ph.src)}" alt="">` : watchSVG(w)}<span class="joy-ring"></span><span class="joy-ring r2"></span></div>
-      <div class="joy-k">${wish ? "Dans le viseur" : "Nouvelle pièce"}</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${esc(w.brand)} ${wish ? "rejoint tes envies" : "rejoint ta collection"}</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
+      <div class="joy-k">${mode === "goal" ? "Objectif atteint" : wish ? "Dans le viseur" : "Nouvelle pièce"}</div><div class="joy-t">${esc(w.model)}</div><div class="joy-m">${mode === "goal" ? "Ta cagnotte est complète" : `${esc(w.brand)} ${wish ? "rejoint tes envies" : "rejoint ta collection"}`}</div>${r ? `<span class="pill ${r.key}">${r.label}</span>` : ""}</div>`;
     if (wish){
       const wEl = el.querySelector(".joy-w"); wEl.querySelectorAll(".joy-ring").forEach(x => x.remove());
       wEl.insertAdjacentHTML("afterbegin", `<svg class="joy-target" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" stroke-width="3"/><circle cx="100" cy="100" r="74" stroke-width="2" stroke-dasharray="4 6"/><circle cx="100" cy="100" r="52" stroke-width="2.5"/><line x1="100" y1="0" x2="100" y2="22"/><line x1="100" y1="178" x2="100" y2="200"/><line x1="0" y1="100" x2="22" y2="100"/><line x1="178" y1="100" x2="200" y2="100"/><circle class="dot" cx="100" cy="4" r="3.5"/></svg>`);
@@ -4181,8 +4252,9 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     let done = false;
     const finish = () => {
       if (done) return; done = true; clearTimeout(timer);
-      const tabBtn = document.querySelector(`.tabbar button[data-tab="${wish ? "wishlist" : "collection"}"]`), wEl = el.querySelector(".joy-w");
-      const bump = () => { const c = $(wish ? "#t-wishlist" : "#t-collection"); if (c){ c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); } };
+      const toWish = wish || mode === "goal";
+      const tabBtn = document.querySelector(`.tabbar button[data-tab="${toWish ? "wishlist" : "collection"}"]`), wEl = el.querySelector(".joy-w");
+      const bump = () => { const c = $(toWish ? "#t-wishlist" : "#t-collection"); if (c){ c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump"); } };
       if (!reduce && tabBtn && wEl.animate){
         const a = wEl.getBoundingClientRect(), b = tabBtn.getBoundingClientRect();
         const dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2);
@@ -4195,6 +4267,181 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     };
     const timer = setTimeout(finish, reduce ? 1600 : 2900);
     el.addEventListener("click", finish);
+  }
+
+  // ---------- Valeur à l'instant T (estimation, ou cote trouvée par Claude) ----------
+  // profils : perte à la sortie de boutique puis évolution annuelle
+  const VALUE_PROFILES = {
+    up:    { d0: 0,    r: .04,  label: "prend de la valeur" },
+    hold:  { d0: .10,  r: .01,  label: "tient sa valeur" },
+    lux:   { d0: .25,  r: -.02, label: "perd modérément" },
+    entry: { d0: .30,  r: -.03, label: "perd de la valeur" },
+    tool:  { d0: .35,  r: -.03, label: "perd de la valeur" },
+    fashion:{ d0: .55, r: -.05, label: "perd beaucoup" }
+  };
+  function valueProfile(w){
+    const b = fold(w.brand), m = fold(w.model);
+    if (/^rolex/.test(b) && /submariner|gmt|daytona|explorer|sea-dweller|yacht|sky-dweller|milgauss/.test(m)) return "up";
+    if (/patek/.test(b) && /nautilus|aquanaut/.test(m)) return "up";
+    if (/audemars/.test(b) && /royal oak/.test(m)) return "up";
+    if (/richard mille|f\.p\. journe|journe/.test(b)) return "up";
+    if (/swatch/.test(b) && /moonswatch|scuba/.test(m)) return "hold";
+    if (/rolex|patek|audemars|lange|grand seiko|tudor|cartier|vacheron/.test(b)) return "hold";
+    if (/omega/.test(b) && /speedmaster/.test(m)) return "hold";
+    if (/omega|iwc|jaeger|breitling|panerai|zenith|tag heuer|longines|oris|sinn|nomos|bell & ross|breguet|blancpain|chopard|bvlgari|hublot|ulysse|girard|glashutte|montblanc|hermes|piaget|rado|doxa|ball|h\. moser|parmigiani/.test(b)) return "lux";
+    if (/fossil|daniel wellington|michael kors|lacoste|tommy|hugo boss|ice-watch|festina|nixon|invicta|pierre lannier|briston/.test(b)) return "fashion";
+    if (/casio|timex|swatch/.test(b)) return "tool";
+    return "entry";
+  }
+  function marketValue(w){
+    if (w.quote && num(w.quote.value)){ const base = num(w.price) ?? num(w.retail); const v = num(w.quote.value); return { value: v, delta: base ? v - base : 0, pct: base ? (v - base) / base : 0, quote: true, date: w.quote.date, trend: w.quote.trend, base }; }
+    const base = num(w.price) ?? num(w.retail); if (!base) return null;
+    const p = VALUE_PROFILES[valueProfile(w)];
+    const t = w.date && !isNaN(Date.parse(w.date)) ? Date.parse(w.date) : Date.now() - 365 * 864e5;
+    const years = Math.max(0, (Date.now() - t) / (365.25 * 864e5));
+    const v = Math.max(base * .15, Math.round(base * (1 - p.d0 * Math.min(1, years * 4 + .25)) * Math.pow(1 + p.r, years)));
+    return { value: v, delta: v - base, pct: (v - base) / base, quote: false, profile: p.label, base };
+  }
+  function collectionValue(arr){
+    let value = 0, paid = 0, n = 0, quotes = 0;
+    arr.forEach(w => { const m = marketValue(w); if (!m) return; n++; value += m.value; paid += m.base; if (m.quote) quotes++; });
+    return { value, paid, n, quotes };
+  }
+  function quotesPrompt(ws){
+    return `Fais une recherche sur internet pour estimer la valeur actuelle, en France, sur le marché de l'occasion, de chaque montre ci-dessous (bon état, avec boîte et papiers si l'information manque). Appuie-toi sur les annonces et ventes récentes (Chrono24 France, Leboncoin, forums horlogers, ventes aux enchères) et sur la tendance du modèle.
+
+${ws.map((w, i) => `${i + 1}) ${w.brand} ${w.model}${w.colorway ? " — " + w.colorway : ""}${w.date ? ", achetée en " + new Date(w.date).getFullYear() : ""}`).join("\n")}
+
+Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
+{"watches":[{"n":1,"value_eur":0,"min_eur":0,"max_eur":0,"trend":"hausse","sources":["Chrono24"]}]}
+trend : hausse, stable ou baisse. Montants entiers en euros.`;
+  }
+  function askQuotes(ids){
+    const ws = ids.map(id => state.collection.find(w => w.id === id)).filter(Boolean).slice(0, 15);
+    if (!ws.length) return;
+    sendToClaude(quotesPrompt(ws), { type: "quote", ids: ws.map(w => w.id) });
+    setStatus("Envoie la demande dans Claude, copie sa réponse, reviens ici.");
+  }
+  function applyQuotes(text){
+    const r = lastJSON(text || ""), list = r && Array.isArray(r.watches) ? r.watches : null; if (!list || !pending) return false;
+    let n = 0;
+    (pending.ids || []).forEach((id, i) => {
+      const w = state.collection.find(x => x.id === id), x = list.find(o => num(o && o.n) === i + 1) || list[i]; if (!w || !x) return;
+      const v = num(x.value_eur); if (!v) return;
+      w.quote = { value: Math.round(v), min: num(x.min_eur), max: num(x.max_eur), trend: ["hausse", "stable", "baisse"].includes(x.trend) ? x.trend : "", sources: Array.isArray(x.sources) ? x.sources.slice(0, 3).map(String) : [], date: new Date().toISOString().slice(0, 10) }; n++;
+    });
+    if (!n) return false;
+    persist(); render(); if (dsheet.open && detail) renderDetail();
+    setStatus(`${n} cote${n > 1 ? "s" : ""} mise${n > 1 ? "s" : ""} à jour.`);
+    return true;
+  }
+
+  // ---------- Financement d'une envie (cagnotte par montre) ----------
+  const monthKey = (d = new Date()) => d.toISOString().slice(0, 7);
+  const monthName = d => d.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+  function fundGoalOf(w){ return num(w.fund && w.fund.goal) ?? num(w.target) ?? num(w.current) ?? num(w.retail) ?? 0; }
+  function monthsUntil(ym){ if (!ym) return null; const [y, m] = ym.split("-").map(Number), now = new Date(); return Math.max(1, (y - now.getFullYear()) * 12 + (m - 1 - now.getMonth())); }
+  function fundInfo(w){
+    const f = w.fund; if (!f) return null;
+    const goal = fundGoalOf(w), saved = (f.history || []).reduce((s, x) => s + (num(x.a) || 0), 0), left = Math.max(0, goal - saved);
+    const monthly = f.mode === "date" ? (left ? Math.ceil(left / monthsUntil(f.deadline)) : 0) : (num(f.monthly) || 0);
+    const months = left === 0 ? 0 : monthly > 0 ? Math.ceil(left / monthly) : null;
+    const eta = months != null ? new Date(new Date().getFullYear(), new Date().getMonth() + months, 1) : null;
+    return { goal, saved, left, monthly, months, eta, pct: goal ? Math.min(1, saved / goal) : 0, done: goal > 0 && saved >= goal };
+  }
+  function reserveBar(pct){ const n = 30, on = Math.round(pct * n); return `<div class="reserve" aria-label="${Math.round(pct * 100)} %">${Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}"></i>`).join("")}</div>`; }
+  function fundCard(w){
+    if (!w || !w.fund) return `<button type="button" class="fund-cta" data-fund="setup"><span class="ic">€</span><span><b>Financer cette montre</b><span>Une cagnotte : un montant par mois, ou une date d'achat visée</span></span></button>`;
+    const f = fundInfo(w), hist = (w.fund.history || []).slice().reverse();
+    return `<div class="fund${f.done ? " done" : ""}"><h3>${f.done ? "Objectif atteint" : "Ma cagnotte"}</h3>
+      <div class="amt"><b>${eur.format(f.saved)}</b><span>sur ${eur.format(f.goal)} · ${Math.round(f.pct * 100)} %</span></div>
+      ${reserveBar(f.pct)}
+      <div class="eta">${f.done ? "La cagnotte est complète : elle est à toi !" : f.months != null ? `Encore ${eur.format(f.left)} · ≈ ${f.months} mois<small>${f.monthly ? `${eur.format(f.monthly)} par mois · achat vers ${monthName(f.eta)}` : ""}</small>` : `Encore ${eur.format(f.left)}<small>Fixe un montant mensuel pour estimer la date.</small>`}</div>
+      <div class="btns">${f.done ? `<button type="button" class="btn buy" data-act-fund="bought">Je l'ai achetée</button>` : `${f.monthly ? `<button type="button" class="btn primary" data-fund="quick">+ ${eur.format(f.monthly)}</button>` : ""}<button type="button" class="btn" data-fund="deposit">Autre montant</button>`}<button type="button" class="btn" data-fund="setup">Réglages</button></div>
+      ${hist.length ? `<details><summary>Historique (${hist.length})</summary><ul class="hist">${hist.map((x, i) => `<li><b>${eur.format(num(x.a) || 0)}</b><span>${new Date(x.d).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}${x.n ? " · " + esc(x.n) : ""}</span><button type="button" data-fund-del="${hist.length - 1 - i}" aria-label="Supprimer">✕</button></li>`).join("")}</ul></details>` : ""}</div>`;
+  }
+  function fundDeposit(w, amount, note){
+    const a = num(amount); if (!w || !w.fund || !a) return;
+    const before = fundInfo(w).done;
+    (w.fund.history = w.fund.history || []).push({ d: new Date().toISOString().slice(0, 10), a: Math.round(a * 100) / 100, n: note || "" });
+    persist();
+    if (dsheet.open && detail && detail.id === w.id) renderDetail();
+    if (tab === "home") renderHome(); else if (tab !== "catalog") render();
+    setStatus(`${eur.format(a)} ajoutés à la cagnotte.`);
+    if (!before && fundInfo(w).done){ if (dsheet.open) dsheet.close(); setTimeout(() => celebrate(w, "wishlist", "goal"), 80); }
+  }
+  // fenêtre de réglage
+  let fdFor = null, fdMode = "monthly";
+  function openFund(id){
+    const wl = state.wishlist; if (!wl.length){ setStatus("Ajoute d'abord une montre à tes envies."); return; }
+    if (dsheet.open) dsheet.close();
+    $("#fd-pick-l").classList.toggle("hidden", !!id);
+    $("#fd-watch").innerHTML = wl.map(w => `<option value="${esc(w.id)}">${esc(w.brand + " " + w.model)}${w.fund ? " (cagnotte en cours)" : ""}</option>`).join("");
+    fdFill(id || (wl.find(w => !w.fund) || wl[0]).id);
+    $("#fdsheet").showModal();
+  }
+  function fdFill(id){
+    const w = state.wishlist.find(x => x.id === id); if (!w) return; fdFor = w;
+    $("#fd-watch").value = id;
+    $("#fd-head").innerHTML = `<span class="th">${thumbOf("wishlist", w)}</span><span><b>${esc(w.brand)}</b><br>${esc(w.model)}</span>`;
+    const f = w.fund || {};
+    $("#fd-goal").value = fundGoalOf(w) || "";
+    fdMode = f.mode === "date" ? "date" : "monthly";
+    $("#fd-monthly").value = f.monthly || "";
+    const d = new Date(); d.setMonth(d.getMonth() + 12); $("#fd-date").value = f.deadline || monthKey(d);
+    $("#fd-saved").value = w.fund ? "" : "";
+    $("#fd-saved").closest("label").classList.toggle("hidden", !!w.fund);
+    $("#fd-stop").classList.toggle("hidden", !w.fund); $("#fd-save").textContent = w.fund ? "Enregistrer" : "Lancer";
+    fdSync();
+  }
+  function fdSync(){
+    document.querySelectorAll("[data-fdmode]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.fdmode === fdMode)));
+    $("#fd-monthly-l").classList.toggle("hidden", fdMode !== "monthly"); $("#fd-date-l").classList.toggle("hidden", fdMode !== "date");
+    const goal = num($("#fd-goal").value) || 0, already = (fdFor && fdFor.fund ? fundInfo(fdFor).saved : num($("#fd-saved").value) || 0), left = Math.max(0, goal - already);
+    let t = "";
+    if (goal){
+      if (fdMode === "monthly"){ const m = num($("#fd-monthly").value); if (m){ const k = Math.ceil(left / m), d = new Date(); d.setMonth(d.getMonth() + k); t = left ? `≈ ${k} mois : achat vers ${monthName(d)}` : "Objectif déjà atteint !"; } }
+      else { const k = monthsUntil($("#fd-date").value); if (k) t = left ? `≈ ${eur.format(Math.ceil(left / k))} à mettre de côté par mois pendant ${k} mois` : "Objectif déjà atteint !"; }
+    }
+    $("#fd-calc").textContent = t;
+  }
+  document.querySelectorAll("[data-fdmode]").forEach(b => b.addEventListener("click", () => { fdMode = b.dataset.fdmode; fdSync(); }));
+  ["fd-goal", "fd-monthly", "fd-date", "fd-saved"].forEach(id => $("#" + id).addEventListener("input", fdSync));
+  $("#fd-watch").addEventListener("change", e => fdFill(e.target.value));
+  $("#fd-save").addEventListener("click", () => {
+    const w = fdFor; if (!w) return;
+    const goal = num($("#fd-goal").value); if (!goal){ $("#fd-goal").focus(); return; }
+    const isNew = !w.fund;
+    w.fund = { ...(w.fund || { history: [], start: new Date().toISOString().slice(0, 10) }), goal, mode: fdMode, monthly: fdMode === "monthly" ? (num($("#fd-monthly").value) || 0) : 0, deadline: fdMode === "date" ? $("#fd-date").value : "" };
+    const init = num($("#fd-saved").value); if (isNew && init) w.fund.history.push({ d: new Date().toISOString().slice(0, 10), a: init, n: "Déjà de côté" });
+    persist(); $("#fdsheet").close();
+    if (tab === "home") renderHome(); else if (tab !== "catalog") render();
+    openWatchSheet("wishlist", w.id);
+    setStatus(isNew ? "Cagnotte lancée." : "Cagnotte mise à jour.");
+  });
+  $("#fd-stop").addEventListener("click", () => { const w = fdFor; if (!w || !confirm("Arrêter cette cagnotte et effacer son historique ?")) return; delete w.fund; persist(); $("#fdsheet").close(); if (tab === "home") renderHome(); else render(); });
+  // versement
+  let dpFor = null;
+  function openDeposit(w){ dpFor = w; $("#dp-for").textContent = `${w.brand} ${w.model}`; $("#dp-amount").value = fundInfo(w).monthly || ""; $("#dp-note").value = ""; $("#dpsheet").showModal(); setTimeout(() => $("#dp-amount").focus(), 50); }
+  $("#dp-save").addEventListener("click", () => { const a = num($("#dp-amount").value); if (!a){ $("#dp-amount").focus(); return; } $("#dpsheet").close(); fundDeposit(dpFor, a, $("#dp-note").value.trim()); });
+  $("#d-fund").addEventListener("click", e => {
+    const b = e.target.closest("[data-fund],[data-fund-del],[data-act-fund]"); if (!b || !detail) return;
+    const w = state.wishlist.find(x => x.id === detail.id); if (!w) return;
+    if (b.dataset.actFund === "bought"){ dsheet.close(); openSheet("wishlist", w.id); $("#buy").click(); form.elements.price.value = Math.round(fundInfo(w).saved); return; }
+    const k = b.dataset.fund;
+    if (k === "setup") return openFund(w.id);
+    if (k === "quick") return fundDeposit(w, fundInfo(w).monthly);
+    if (k === "deposit") return openDeposit(w);
+    if (b.dataset.fundDel !== undefined){ w.fund.history.splice(+b.dataset.fundDel, 1); persist(); renderDetail(); render(); }
+  });
+  // accueil : rappel du mois et cagnottes en cours
+  function homeFunds(){
+    const funds = state.wishlist.filter(w => w.fund), mk = monthKey();
+    const remind = funds.filter(w => { const f = fundInfo(w); return !f.done && f.monthly > 0 && w.fund.skip !== mk && !(w.fund.history || []).some(x => String(x.d).slice(0, 7) === mk); });
+    let h = remind.map(w => { const f = fundInfo(w); return `<div class="h-remind"><span>Versement de ${new Date().toLocaleDateString("fr-FR", { month: "long" })}</span><b>${esc(w.brand)} ${esc(w.model)} · ${eur.format(f.monthly)}</b><div class="btns"><button type="button" class="btn small" data-fundadd="${esc(w.id)}">+ ${eur.format(f.monthly)}</button><button type="button" class="btn small ghost" data-fundskip="${esc(w.id)}">Pas ce mois-ci</button></div></div>`; }).join("");
+    if (funds.length) h += `<div class="h-funds">${funds.map(w => { const f = fundInfo(w); return `<div class="h-fund" data-wish="${esc(w.id)}"><span class="th">${thumbOf("wishlist", w)}</span><span class="tx"><small>${f.done ? "Objectif atteint" : "Cagnotte"}</small><b>${esc(w.brand)} ${esc(w.model)}</b><span class="meter"><i style="width:${Math.round(f.pct * 100)}%"></i></span><span class="gap">${eur.format(f.saved)} / ${eur.format(f.goal)}${f.eta && !f.done ? ` · ${monthName(f.eta)}` : ""}</span></span></div>`; }).join("")}</div>`;
+    else if (state.wishlist.length) h += `<button type="button" class="fund-cta" data-fundnew=""><span class="ic">€</span><span><b>Financer une envie</b><span>Choisis la montre visée et ton rythme d'épargne</span></span></button>`;
+    return h;
   }
 
   // ---------- Page d'accueil ----------
@@ -4219,34 +4466,42 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
       <div class="h-hello"><span>${esc(date)}</span><h2>${hello}</h2></div>
       ${pick ? `<button type="button" class="h-day" data-open="${esc(pick.id)}"><span class="h-day-img">${thumbOf("collection", pick)}</span><span><small>Montre du jour</small><b>${esc(pick.brand)}</b><strong>${esc(pick.model)}</strong><em>Et si tu la portais aujourd'hui ?</em></span></button>` : ""}
       <div class="h-kpis">
-        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(value) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""}</span></button>
+        <button type="button" class="h-kpi" data-go="collection"><b>${col.length ? eur.format(collectionValue(col).value) : "0"}</b><span>${col.length} montre${col.length > 1 ? "s" : ""} · estimée</span></button>
         <button type="button" class="h-kpi" data-go="wishlist"><b>${wl.length}</b><span>envie${wl.length > 1 ? "s" : ""}${budget ? " · " + eur.format(budget) : ""}</span></button>
         <button type="button" class="h-kpi" data-go="catalog"><b>${CAT_LIST.length}</b><span>modèles</span></button>
       </div>
-      ${g ? `<div class="h-goal" data-wish="${esc(g.w.id)}"><span class="th">${thumbOf("wishlist", g.w)}</span><span class="tx"><small>Prochain objectif</small><b>${esc(g.w.brand)} ${esc(g.w.model)}</b>${g.pct !== null ? `<span class="meter"><i style="width:${Math.round(g.pct * 100)}%"></i></span><span class="gap">${g.c <= g.t ? "Au prix visé : c'est le moment !" : `${eur.format(g.c)} · encore ${eur.format(g.c - g.t)} au-dessus de ta cible`}</span>` : `<span class="gap">${eur.format(g.c)}</span>`}</span></div>` : ""}
+      ${homeFunds()}
       <button type="button" class="h-stats" data-go="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span><b>Mes statistiques</b><span>${col.length ? `${Object.keys(brands).length} marque${Object.keys(brands).length > 1 ? "s" : ""}${top ? ` · ${esc(top[0])} en tête` : ""}` : "Ta collection en chiffres"}</span></span><i>›</i></button>
       <div class="h-sec"><h2>Actualités</h2><button type="button" class="linkbtn" id="news-refresh">Actualiser</button></div>
       <div class="news" id="news"></div>`;
     loadNews(false);
   }
   page.addEventListener("click", e => {
-    const t = e.target.closest("[data-go],[data-open],[data-wish],#news-refresh,[data-rec]"); if (!t) return;
+    const t = e.target.closest("[data-go],[data-open],[data-wish],#news-refresh,[data-rec],#st-quotes,[data-fundgo],[data-fundadd],[data-fundskip],[data-fundnew]"); if (!t) return;
     if (t.id === "news-refresh") return loadNews(true);
     if (t.dataset.go) return go(t.dataset.go);
     if (t.dataset.open) return openWatchSheet("collection", t.dataset.open);
     if (t.dataset.wish) return openWatchSheet("wishlist", t.dataset.wish);
     if (t.dataset.rec){ const [k, id] = t.dataset.rec.split(":"); return openWatchSheet(k, id); }
+    if (t.id === "st-quotes") return askQuotes(state.collection.map(w => w.id));
+    if (t.dataset.fundgo) return openFund(t.dataset.fundgo);
+    if (t.dataset.fundadd){ const w = state.wishlist.find(x => x.id === t.dataset.fundadd); if (w) fundDeposit(w, fundInfo(w).monthly); return; }
+    if (t.dataset.fundskip){ const w = state.wishlist.find(x => x.id === t.dataset.fundskip); if (w && w.fund){ w.fund.skip = monthKey(); persist(); renderHome(); } return; }
+    if (t.dataset.fundnew !== undefined) return openFund("");
   });
   $("#stats-btn").addEventListener("click", () => go("stats"));
 
   // ---------- Actualités horlogères (flux RSS publics, sans compte) ----------
-  const NEWS_LS = "mywatch-news", NEWS_TTL = 30 * 6e4;
+  const NEWS_LS = "mywatch-news-fr", NEWS_TTL = 2 * 864e5; // mise à jour automatique tous les 2 jours
+  const GN = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=fr&gl=FR&ceid=FR:fr`;
   const FEEDS = [
-    { name: "Google Actualités", url: "https://news.google.com/rss/search?q=montre%20horlogerie&hl=fr&gl=FR&ceid=FR:fr", gnews: true },
-    { name: "Monochrome", url: "https://monochrome-watches.com/feed/" },
-    { name: "Fratello", url: "https://www.fratellowatches.com/feed/" },
-    { name: "Hodinkee", url: "https://www.hodinkee.com/articles/rss.xml" },
-    { name: "Worn & Wound", url: "https://wornandwound.com/feed/" }
+    { name: "Google Actualités", url: GN("montre horlogerie"), gnews: true },
+    { name: "Google Actualités", url: GN("horlogerie suisse nouveauté"), gnews: true },
+    { name: "Google Actualités", url: GN("montres de luxe"), gnews: true },
+    { name: "Google Actualités", url: GN("Rolex OR Omega OR Tudor OR Seiko OR Tissot montre"), gnews: true },
+    { name: "Les Rhabilleurs", url: "https://www.lesrhabilleurs.com/feed/" },
+    { name: "Montres-de-luxe.com", url: "https://www.montres-de-luxe.com/xml/syndication.rss" },
+    { name: "WorldTempus", url: "https://www.worldtempus.com/fr/rss.xml" }
   ];
   const NEWS_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l3 2" stroke-linecap="round"/></svg>`;
   const txt = s => { const d = new DOMParser().parseFromString(String(s || ""), "text/html"); return (d.body.textContent || "").replace(/\s+/g, " ").trim(); };
@@ -4277,7 +4532,8 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const box = $("#news"); if (!box) return;
     if (!items || !items.length){ box.innerHTML = `<p class="news-msg">${note || "Actualités indisponibles pour le moment."} <a href="https://news.google.com/search?q=montres%20horlogerie&hl=fr&gl=FR&ceid=FR:fr" target="_blank" rel="noopener">Ouvrir Google Actualités</a></p>`; return; }
     const list = items.slice(0, 10), hi = list.findIndex(n => n.img); if (hi > 0) list.unshift(list.splice(hi, 1)[0]);
-    box.innerHTML = list.map((n, i) => `<a class="nw${i === 0 && n.img ? " big" : ""}" href="${esc(n.link)}" target="_blank" rel="noopener"><span class="nw-img">${n.img ? `<img src="${esc(n.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createRange().createContextualFragment('${NEWS_ICON.replace(/"/g, "&quot;")}'))">` : NEWS_ICON}</span><span class="nw-tx"><small>${esc(n.source)}${n.date ? " · " + ago(n.date) : ""}</small><b>${esc(n.title)}</b></span></a>`).join("");
+    const mono = s => `<span class="nw-mono">${esc(String(s || "?").replace(/^(les|le|la|l')\s+/i, "").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(x => x[0]).join("").toUpperCase())}</span>`;
+    box.innerHTML = list.map((n, i) => `<a class="nw${i === 0 && n.img ? " big" : ""}" href="${esc(n.link)}" target="_blank" rel="noopener"><span class="nw-img">${n.img ? `<img src="${esc(n.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : mono(n.source)}</span><span class="nw-tx"><small>${esc(n.source)}${n.date ? " · " + ago(n.date) : ""}</small><b>${esc(n.title)}</b></span></a>`).join("");
   }
   let newsBusy = false;
   async function loadNews(force){
@@ -4325,15 +4581,15 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     const card = (title, body, sub) => `<div class="st-card"><h3>${title}</h3>${sub ? `<p class="sub">${sub}</p>` : ""}${body}</div>`;
     let h = `<div class="h-hello"><span>Ta collection en chiffres</span><h2>Statistiques</h2></div>`;
     if (!col.length){ page.innerHTML = h + `<p class="st-empty">Ajoute ta première montre pour voir tes statistiques.</p>`; return; }
-    const val = col.reduce((s, w) => s + (valueOf(w, false) || 0), 0);
-    const paid = col.reduce((s, w) => s + (num(w.price) ?? num(w.retail) ?? 0), 0);
-    const both = col.filter(w => num(w.price) != null && num(w.retail) != null), saved = both.reduce((s, w) => s + num(w.retail) - num(w.price), 0);
+    const mvAll = collectionValue(col), gain = mvAll.value - mvAll.paid;
     const brands = {}; col.forEach(w => brands[w.brand || "?"] = (brands[w.brand || "?"] || 0) + 1);
-    h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(val)}</b><span>Valeur de la collection (prix publics)</span></div>
-      <div class="st-kpi"><b>${eur.format(paid)}</b><span>Dépensé</span></div>
-      <div class="st-kpi"><b>${both.length ? (saved >= 0 ? "" : "−") + eur.format(Math.abs(saved)) : "—"}</b><span>${both.length ? (saved >= 0 ? "Économisé sur le prix public" : "Payé au-dessus du prix public") : "Économies (prix payés manquants)"}</span></div>
+    const both = [];
+    h += `<div class="st-kpis"><div class="st-kpi hero"><b>${eur.format(mvAll.value)}</b><span>Valeur estimée aujourd'hui${mvAll.quotes ? ` (dont ${mvAll.quotes} cote${mvAll.quotes > 1 ? "s" : ""} Claude)` : ""}</span></div>
+      <div class="st-kpi"><b>${eur.format(mvAll.paid)}</b><span>Payé</span></div>
+      <div class="st-kpi"><b class="mv ${gain >= 0 ? "up" : "down"}" style="background:none;padding:0">${gain >= 0 ? "+" : "−"}${eur.format(Math.abs(gain))}</b><span>${gain >= 0 ? "Plus-value" : "Moins-value"} estimée${mvAll.paid ? ` (${gain >= 0 ? "+" : "−"}${Math.abs(Math.round(gain / mvAll.paid * 100))} %)` : ""}</span></div>
       <div class="st-kpi"><b>${col.length}</b><span>Montre${col.length > 1 ? "s" : ""}</span></div>
-      <div class="st-kpi"><b>${Object.keys(brands).length}</b><span>Marque${Object.keys(brands).length > 1 ? "s" : ""}</span></div></div>`;
+      <div class="st-kpi"><b>${Object.keys(brands).length}</b><span>Marque${Object.keys(brands).length > 1 ? "s" : ""}</span></div></div>
+      <div style="text-align:center;margin-top:-6px"><button type="button" class="linkbtn" id="st-quotes">✦ Actualiser les cotes avec Claude</button></div>`;
     // évolution
     const dated = col.filter(w => w.date && !isNaN(Date.parse(w.date))).map(w => ({ t: Date.parse(w.date), w })).sort((a, b) => a.t - b.t);
     if (dated.length >= 2){ let acc = 0; const pts = dated.map(x => ({ t: x.t, v: (acc += (num(x.w.price) ?? valueOf(x.w, false) ?? 0)), label: `${x.w.brand} ${x.w.model} · ${new Date(x.t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}` })); h += card("Évolution de la collection", lineChart(pts), "Montant cumulé de tes achats. Touche le graphique pour le détail."); }
@@ -4358,9 +4614,9 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
     // records
     const rec = (label, w, v, kind = "collection") => w ? `<div class="rec" data-rec="${kind}:${esc(w.id)}"><small>${label}</small><b>${esc(w.brand)} ${esc(w.model)}</b><span>${v}</span></div>` : "";
     const by = (f, dir = 1) => col.filter(w => f(w) != null).sort((a, b) => dir * (f(b) - f(a)))[0];
-    const priciest = by(w => valueOf(w, false)), deal = both.length ? by(w => num(w.retail) - num(w.price)) : null;
+    const priciest = by(w => valueOf(w, false)), deal = by(w => { const m = marketValue(w); return m ? m.pct : null; }), dm = deal ? marketValue(deal) : null;
     const deep = by(w => num(w.water)), big = by(w => num(w.size)), small = by(w => num(w.size), -1), last = dated.length ? dated[dated.length - 1].w : null;
-    h += card("Records", `<div class="recs">${rec("La plus précieuse", priciest, eur.format(valueOf(priciest, false) || 0))}${deal && num(deal.retail) - num(deal.price) > 0 ? rec("Meilleure affaire", deal, `−${eur.format(num(deal.retail) - num(deal.price))}`) : ""}${rec("La plus étanche", deep, deep ? (deep.water === "1000" ? "1 000 m+" : deep.water + " m") : "")}${big && small && big !== small ? rec("La plus grande", big, big.size + " mm") + rec("La plus fine au poignet", small, small.size + " mm") : ""}${last ? rec("Dernière arrivée", last, new Date(last.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })) : ""}</div>`);
+    h += card("Records", `<div class="recs">${rec("La plus précieuse", priciest, eur.format(valueOf(priciest, false) || 0))}${dm ? rec("Meilleur placement", deal, `${dm.delta >= 0 ? "+" : "−"}${Math.abs(Math.round(dm.pct * 100))} % · ${eur.format(dm.value)}`) : ""}${rec("La plus étanche", deep, deep ? (deep.water === "1000" ? "1 000 m+" : deep.water + " m") : "")}${big && small && big !== small ? rec("La plus grande", big, big.size + " mm") + rec("La plus fine au poignet", small, small.size + " mm") : ""}${last ? rec("Dernière arrivée", last, new Date(last.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })) : ""}</div>`);
     // envies
     if (wl.length){
       const bud = wl.reduce((s, w) => s + (num(w.current) || num(w.retail) || num(w.target) || 0), 0);
@@ -4467,8 +4723,10 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
       const sizes = arr.map(w => num(w.size)).filter(Boolean), avg = sizes.length ? Math.round(sizes.reduce((a, b) => a + b, 0) / sizes.length * 10) / 10 : null;
       const top = arr.slice().sort((a, b) => (valueOf(b) ?? 0) - (valueOf(a) ?? 0))[0];
       const brands = new Set(arr.map(w => fold(w.brand))).size;
+      const mv = collectionValue(arr);
       hero.innerHTML = `<span class="eyebrow">Ma collection</span>
-        <div class="big">${eur.format(total)}</div>
+        <div class="big">${eur.format(mv.value || total)}</div>
+        ${mv.n ? `<div class="sub">valeur estimée · payé ${eur.format(mv.paid)} <span class="mv ${mv.value >= mv.paid ? "up" : "down"}">${mv.value >= mv.paid ? "+" : "−"}${eur.format(Math.abs(mv.value - mv.paid))}</span></div>` : ""}
         <div class="sub"><strong>${arr.length}</strong> montre${arr.length > 1 ? "s" : ""} · <strong>${brands}</strong> marque${brands > 1 ? "s" : ""}</div>
         ${rarityBar(arr, false)}
         <div class="tiles"><div class="tile"><b>${arr.length ? auto + " / " + arr.length : "–"}</b><small>Mécaniques</small></div><div class="tile"><b>${avg ? String(avg).replace(".", ",") + " mm" : "–"}</b><small>Diamètre moyen</small></div><div class="tile"><b>${top ? esc(top.brand) : "–"}</b><small>Pièce maîtresse</small></div></div>`;
@@ -4713,6 +4971,7 @@ Réponds uniquement avec un bloc de code JSON de cette forme, sans autre texte :
   }
   async function init(){
     state.view = { ...defaultView(), layout: state.view.layout || "grid" }; tab = "home";
+    try { if (!(pending && pending.type === "reviews")) localStorage.removeItem("mywatch-compare"); localStorage.removeItem("mywatch-news"); } catch(e){}
     const cq = $("#cat-q"); if (cq) cq.value = "";
     const needSave = applyPatches(state);
     assetsNs = localAssets;
